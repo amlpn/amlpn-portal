@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apply for Membership — AMLPN</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #243447;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .header {
+    background: #17365D;
+    color: #fff;
+    padding: 22px 20px;
+    text-align: center;
+  }
+  .header .brand {
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 3px;
+  }
+  .header .sub {
+    font-size: 11px;
+    margin-top: 4px;
+    opacity: .9;
+  }
+  .flag {
+    display: flex;
+    width: 180px;
+    height: 5px;
+    margin: 12px auto 0;
+  }
+  .flag div { flex: 1; }
+  .flag .b { background: #000; }
+  .flag .y { background: #FCDC04; }
+  .flag .r { background: #D90000; }
+  .motto {
+    color: #E5C453;
+    font-style: italic;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 22px 16px 40px;
+  }
+  .progress {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 6px;
+  }
+  .progress .step {
+    flex: 1;
+    text-align: center;
+    font-size: 11px;
+    color: #657786;
+    padding: 8px 4px;
+    border-bottom: 3px solid #e5e7eb;
+    font-weight: bold;
+    transition: all .2s;
+  }
+  .progress .step.active {
+    color: #17365D;
+    border-bottom-color: #17365D;
+  }
+  .progress .step.done {
+    color: #26733C;
+    border-bottom-color: #2E7D32;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    padding: 24px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+  }
+  .card h2 {
+    margin: 0 0 18px;
+    font-size: 18px;
+    color: #17365D;
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: #17365D;
+    margin: 14px 0 6px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  label .req { color: #B42318; }
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d9e2ec;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+    background: #fff;
+    color: #243447;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #17365D;
+    box-shadow: 0 0 0 3px rgba(23,54,93,.1);
+  }
+  input.invalid, select.invalid {
+    border-color: #C62828;
+    background: #FFFBFB;
+  }
+  input.valid {
+    border-color: #2E7D32;
+  }
+  .field-error {
+    font-size: 12px;
+    color: #B42318;
+    margin-top: 6px;
+    display: none;
+  }
+  .field-error.visible { display: block; }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 520px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+  .email-match {
+    font-size: 12px;
+    margin-top: 6px;
+    display: none;
+  }
+  .email-match.visible { display: block; }
+  .email-match.ok { color: #26733C; }
+  .email-match.bad { color: #B42318; }
+  .checkbox-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 16px 0 8px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .checkbox-line input {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .btn-row button { margin-top: 0; }
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .btn-primary { background: #17365D; color: #fff; }
+  .btn-primary:hover { background: #0F2A47; }
+  .btn-primary:disabled { background: #94A3B8; cursor: not-allowed; }
+  .btn-secondary {
+    background: #fff;
+    color: #17365D;
+    border: 1px solid #d9e2ec;
+  }
+  .btn-secondary:hover { background: #eef2f6; }
+  .btn-submit {
+    background: #2E7D32;
+    color: #fff;
+  }
+  .btn-submit:hover { background: #256428; }
+  .btn-submit:disabled { background: #94A3B8; cursor: not-allowed; }
+  .fee-box {
+    background: #EEF5FB;
+    border-left: 5px solid #17365D;
+    padding: 16px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.7;
+    display: none;
+  }
+  .fee-box.visible { display: block; }
+  .fee-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+  }
+  .fee-total {
+    border-top: 1px solid #c9dded;
+    margin-top: 8px;
+    padding-top: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #17365D;
+  }
+  .notice {
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-top: 16px;
+    display: none;
+  }
+  .notice.error { background: #FDECEC; color: #B71C1C; border-left: 4px solid #C62828; display: block; }
+  .notice.success { background: #E7F4EA; color: #26733C; border-left: 4px solid #2E7D32; display: block; }
+  .review-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .review-table th {
+    background: #F4F6F8;
+    color: #17365D;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #d9e2ec;
+  }
+  .review-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #eef2f6;
+    vertical-align: top;
+  }
+  .review-table td:first-child {
+    color: #657786;
+    width: 42%;
+  }
+  .review-table td:last-child {
+    font-weight: bold;
+    color: #243447;
+  }
+  .success-screen {
+    text-align: center;
+    padding: 40px 22px;
+  }
+  .success-screen .icon {
+    font-size: 56px;
+    margin-bottom: 12px;
+  }
+  .success-screen h2 {
+    color: #17365D;
+    margin: 0 0 8px;
+    font-size: 22px;
+  }
+  .success-screen .appid {
+    display: inline-block;
+    background: #EEF5FB;
+    color: #17365D;
+    padding: 14px 24px;
+    border-radius: 6px;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin: 18px 0;
+    border: 1px solid #C9DDED;
+  }
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: #657786;
+  }
+  .loading::after {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 3px solid #17365D;
+    border-top-color: transparent;
+    border-radius: 50%;
+    margin-left: 10px;
+    vertical-align: middle;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .footer {
+    text-align: center;
+    padding: 24px 16px 40px;
+    color: #657786;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .footer strong { color: #17365D; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">AMLPN</div>
+  <div class="sub">ATRIA MEDICAL LABORATORY PROFESSIONALS NETWORK</div>
+  <div class="flag">
+    <div class="b"></div><div class="y"></div><div class="r"></div>
+  </div>
+  <div class="motto">Together We Can</div>
+</div>
+
+<div class="page">
+
+  <div id="loading" class="loading">Loading application form</div>
+
+  <div id="formArea" class="hidden">
+
+    <div class="progress">
+      <div class="step active" data-step="1">1. Personal</div>
+      <div class="step" data-step="2">2. Contact</div>
+      <div class="step" data-step="3">3. Professional</div>
+      <div class="step" data-step="4">4. Review</div>
+    </div>
+
+    <!-- ================= STEP 1 ================= -->
+    <div id="step-1" class="card">
+      <h2>Personal Information</h2>
+
+      <label for="fullName">Full Name <span class="req">*</span></label>
+      <input type="text" id="fullName" placeholder="e.g. John Doe Sseguya">
+      <div class="field-error" id="err-fullName">Please enter your full name.</div>
+
+      <div class="two-col">
+        <div>
+          <label for="gender">Gender <span class="req">*</span></label>
+          <select id="gender"></select>
+          <div class="field-error" id="err-gender">Please select your gender.</div>
+        </div>
+        <div>
+          <label for="dateOfBirth">Date of Birth <span class="req">*</span></label>
+          <input type="date" id="dateOfBirth">
+          <div class="field-error" id="err-dateOfBirth">Please enter your date of birth.</div>
+        </div>
+      </div>
+
+      <label for="phone">Phone Number <span class="req">*</span></label>
+      <input type="tel" id="phone" placeholder="e.g. 2567XXXXXXXX">
+      <div class="field-error" id="err-phone">Please enter your phone number.</div>
+
+      <div class="two-col">
+        <div>
+          <label for="nationality">Nationality <span class="req">*</span></label>
+          <input type="text" id="nationality" placeholder="e.g. Ugandan" value="Ugandan">
+          <div class="field-error" id="err-nationality">Please enter your nationality.</div>
+        </div>
+        <div>
+          <label for="district">District <span class="req">*</span></label>
+          <input type="text" id="district" placeholder="e.g. Kampala">
+          <div class="field-error" id="err-district">Please enter your district.</div>
+        </div>
+      </div>
+
+      <label for="physicalAddress">Physical Address <span class="req">*</span></label>
+      <input type="text" id="physicalAddress" placeholder="e.g. Buwama A, Mpigi">
+      <div class="field-error" id="err-physicalAddress">Please enter your physical address.</div>
+
+      <div class="btn-row">
+        <button class="btn-primary" data-next="2">Continue</button>
+      </div>
+    </div>
+
+    <!-- ================= STEP 2 ================= -->
+    <div id="step-2" class="card hidden">
+      <h2>Contact &amp; Emergency</h2>
+
+      <label for="email">Email Address <span class="req">*</span></label>
+      <input type="email" id="email" placeholder="you@example.com">
+      <div class="field-error" id="err-email">Please enter a valid email address.</div>
+
+      <label for="confirmEmail">Confirm Email Address <span class="req">*</span></label>
+      <input type="email" id="confirmEmail" placeholder="Repeat your email">
+      <div class="email-match" id="emailMatch"></div>
+      <div class="field-error" id="err-confirmEmail">Email addresses must match.</div>
+
+      <label for="emergencyContactName">Emergency Contact Name</label>
+      <input type="text" id="emergencyContactName" placeholder="e.g. Jane Doe">
+
+      <label for="emergencyContactPhone">Emergency Contact Phone</label>
+      <input type="tel" id="emergencyContactPhone" placeholder="e.g. 2567XXXXXXXX">
+
+      <div class="btn-row">
+        <button class="btn-secondary" data-back="1">Back</button>
+        <button class="btn-primary" data-next="3">Continue</button>
+      </div>
+    </div>
+
+    <!-- ================= STEP 3 ================= -->
+    <div id="step-3" class="card hidden">
+      <h2>Professional Information</h2>
+
+      <label for="professionalStatus">Professional Status <span class="req">*</span></label>
+      <select id="professionalStatus"></select>
+      <div class="field-error" id="err-professionalStatus">Please select your professional status.</div>
+
+      <div class="two-col">
+        <div>
+          <label for="professionalRegNo">Professional Registration No.</label>
+          <input type="text" id="professionalRegNo" placeholder="e.g. AHPC 51415">
+        </div>
+        <div>
+          <label for="professionalRegistrationStatus">Registration Status</label>
+          <select id="professionalRegistrationStatus"></select>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <label for="licenceExpiryDate">Licence Expiry Date</label>
+          <input type="date" id="licenceExpiryDate">
+        </div>
+        <div>
+          <label for="professionalCategory">Professional Category</label>
+          <select id="professionalCategory"></select>
+        </div>
+      </div>
+
+      <label for="specialization">Specialization</label>
+      <input type="text" id="specialization" placeholder="e.g. Haematology">
+
+      <label for="highestQualification">Highest Qualification <span class="req">*</span></label>
+      <select id="highestQualification"></select>
+      <div class="field-error" id="err-highestQualification">Please select your highest qualification.</div>
+
+      <div class="fee-box" id="feeBox">
+        <div style="font-size:12px;color:#657786;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Fee Preview</div>
+        <div class="fee-row"><span>Joining Fee</span><span id="feeJoining">—</span></div>
+        <div class="fee-row"><span>Annual Subscription</span><span id="feeAnnual">—</span></div>
+        <div class="fee-row"><span>Membership Card Fee</span><span id="feeCard">—</span></div>
+        <div class="fee-row fee-total"><span>Total Payable</span><span id="feeTotal">—</span></div>
+      </div>
+
+      <label for="qualificationTitle">Qualification Title</label>
+      <input type="text" id="qualificationTitle" placeholder="e.g. Certificate in Medical Laboratory Techniques">
+
+      <div class="two-col">
+        <div>
+          <label for="institution">Institution / Employer</label>
+          <input type="text" id="institution">
+        </div>
+        <div>
+          <label for="jobTitle">Job Title</label>
+          <input type="text" id="jobTitle">
+        </div>
+      </div>
+
+      <label for="yearsOfPractice">Years of Practice</label>
+      <input type="text" id="yearsOfPractice" placeholder="e.g. 3">
+
+      <div class="btn-row">
+        <button class="btn-secondary" data-back="2">Back</button>
+        <button class="btn-primary" data-next="4">Continue</button>
+      </div>
+    </div>
+
+    <!-- ================= STEP 4 ================= -->
+    <div id="step-4" class="card hidden">
+      <h2>Review &amp; Submit</h2>
+
+      <label for="reasonForJoining">Reason for Joining AMLPN <span class="req">*</span></label>
+      <textarea id="reasonForJoining" rows="3" placeholder="Tell us briefly why you want to join"></textarea>
+      <div class="field-error" id="err-reasonForJoining">Please tell us why you'd like to join.</div>
+
+      <div class="checkbox-line">
+        <input type="checkbox" id="consent">
+        <label for="consent" style="margin:0;text-transform:none;font-size:13px;letter-spacing:0;font-weight:normal;color:#243447;">
+          I have read and agree to the declaration and consent. I confirm the information provided is accurate, and I consent to AMLPN processing my personal data for membership administration purposes.
+        </label>
+      </div>
+      <div class="field-error" id="err-consent">You must agree to the declaration to continue.</div>
+
+      <h2 style="margin-top:26px;">Review Your Details</h2>
+      <table class="review-table" id="reviewTable"></table>
+
+      <div class="notice" id="submitNotice"></div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" data-back="3">Back</button>
+        <button class="btn-submit" id="btnSubmit">Submit Application</button>
+      </div>
+    </div>
+
+    <!-- ================= SUCCESS ================= -->
+    <div id="successScreen" class="card success-screen hidden">
+      <div class="icon">🎉</div>
+      <h2>Application Received</h2>
+      <p>Thank you for applying to join AMLPN.<br>We've sent a confirmation email to your inbox.</p>
+      <div class="appid" id="successAppId">—</div>
+      <p style="font-size:13px;color:#657786;">
+        Please keep this Application ID for future correspondence.
+      </p>
+      <p style="margin-top:24px;font-weight:bold;color:#17365D;">Together We Can</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Atria Medical Laboratory Professionals Network</strong><br>
+  Together We Can
+</div>
+
+<script>
+
+// ============================================================
+// CONFIG
+// ============================================================
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
+
+let OPTIONS = null;
+
+// ============================================================
+// API CALLER
+// ============================================================
+
+async function api(payload) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+
+(async function init() {
+  try {
+    const res = await api({ action: "apply-options" });
+    if (!res || !res.ok) {
+      document.getElementById("loading").textContent = "Could not load form options. Please try again later.";
+      return;
+    }
+    OPTIONS = res;
+    populateDropdowns();
+    document.getElementById("loading").classList.add("hidden");
+    document.getElementById("formArea").classList.remove("hidden");
+    showStep(1);
+  } catch (err) {
+    document.getElementById("loading").textContent = "Network error. Please try again.";
+  }
+})();
+
+// ============================================================
+// POPULATE DROPDOWNS
+// ============================================================
+
+function fillSelect(id, values, placeholder) {
+  const sel = document.getElementById(id);
+  sel.innerHTML = "";
+  const opt = document.createElement("option");
+  opt.value = "";
+  opt.textContent = placeholder || "— Select —";
+  sel.appendChild(opt);
+  (values || []).forEach(v => {
+    const o = document.createElement("option");
+    o.value = v;
+    o.textContent = v;
+    sel.appendChild(o);
+  });
+}
+
+function populateDropdowns() {
+  fillSelect("gender", OPTIONS.dropdowns.genders, "— Select gender —");
+  fillSelect("professionalStatus", OPTIONS.dropdowns.professionalStatuses, "— Select status —");
+  fillSelect("professionalRegistrationStatus", OPTIONS.dropdowns.registrationStatuses, "— Select —");
+  fillSelect("professionalCategory", OPTIONS.dropdowns.professionalCategories, "— Select —");
+  fillSelect("highestQualification", OPTIONS.dropdowns.qualifications, "— Select qualification —");
+}
+
+// ============================================================
+// FEE PREVIEW
+// ============================================================
+
+document.getElementById("highestQualification").addEventListener("change", function () {
+  const qual = this.value;
+  const box = document.getElementById("feeBox");
+  if (!qual) { box.classList.remove("visible"); return; }
+
+  const fee = OPTIONS.fees.find(f => f.qualification === qual);
+  if (!fee) { box.classList.remove("visible"); return; }
+
+  document.getElementById("feeJoining").textContent = "UGX " + fee.joiningFee.toLocaleString();
+  document.getElementById("feeAnnual").textContent = "UGX " + fee.annualSubscription.toLocaleString();
+  document.getElementById("feeCard").textContent = "UGX " + fee.cardFee.toLocaleString();
+  document.getElementById("feeTotal").textContent = "UGX " + (fee.joiningFee + fee.annualSubscription + fee.cardFee).toLocaleString();
+  box.classList.add("visible");
+});
+
+// ============================================================
+// EMAIL MATCH
+// ============================================================
+
+function checkEmailMatch() {
+  const email = document.getElementById("email").value.trim().toLowerCase();
+  const confirm = document.getElementById("confirmEmail").value.trim().toLowerCase();
+  const msg = document.getElementById("emailMatch");
+  const emailInput = document.getElementById("email");
+  const confirmInput = document.getElementById("confirmEmail");
+
+  if (!confirm) {
+    msg.className = "email-match";
+    emailInput.classList.remove("valid", "invalid");
+    confirmInput.classList.remove("valid", "invalid");
+    return;
+  }
+
+  if (email === confirm && email) {
+    msg.textContent = "✓ Emails match";
+    msg.className = "email-match visible ok";
+    emailInput.classList.add("valid");
+    confirmInput.classList.add("valid");
+    emailInput.classList.remove("invalid");
+    confirmInput.classList.remove("invalid");
+  } else {
+    msg.textContent = "✗ Emails do not match";
+    msg.className = "email-match visible bad";
+    emailInput.classList.remove("valid");
+    confirmInput.classList.remove("valid");
+    emailInput.classList.add("invalid");
+    confirmInput.classList.add("invalid");
+  }
+}
+
+document.getElementById("email").addEventListener("input", checkEmailMatch);
+document.getElementById("confirmEmail").addEventListener("input", checkEmailMatch);
+
+// ============================================================
+// STEP NAVIGATION
+// ============================================================
+
+function showStep(n) {
+  [1,2,3,4].forEach(i => {
+    document.getElementById("step-" + i).classList.toggle("hidden", i !== n);
+  });
+  document.querySelectorAll(".progress .step").forEach(el => {
+    const s = Number(el.dataset.step);
+    el.classList.toggle("active", s === n);
+    el.classList.toggle("done", s < n);
+  });
+  if (n === 4) buildReview();
+  window.scrollTo(0, 0);
+}
+
+document.querySelectorAll("[data-next]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const current = Number(btn.closest(".card").id.replace("step-", ""));
+    if (!validateStep(current)) return;
+    showStep(Number(btn.dataset.next));
+  });
+});
+
+document.querySelectorAll("[data-back]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    showStep(Number(btn.dataset.back));
+  });
+});
+
+// ============================================================
+// VALIDATION
+// ============================================================
+
+function markError(id, show) {
+  const input = document.getElementById(id);
+  const err = document.getElementById("err-" + id);
+  if (input) input.classList.toggle("invalid", show);
+  if (err) err.classList.toggle("visible", show);
+}
+
+function validateStep(n) {
+  let ok = true;
+
+  function req(id, test) {
+    const v = document.getElementById(id).value.trim();
+    const valid = test ? test(v) : v !== "";
+    markError(id, !valid);
+    if (!valid) ok = false;
+    return valid;
+  }
+
+  if (n === 1) {
+    req("fullName");
+    req("gender");
+    req("dateOfBirth");
+    req("phone");
+    req("nationality");
+    req("district");
+    req("physicalAddress");
+  }
+
+  if (n === 2) {
+    req("email", v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+    const email = document.getElementById("email").value.trim().toLowerCase();
+    const confirm = document.getElementById("confirmEmail").value.trim().toLowerCase();
+    const match = email && confirm && email === confirm;
+    markError("confirmEmail", !match);
+    if (!match) ok = false;
+  }
+
+  if (n === 3) {
+    req("professionalStatus");
+    req("highestQualification");
+  }
+
+  if (n === 4) {
+    req("reasonForJoining");
+    const consent = document.getElementById("consent").checked;
+    document.getElementById("err-consent").classList.toggle("visible", !consent);
+    if (!consent) ok = false;
+  }
+
+  return ok;
+}
+
+// ============================================================
+// REVIEW TABLE
+// ============================================================
+
+function buildReview() {
+  const fields = [
+    ["Full Name", "fullName"],
+    ["Gender", "gender"],
+    ["Date of Birth", "dateOfBirth"],
+    ["Phone", "phone"],
+    ["Nationality", "nationality"],
+    ["District", "district"],
+    ["Physical Address", "physicalAddress"],
+    ["Email", "email"],
+    ["Emergency Contact Name", "emergencyContactName"],
+    ["Emergency Contact Phone", "emergencyContactPhone"],
+    ["Professional Status", "professionalStatus"],
+    ["Professional Registration No.", "professionalRegNo"],
+    ["Registration Status", "professionalRegistrationStatus"],
+    ["Licence Expiry Date", "licenceExpiryDate"],
+    ["Professional Category", "professionalCategory"],
+    ["Specialization", "specialization"],
+    ["Highest Qualification", "highestQualification"],
+    ["Qualification Title", "qualificationTitle"],
+    ["Institution / Employer", "institution"],
+    ["Job Title", "jobTitle"],
+    ["Years of Practice", "yearsOfPractice"]
+  ];
+
+  const table = document.getElementById("reviewTable");
+  table.innerHTML = "";
+  fields.forEach(([label, id]) => {
+    const v = document.getElementById(id).value.trim();
+    if (!v) return;
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td"); td1.textContent = label;
+    const td2 = document.createElement("td"); td2.textContent = v;
+    tr.appendChild(td1); tr.appendChild(td2);
+    table.appendChild(tr);
+  });
+}
+
+// ============================================================
+// SUBMIT
+// ============================================================
+
+document.getElementById("btnSubmit").addEventListener("click", async () => {
+  if (!validateStep(4)) return;
+
+  const notice = document.getElementById("submitNotice");
+  notice.className = "notice"; notice.textContent = "";
+
+  const btn = document.getElementById("btnSubmit");
+  btn.disabled = true; btn.textContent = "Submitting…";
+
+  const payload = {
+    action: "apply",
+    fullName: document.getElementById("fullName").value.trim(),
+    gender: document.getElementById("gender").value,
+    dateOfBirth: document.getElementById("dateOfBirth").value,
+    phone: document.getElementById("phone").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    confirmEmail: document.getElementById("confirmEmail").value.trim(),
+    nationality: document.getElementById("nationality").value.trim(),
+    district: document.getElementById("district").value.trim(),
+    physicalAddress: document.getElementById("physicalAddress").value.trim(),
+    professionalStatus: document.getElementById("professionalStatus").value,
+    professionalRegNo: document.getElementById("professionalRegNo").value.trim(),
+    professionalRegistrationStatus: document.getElementById("professionalRegistrationStatus").value,
+    licenceExpiryDate: document.getElementById("licenceExpiryDate").value,
+    professionalCategory: document.getElementById("professionalCategory").value,
+    specialization: document.getElementById("specialization").value.trim(),
+    highestQualification: document.getElementById("highestQualification").value,
+    qualificationTitle: document.getElementById("qualificationTitle").value.trim(),
+    institution: document.getElementById("institution").value.trim(),
+    jobTitle: document.getElementById("jobTitle").value.trim(),
+    yearsOfPractice: document.getElementById("yearsOfPractice").value.trim(),
+    emergencyContactName: document.getElementById("emergencyContactName").value.trim(),
+    emergencyContactPhone: document.getElementById("emergencyContactPhone").value.trim(),
+    reasonForJoining: document.getElementById("reasonForJoining").value.trim(),
+    consent: document.getElementById("consent").checked
+  };
+
+  try {
+    const res = await api(payload);
+    btn.disabled = false; btn.textContent = "Submit Application";
+
+    if (!res || !res.ok) {
+      notice.className = "notice error";
+      notice.textContent = res && res.message ? res.message : "Submission failed.";
+      return;
+    }
+
+    // Show success
+    document.getElementById("formArea").classList.add("hidden");
+    document.getElementById("successScreen").classList.remove("hidden");
+    document.getElementById("successAppId").textContent = res.applicationId;
+
+  } catch (err) {
+    btn.disabled = false; btn.textContent = "Submit Application";
+    notice.className = "notice error";
+    notice.textContent = "Network error. Please try again.";
+  }
+});
+
+</script>
+</body>
+</html>
