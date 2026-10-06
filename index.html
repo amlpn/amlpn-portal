@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/favicon.png">
 <title>AMLPN Member Portal</title>
 <style>
   * { box-sizing: border-box; }
@@ -106,6 +107,19 @@
     border: 1px solid #d9e2ec;
   }
   .btn-secondary:hover { background: #eef2f6; }
+  .btn-apply {
+    background: #C7A84B;
+    color: #17365D;
+    padding: 16px;
+    font-size: 15px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-top: 0;
+  }
+  .btn-apply:hover { background: #B89738; }
   .notice {
     padding: 12px 14px;
     border-radius: 6px;
@@ -124,32 +138,6 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
-  }
-   .pw-wrap {
-    position: relative;
-  }
-  .pw-wrap input {
-    padding-right: 44px;
-  }
-  .pw-toggle {
-    position: absolute;
-    top: 50%;
-    right: 12px;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    width: auto;
-    padding: 4px;
-    margin: 0;
-    font-size: 18px;
-    color: #657786;
-    line-height: 1;
-    opacity: .7;
-  }
-  .pw-toggle:hover {
-    opacity: 1;
-    background: transparent;
   }
   .topbar .who { color: #17365D; font-weight: bold; }
   .topbar button { width: auto; margin: 0; padding: 8px 16px; font-size: 13px; }
@@ -213,16 +201,90 @@
   }
   .footer strong { color: #17365D; }
   .hidden { display: none !important; }
-  @media (max-width: 480px) {
-    .header { padding: 16px 14px; }
-    .header .brand { font-size: 22px; }
-    .page { padding: 16px 12px 30px; }
-    .card { padding: 18px 16px; }
-    table.info td:first-child { width: 45%; font-size: 12px; }
-    table.data th, table.data td { padding: 8px 8px; font-size: 12px; }
+
+  /* ---------- PROMO CARD ---------- */
+  .promo-card {
+    background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(23,54,93,.2);
+    position: relative;
+    overflow: hidden;
+    min-height: 90px;
+  }
+  .promo-card .promo-tag {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #E5C453;
+    margin-bottom: 6px;
+  }
+  .promo-card .promo-text {
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 1.4;
+    transition: opacity .5s;
+  }
+  .promo-card .promo-dots {
+    margin-top: 12px;
+    display: flex;
+    gap: 6px;
+  }
+  .promo-card .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.3);
+    transition: background .3s;
+  }
+  .promo-card .dot.active { background: #E5C453; }
+
+  /* ---------- APPLY BANNER ---------- */
+  .apply-banner {
+    background: #FFF8DD;
+    border: 1px solid #F0D675;
+    border-left: 5px solid #C7A84B;
+    border-radius: 0 8px 8px 0;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .apply-banner .text {
+    flex: 1;
+    min-width: 200px;
+  }
+  .apply-banner .text .line1 {
+    color: #17365D;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 2px;
+  }
+  .apply-banner .text .line2 {
+    color: #7C6A20;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .apply-banner .btn-apply {
+    margin-top: 0;
+    padding: 12px 22px;
+    width: auto;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  @media (max-width: 520px) {
+    .apply-banner { flex-direction: column; align-items: stretch; }
+    .apply-banner .btn-apply { width: 100%; }
+    .promo-card { padding: 18px 18px; }
+    .promo-card .promo-text { font-size: 16px; }
   }
 </style>
- <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 <body>
 
@@ -237,14 +299,31 @@
 
 <!-- LOGIN -->
 <div id="view-login" class="page">
+
+  <!-- Rotating promo card -->
+  <div class="promo-card" id="promoCard">
+    <div class="promo-tag">AMLPN</div>
+    <div class="promo-text" id="promoText">Together We Can</div>
+    <div class="promo-dots" id="promoDots"></div>
+  </div>
+
+  <!-- Apply banner -->
+  <div class="apply-banner">
+    <div class="text">
+      <div class="line1">New to AMLPN?</div>
+      <div class="line2">Join our professional network. Click below to start your membership application.</div>
+    </div>
+    <a href="/apply" class="btn-apply">Apply for Membership →</a>
+  </div>
+
   <div class="card narrow">
     <h2 style="text-align:center;">Member Portal Login</h2>
     <label for="email">Email Address</label>
     <input type="email" id="email" autocomplete="username">
     <label for="password">Password</label>
-    <div class="pw-wrap">
-      <input type="password" id="password" autocomplete="current-password">
-      <button type="button" class="pw-toggle" id="toggleLoginPwd" tabindex="-1">👁</button>
+    <div style="position:relative;">
+      <input type="password" id="password" autocomplete="current-password" style="padding-right:44px;">
+      <button type="button" id="toggleLoginPwd" tabindex="-1" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);background:none;border:none;cursor:pointer;width:auto;padding:4px;margin:0;font-size:18px;color:#657786;line-height:1;opacity:.7;">👁</button>
     </div>
     <button class="btn-primary" id="btnLogin">Sign In</button>
     <div class="notice" id="loginNotice"></div>
@@ -252,6 +331,7 @@
       <a href="javascript:void(0)" id="linkForgot" style="color:#17365D;font-size:13px;font-weight:bold;text-decoration:none;">Forgot your password?</a>
     </div>
   </div>
+
   <div class="card narrow" style="text-align:center;font-size:13px;color:#657786;">
     Need help? Contact AMLPN at
     <a href="mailto:amlpn.ug@gmail.com" style="color:#17365D;font-weight:bold;">amlpn.ug@gmail.com</a>
@@ -304,15 +384,15 @@
 <div id="view-password" class="page hidden">
   <div class="card narrow">
     <h2 style="text-align:center;">Change My Password</h2>
-      <label for="pwd1">New Password</label>
-    <div class="pw-wrap">
-      <input type="password" id="pwd1" placeholder="At least 8 characters">
-      <button type="button" class="pw-toggle" id="togglePwd1" tabindex="-1">👁</button>
+    <label for="pwd1">New Password</label>
+    <div style="position:relative;">
+      <input type="password" id="pwd1" placeholder="At least 8 characters" style="padding-right:44px;">
+      <button type="button" id="togglePwd1" tabindex="-1" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);background:none;border:none;cursor:pointer;width:auto;padding:4px;margin:0;font-size:18px;color:#657786;line-height:1;opacity:.7;">👁</button>
     </div>
     <label for="pwd2">Confirm New Password</label>
-    <div class="pw-wrap">
-      <input type="password" id="pwd2">
-      <button type="button" class="pw-toggle" id="togglePwd2" tabindex="-1">👁</button>
+    <div style="position:relative;">
+      <input type="password" id="pwd2" style="padding-right:44px;">
+      <button type="button" id="togglePwd2" tabindex="-1" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);background:none;border:none;cursor:pointer;width:auto;padding:4px;margin:0;font-size:18px;color:#657786;line-height:1;opacity:.7;">👁</button>
     </div>
     <button class="btn-primary" id="btnSavePwd">Save New Password</button>
     <button class="btn-secondary" id="btnBackDash">Back to Dashboard</button>
@@ -334,6 +414,9 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
 
 let TOKEN = null;
+let PROMO_MESSAGES = ["Together We Can"];
+let PROMO_INDEX = 0;
+let PROMO_INTERVAL = null;
 
 // ============================================================
 // API CALLER
@@ -349,6 +432,52 @@ async function api(payload) {
 }
 
 // ============================================================
+// PROMO ROTATOR
+// ============================================================
+
+function initPromo() {
+  api({ action: "apply-options" })
+    .then(res => {
+      if (res && res.ok && res.promo && res.promo.rotatingMessages && res.promo.rotatingMessages.length) {
+        PROMO_MESSAGES = res.promo.rotatingMessages;
+      }
+      startPromoRotation();
+    })
+    .catch(() => {
+      startPromoRotation();
+    });
+}
+
+function startPromoRotation() {
+  const dotsContainer = document.getElementById("promoDots");
+  dotsContainer.innerHTML = "";
+  PROMO_MESSAGES.forEach((_, i) => {
+    const dot = document.createElement("div");
+    dot.className = "dot" + (i === 0 ? " active" : "");
+    dotsContainer.appendChild(dot);
+  });
+
+  document.getElementById("promoText").textContent = PROMO_MESSAGES[0];
+
+  if (PROMO_MESSAGES.length > 1) {
+    PROMO_INTERVAL = setInterval(() => {
+      const textEl = document.getElementById("promoText");
+      textEl.style.opacity = "0";
+      setTimeout(() => {
+        PROMO_INDEX = (PROMO_INDEX + 1) % PROMO_MESSAGES.length;
+        textEl.textContent = PROMO_MESSAGES[PROMO_INDEX];
+        textEl.style.opacity = "1";
+        document.querySelectorAll("#promoDots .dot").forEach((d, i) => {
+          d.classList.toggle("active", i === PROMO_INDEX);
+        });
+      }, 400);
+    }, 5000);
+  }
+}
+
+initPromo();
+
+// ============================================================
 // VIEW SWITCHER
 // ============================================================
 
@@ -360,6 +489,25 @@ function showView(name) {
   });
   window.scrollTo(0, 0);
 }
+
+// ============================================================
+// SHOW/HIDE PASSWORD
+// ============================================================
+
+function attachPasswordToggle(buttonId, inputId) {
+  const btn = document.getElementById(buttonId);
+  const input = document.getElementById(inputId);
+  if (!btn || !input) return;
+  btn.addEventListener("click", () => {
+    const isPw = input.type === "password";
+    input.type = isPw ? "text" : "password";
+    btn.textContent = isPw ? "🙈" : "👁";
+  });
+}
+
+attachPasswordToggle("toggleLoginPwd", "password");
+attachPasswordToggle("togglePwd1", "pwd1");
+attachPasswordToggle("togglePwd2", "pwd2");
 
 // ============================================================
 // LOGIN
@@ -392,7 +540,6 @@ document.getElementById("btnLogin").addEventListener("click", async () => {
 
     TOKEN = res.token;
     loadDashboard();
-
   } catch (err) {
     btn.disabled = false; btn.textContent = "Sign In";
     notice.className = "notice error";
@@ -405,7 +552,7 @@ document.getElementById("password").addEventListener("keydown", e => {
 });
 
 // ============================================================
-// FORGOT PASSWORD
+// FORGOT
 // ============================================================
 
 document.getElementById("linkForgot").addEventListener("click", () => {
@@ -596,7 +743,6 @@ document.getElementById("btnSavePwd").addEventListener("click", async () => {
     notice.textContent = "Password updated.";
     document.getElementById("pwd1").value = "";
     document.getElementById("pwd2").value = "";
-    document.getElementById("tempPasswordBanner").classList.add("hidden");
   } catch (err) {
     btn.disabled = false; btn.textContent = "Save New Password";
     notice.className = "notice error";
@@ -605,25 +751,13 @@ document.getElementById("btnSavePwd").addEventListener("click", async () => {
 });
 
 document.getElementById("btnBackDash").addEventListener("click", () => showView("dashboard"));
-// ============================================================
-// SHOW / HIDE PASSWORD TOGGLES
-// ============================================================
 
-function attachPasswordToggle(buttonId, inputId) {
-  const btn = document.getElementById(buttonId);
-  const input = document.getElementById(inputId);
-  if (!btn || !input) return;
+document.getElementById("bannerChangeLink").addEventListener("click", () => {
+  showView("password");
+  document.getElementById("pwdNotice").className = "notice";
+  document.getElementById("pwdNotice").textContent = "";
+});
 
-  btn.addEventListener("click", () => {
-    const isPassword = input.type === "password";
-    input.type = isPassword ? "text" : "password";
-    btn.textContent = isPassword ? "🙈" : "👁";
-  });
-}
-
-attachPasswordToggle("toggleLoginPwd", "password");
-attachPasswordToggle("togglePwd1", "pwd1");
-attachPasswordToggle("togglePwd2", "pwd2");
 </script>
 </body>
 </html>
