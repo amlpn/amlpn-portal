@@ -125,6 +125,32 @@
     flex-wrap: wrap;
     gap: 8px;
   }
+   .pw-wrap {
+    position: relative;
+  }
+  .pw-wrap input {
+    padding-right: 44px;
+  }
+  .pw-toggle {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    padding: 4px;
+    margin: 0;
+    font-size: 18px;
+    color: #657786;
+    line-height: 1;
+    opacity: .7;
+  }
+  .pw-toggle:hover {
+    opacity: 1;
+    background: transparent;
+  }
   .topbar .who { color: #17365D; font-weight: bold; }
   .topbar button { width: auto; margin: 0; padding: 8px 16px; font-size: 13px; }
   table.info { width: 100%; border-collapse: collapse; font-size: 14px; }
@@ -215,7 +241,10 @@
     <label for="email">Email Address</label>
     <input type="email" id="email" autocomplete="username">
     <label for="password">Password</label>
-    <input type="password" id="password" autocomplete="current-password">
+    <div class="pw-wrap">
+      <input type="password" id="password" autocomplete="current-password">
+      <button type="button" class="pw-toggle" id="toggleLoginPwd" tabindex="-1">👁</button>
+    </div>
     <button class="btn-primary" id="btnLogin">Sign In</button>
     <div class="notice" id="loginNotice"></div>
     <div style="text-align:center;margin-top:14px;">
@@ -274,10 +303,16 @@
 <div id="view-password" class="page hidden">
   <div class="card narrow">
     <h2 style="text-align:center;">Change My Password</h2>
-    <label for="pwd1">New Password</label>
-    <input type="password" id="pwd1" placeholder="At least 8 characters">
+      <label for="pwd1">New Password</label>
+    <div class="pw-wrap">
+      <input type="password" id="pwd1" placeholder="At least 8 characters">
+      <button type="button" class="pw-toggle" id="togglePwd1" tabindex="-1">👁</button>
+    </div>
     <label for="pwd2">Confirm New Password</label>
-    <input type="password" id="pwd2">
+    <div class="pw-wrap">
+      <input type="password" id="pwd2">
+      <button type="button" class="pw-toggle" id="togglePwd2" tabindex="-1">👁</button>
+    </div>
     <button class="btn-primary" id="btnSavePwd">Save New Password</button>
     <button class="btn-secondary" id="btnBackDash">Back to Dashboard</button>
     <div class="notice" id="pwdNotice"></div>
@@ -569,7 +604,25 @@ document.getElementById("btnSavePwd").addEventListener("click", async () => {
 });
 
 document.getElementById("btnBackDash").addEventListener("click", () => showView("dashboard"));
+// ============================================================
+// SHOW / HIDE PASSWORD TOGGLES
+// ============================================================
 
+function attachPasswordToggle(buttonId, inputId) {
+  const btn = document.getElementById(buttonId);
+  const input = document.getElementById(inputId);
+  if (!btn || !input) return;
+
+  btn.addEventListener("click", () => {
+    const isPassword = input.type === "password";
+    input.type = isPassword ? "text" : "password";
+    btn.textContent = isPassword ? "🙈" : "👁";
+  });
+}
+
+attachPasswordToggle("toggleLoginPwd", "password");
+attachPasswordToggle("togglePwd1", "pwd1");
+attachPasswordToggle("togglePwd2", "pwd2");
 </script>
 </body>
 </html>
