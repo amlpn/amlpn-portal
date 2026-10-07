@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/favicon.png">
+<title>Track Application — AMLPN</title>
+<script src="/nav.js" defer></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #243447;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 22px 16px 40px;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    padding: 24px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+  }
+  .card h1 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    color: #17365D;
+  }
+  .card .sub {
+    font-size: 13px;
+    color: #657786;
+    margin-bottom: 20px;
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: #17365D;
+    margin: 14px 0 6px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  input[type="text"], input[type="email"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d9e2ec;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+  }
+  input:focus {
+    outline: none;
+    border-color: #17365D;
+    box-shadow: 0 0 0 3px rgba(23,54,93,.1);
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 18px;
+  }
+  .btn-primary { background: #17365D; color: #fff; }
+  .btn-primary:hover { background: #0F2A47; }
+  .btn-primary:disabled { background: #94A3B8; cursor: not-allowed; }
+  .btn-secondary {
+    background: #fff;
+    color: #17365D;
+    border: 1px solid #d9e2ec;
+  }
+  .btn-secondary:hover { background: #eef2f6; }
+  .notice {
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 16px;
+    display: none;
+  }
+  .notice.error { background: #FDECEC; color: #B71C1C; border-left: 4px solid #C62828; display: block; }
+  .notice.success { background: #E7F4EA; color: #26733C; border-left: 4px solid #2E7D32; display: block; }
+
+  /* Status card */
+  .status-header {
+    background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
+    color: #fff;
+    padding: 22px 24px;
+    border-radius: 10px 10px 0 0;
+    margin: -24px -22px 20px;
+  }
+  .status-header .label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #E5C453;
+    margin-bottom: 6px;
+  }
+  .status-header .appid {
+    font-family: Consolas, Monaco, monospace;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .status-header .name {
+    font-size: 15px;
+    margin-top: 10px;
+    opacity: .95;
+  }
+  .status-header .date {
+    font-size: 12px;
+    margin-top: 4px;
+    opacity: .8;
+  }
+
+  .current-status {
+    background: #FFF8DD;
+    border: 1px solid #F0D675;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 18px 0;
+    text-align: center;
+  }
+  .current-status .cs-label {
+    font-size: 11px;
+    color: #7C6A20;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+  .current-status .cs-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #17365D;
+  }
+
+  /* Timeline */
+  .timeline {
+    margin: 24px 0;
+    position: relative;
+    padding-left: 34px;
+  }
+  .timeline-step {
+    position: relative;
+    padding-bottom: 22px;
+  }
+  .timeline-step:last-child { padding-bottom: 0; }
+  .timeline-step::before {
+    content: "";
+    position: absolute;
+    left: -22px;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #E5E7EB;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 1px #E5E7EB;
+    z-index: 2;
+  }
+  .timeline-step::after {
+    content: "";
+    position: absolute;
+    left: -16px;
+    top: 22px;
+    bottom: -6px;
+    width: 2px;
+    background: #E5E7EB;
+    z-index: 1;
+  }
+  .timeline-step:last-child::after { display: none; }
+
+  .timeline-step.done::before { background: #2E7D32; box-shadow: 0 0 0 1px #2E7D32; }
+  .timeline-step.done::after { background: #2E7D32; }
+  .timeline-step.active::before {
+    background: #C7A84B;
+    box-shadow: 0 0 0 1px #C7A84B, 0 0 0 6px rgba(199,168,75,.2);
+    animation: pulse 2s infinite;
+  }
+  .timeline-step.active::after { background: #E5E7EB; }
+  .timeline-step.pending::before { background: #E5E7EB; }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 1px #C7A84B, 0 0 0 6px rgba(199,168,75,.2); }
+    50%      { box-shadow: 0 0 0 1px #C7A84B, 0 0 0 10px rgba(199,168,75,.05); }
+  }
+
+  .timeline-step .ts-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #243447;
+  }
+  .timeline-step.done .ts-label { color: #2E7D32; }
+  .timeline-step.active .ts-label { color: #8A6D00; }
+  .timeline-step.pending .ts-label { color: #94A3B8; font-weight: normal; }
+
+  .timeline-step .ts-note {
+    font-size: 12px;
+    margin-top: 3px;
+    color: #657786;
+  }
+  .timeline-step.pending .ts-note { color: #B0B7BF; }
+
+  .next-step {
+    background: #EEF5FB;
+    border-left: 5px solid #17365D;
+    padding: 16px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .next-step .ns-label {
+    font-size: 11px;
+    color: #17365D;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .contact-note {
+    background: #F4F6F8;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-top: 18px;
+    font-size: 13px;
+    color: #50606F;
+    line-height: 1.6;
+  }
+  .contact-note strong { color: #17365D; }
+  .contact-note a { color: #17365D; font-weight: bold; }
+
+  .hidden { display: none !important; }
+  .footer {
+    text-align: center;
+    padding: 24px 16px 40px;
+    color: #657786;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .footer strong { color: #17365D; }
+</style>
+</head>
+<body data-page="Track Application">
+
+<div class="page">
+
+  <div class="card">
+    <h1>Track Your Application</h1>
+    <div class="sub">
+      Enter your Application ID and the email address you used when applying.
+    </div>
+
+    <label for="applicationId">Application ID</label>
+    <input type="text" id="applicationId" placeholder="e.g. APP/2026/0009" autocomplete="off">
+
+    <label for="email">Email Address</label>
+    <input type="email" id="email" placeholder="your.registered@email.com" autocomplete="email">
+
+    <button class="btn-primary" id="btnTrack">Track Application</button>
+
+    <div class="notice" id="trackNotice"></div>
+  </div>
+
+  <!-- Result card (hidden until search) -->
+  <div class="card hidden" id="resultCard">
+
+    <div class="status-header">
+      <div class="label">APPLICATION ID</div>
+      <div class="appid" id="rAppId">—</div>
+      <div class="name" id="rName">—</div>
+      <div class="date" id="rDate">—</div>
+    </div>
+
+    <div class="current-status">
+      <div class="cs-label">Current Status</div>
+      <div class="cs-value" id="rStatus">—</div>
+    </div>
+
+    <div class="timeline" id="rTimeline"></div>
+
+    <div class="next-step">
+      <div class="ns-label">What you need to do</div>
+      <div id="rNextStep">—</div>
+    </div>
+
+    <div class="contact-note">
+      <strong>Questions about your application?</strong><br>
+      Contact AMLPN:<br>
+      📧 <a href="mailto:amlpn.ug@gmail.com">amlpn.ug@gmail.com</a><br>
+      📞 <a href="tel:+256785457533">(+256)-785-457-533</a>
+    </div>
+
+    <button class="btn-secondary" id="btnNewSearch" style="margin-top:18px;">Track a Different Application</button>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Atria Medical Laboratory Professionals Network</strong><br>
+  Together We Can
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
+
+async function api(payload) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+document.getElementById("btnTrack").addEventListener("click", track);
+
+document.getElementById("email").addEventListener("keydown", e => {
+  if (e.key === "Enter") track();
+});
+
+async function track() {
+
+  const applicationId = document.getElementById("applicationId").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const notice = document.getElementById("trackNotice");
+  notice.className = "notice"; notice.textContent = "";
+
+  if (!applicationId || !email) {
+    notice.className = "notice error";
+    notice.textContent = "Please enter both your Application ID and email address.";
+    return;
+  }
+
+  const btn = document.getElementById("btnTrack");
+  btn.disabled = true; btn.textContent = "Searching…";
+
+  try {
+    const res = await api({ action: "track", applicationId, email });
+    btn.disabled = false; btn.textContent = "Track Application";
+
+    if (!res || !res.ok) {
+      notice.className = "notice error";
+      notice.textContent = res && res.message ? res.message : "Could not find your application.";
+      return;
+    }
+
+    showResult(res.application);
+
+  } catch (err) {
+    btn.disabled = false; btn.textContent = "Track Application";
+    notice.className = "notice error";
+    notice.textContent = "Network error. Please try again.";
+  }
+}
+
+function showResult(app) {
+
+  document.getElementById("rAppId").textContent = app.applicationId;
+  document.getElementById("rName").textContent = app.fullName;
+  document.getElementById("rDate").textContent = "Submitted: " + app.submitted;
+
+  // Current status label
+  const statusLabel = statusTextFromWorkflow(app.workflow, app.finalRelease, app.paymentStatus);
+  document.getElementById("rStatus").textContent = statusLabel;
+
+  // Timeline
+  const timeline = document.getElementById("rTimeline");
+  timeline.innerHTML = "";
+  (app.timeline || []).forEach(step => {
+    const div = document.createElement("div");
+    div.className = "timeline-step " + step.state;
+    div.innerHTML =
+      '<div class="ts-label">' + escapeHtml(step.label) + '</div>' +
+      (step.state === "active" ? '<div class="ts-note">← You are here</div>' : '');
+    timeline.appendChild(div);
+  });
+
+  // Next step
+  document.getElementById("rNextStep").textContent = app.nextStepMessage || "—";
+
+  // Show result card, hide the search card (or keep it above)
+  document.getElementById("resultCard").classList.remove("hidden");
+  document.getElementById("resultCard").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function statusTextFromWorkflow(workflow, finalRelease, paymentStatus) {
+  const w = String(workflow || "").toLowerCase();
+  const f = String(finalRelease || "").toLowerCase();
+
+  if (f === "released") return "Membership Released 🎉";
+  if (w === "verified") return "Verified — Awaiting Release";
+  if (w === "payment verification") return "Payment Verification";
+  if (w === "payment submitted") return "Payment Submitted";
+  if (w === "payment required") return "Payment Required";
+  if (w === "documents received") return "Documents Under Review";
+  if (w === "documents required" || w === "awaiting documents") return "Documents Required";
+  if (w === "not reviewed") return "Under Preliminary Review";
+  if (w === "rejected") return "Application Not Successful";
+  return "In Progress";
+}
+
+document.getElementById("btnNewSearch").addEventListener("click", () => {
+  document.getElementById("applicationId").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("resultCard").classList.add("hidden");
+  document.getElementById("trackNotice").className = "notice";
+  document.getElementById("trackNotice").textContent = "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function escapeHtml(s) {
+  return String(s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+</script>
+</body>
+</html>
