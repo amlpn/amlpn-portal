@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/favicon.png">
+<title>Meet the Team — AMLPN</title>
+<script src="/nav.js" defer></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #243447;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .hero {
+    background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
+    color: #fff;
+    padding: 42px 24px 38px;
+    text-align: center;
+    margin-bottom: 26px;
+  }
+  .hero h1 { margin: 0; font-size: 28px; letter-spacing: 1px; }
+  .hero .sub {
+    color: #E5C453;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+  .hero p {
+    max-width: 620px;
+    margin: 18px auto 0;
+    font-size: 14px;
+    line-height: 1.7;
+    opacity: .95;
+  }
+
+  .page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 16px 60px;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #657786;
+    font-size: 14px;
+  }
+  .loading::after {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 3px solid #17365D;
+    border-top-color: transparent;
+    border-radius: 50%;
+    margin-left: 10px;
+    vertical-align: middle;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    transition: all .2s;
+    text-align: center;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(23,54,93,.15);
+    border-color: #C7A84B;
+  }
+
+  .photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .initials {
+    color: #fff;
+    font-size: 44px;
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+
+  .info {
+    padding: 18px 20px 20px;
+  }
+  .name {
+    color: #17365D;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.35;
+    margin-bottom: 6px;
+  }
+  .position {
+    color: #C7A84B;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    background: #FFF8DD;
+    border-radius: 20px;
+    display: inline-block;
+    line-height: 1.4;
+  }
+  .bio {
+    color: #50606F;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 12px;
+    text-align: left;
+  }
+  .contact-links {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #eef2f6;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  .contact-links a {
+    color: #17365D;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .contact-links a:hover { text-decoration: underline; }
+
+  /* Board label */
+  .section-label {
+    color: #17365D;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 8px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #C7A84B;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 30px 16px 20px;
+    color: #657786;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .footer strong { color: #17365D; }
+
+  .empty-note {
+    text-align: center;
+    padding: 40px 20px;
+    color: #657786;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body data-page="Meet the Team">
+
+<div class="hero">
+  <h1>Meet the Team</h1>
+  <div class="sub">Central Executive Committee</div>
+  <p>
+    AMLPN is led by a dedicated Central Executive Committee elected from among our
+    members — working together to serve, represent, and advance the interests of
+    Medical Laboratory Professionals across Uganda.
+  </p>
+</div>
+
+<div class="page">
+
+  <div class="loading" id="loading">Loading team members</div>
+
+  <div class="section-label hidden" id="boardLabel" style="display:none;">Board &amp; Executive Committee</div>
+
+  <div class="grid" id="teamGrid"></div>
+
+  <div class="empty-note hidden" id="emptyNote" style="display:none;">
+    Team information is being updated. Please check back soon.
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Atria Medical Laboratory Professionals Network</strong><br>
+  Together We Can
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
+
+async function api(payload) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+function initialsFor(name) {
+  const parts = String(name || "").trim().split(/\s+/);
+  if (!parts.length) return "?";
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function escapeHtml(s) {
+  return String(s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function titleCase(name) {
+  return String(name || "").toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+}
+
+(async function init() {
+  try {
+    const res = await api({ action: "team-members" });
+    document.getElementById("loading").style.display = "none";
+
+    if (!res || !res.ok || !res.members || !res.members.length) {
+      document.getElementById("emptyNote").style.display = "block";
+      return;
+    }
+
+    render(res.members);
+
+  } catch (err) {
+    document.getElementById("loading").textContent = "Could not load team members. Please try again later.";
+  }
+})();
+
+function render(members) {
+
+  document.getElementById("boardLabel").style.display = "block";
+
+  const grid = document.getElementById("teamGrid");
+  grid.innerHTML = "";
+
+  members.forEach(m => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const photoHtml = m.photoUrl
+      ? '<div class="photo"><img src="' + escapeHtml(m.photoUrl) + '" alt="' + escapeHtml(m.name) + '" onerror="this.parentNode.innerHTML=\'<div class=&quot;initials&quot;>' + initialsFor(m.name) + '</div>\'"></div>'
+      : '<div class="photo"><div class="initials">' + initialsFor(m.name) + '</div></div>';
+
+    let contactHtml = "";
+    if (m.email || m.phone) {
+      contactHtml = '<div class="contact-links">';
+      if (m.email) contactHtml += '<a href="mailto:' + escapeHtml(m.email) + '">✉ Email</a>';
+      if (m.phone) contactHtml += '<a href="tel:' + escapeHtml(m.phone) + '">📞 Call</a>';
+      contactHtml += '</div>';
+    }
+
+    const bioHtml = m.bio
+      ? '<div class="bio">' + escapeHtml(m.bio) + '</div>'
+      : '';
+
+    card.innerHTML =
+      photoHtml +
+      '<div class="info">' +
+        '<div class="name">' + escapeHtml(titleCase(m.name)) + '</div>' +
+        '<div class="position">' + escapeHtml(m.position) + '</div>' +
+        bioHtml +
+        contactHtml +
+      '</div>';
+
+    grid.appendChild(card);
+  });
+}
+
+</script>
+</body>
+</html>
