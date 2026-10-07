@@ -882,11 +882,12 @@ document.getElementById("btnSubmit").addEventListener("click", async () => {
       notice.textContent = res && res.message ? res.message : "Submission failed.";
       return;
     }
-
+   
     // Show success
-    document.getElementById("formArea").classList.add("hidden");
-    document.getElementById("successScreen").classList.remove("hidden");
-    document.getElementById("successAppId").textContent = res.applicationId;
+      [1,2,3,4].forEach(i => document.getElementById("step-" + i).classList.add("hidden"));
+      document.querySelector(".progress").classList.add("hidden");
+      document.getElementById("successScreen").classList.remove("hidden");
+      document.getElementById("successAppId").textContent = res.applicationId;
 
   } catch (err) {
     btn.disabled = false; btn.textContent = "Submit Application";
