@@ -50,46 +50,90 @@
     opacity: .95;
   }
 
-  /* ---------- SECTIONS ---------- */
-  .section {
+  /* ---------- ACCORDION ---------- */
+  .acc {
     background: #fff;
     border: 1px solid #d9e2ec;
     border-radius: 12px;
-    padding: 28px 26px;
-    margin-bottom: 22px;
+    margin-bottom: 14px;
     box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    overflow: hidden;
+    transition: box-shadow .15s;
   }
-  .section h2 {
-    margin: 0 0 18px;
-    font-size: 20px;
+  .acc.open {
+    box-shadow: 0 4px 14px rgba(23,54,93,.12);
+  }
+
+  .acc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    cursor: pointer;
+    background: #fff;
+    transition: background .15s;
+    user-select: none;
+    gap: 12px;
+  }
+  .acc-head:hover { background: #f8fafc; }
+  .acc-head .acc-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+  }
+  .acc-head .acc-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .acc-head .acc-label {
+    font-size: 17px;
+    font-weight: bold;
     color: #17365D;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #E5E7EB;
+    line-height: 1.3;
   }
-  .section h2::before {
-    content: "▸ ";
+  .acc-head .acc-hint {
+    font-size: 12px;
+    color: #94A3B8;
+    margin-top: 2px;
+  }
+  .acc-chev {
+    font-size: 20px;
     color: #C7A84B;
+    transition: transform .25s;
+    flex-shrink: 0;
+    font-weight: bold;
   }
-  .section p {
-    margin: 0 0 14px;
-    line-height: 1.75;
+  .acc.open .acc-chev { transform: rotate(180deg); }
+
+  .acc-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease-out;
   }
-  .section p:last-child { margin-bottom: 0; }
+  .acc.open .acc-body {
+    max-height: 6000px;
+    transition: max-height .6s ease-in;
+  }
+  .acc-inner {
+    padding: 6px 24px 24px;
+    border-top: 1px solid #eef2f6;
+  }
 
   /* ---------- MISSION/VISION CARDS ---------- */
   .mv-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 18px;
+    gap: 14px;
+    margin-top: 8px;
   }
-  @media (max-width: 640px) {
-    .mv-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 640px) { .mv-grid { grid-template-columns: 1fr; } }
   .mv-card {
     background: #f8fafc;
     border-left: 5px solid #C7A84B;
     border-radius: 0 8px 8px 0;
-    padding: 20px 22px;
+    padding: 18px 20px;
   }
   .mv-card .mv-label {
     color: #8A6D00;
@@ -107,12 +151,7 @@
   }
 
   /* ---------- OBJECTIVES ---------- */
-  .obj-list {
-    list-style: none;
-    counter-reset: obj;
-    padding: 0;
-    margin: 0;
-  }
+  .obj-list { list-style: none; counter-reset: obj; padding: 0; margin: 8px 0 0; }
   .obj-list li {
     counter-increment: obj;
     position: relative;
@@ -144,8 +183,8 @@
     background: #EEF5FB;
     border: 1px solid #C9DDED;
     border-radius: 8px;
-    padding: 20px 22px;
-    margin-bottom: 16px;
+    padding: 18px 20px;
+    margin: 14px 0 16px;
   }
   .legal-row {
     display: flex;
@@ -157,22 +196,14 @@
     flex-wrap: wrap;
   }
   .legal-row:last-child { border-bottom: none; }
-  .legal-row .label {
-    color: #657786;
-    font-weight: bold;
-  }
+  .legal-row .label { color: #657786; font-weight: bold; }
   .legal-row .value {
     color: #17365D;
     font-weight: bold;
     text-align: right;
     word-break: break-word;
   }
-  .cert-btns {
-    display: flex;
-    gap: 12px;
-    margin-top: 18px;
-    flex-wrap: wrap;
-  }
+  .cert-btns { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
   .btn-cert {
     display: inline-block;
     background: #17365D;
@@ -192,11 +223,10 @@
   .act-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: 12px;
+    margin-top: 8px;
   }
-  @media (max-width: 640px) {
-    .act-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 640px) { .act-grid { grid-template-columns: 1fr; } }
   .act-card {
     background: #fff;
     border: 1px solid #e5e7eb;
@@ -208,21 +238,14 @@
     border-color: #17365D;
     box-shadow: 0 4px 12px rgba(23,54,93,.1);
   }
-  .act-card .icon {
-    font-size: 22px;
-    margin-bottom: 8px;
-  }
+  .act-card .icon { font-size: 22px; margin-bottom: 8px; }
   .act-card .title {
     color: #17365D;
     font-weight: bold;
     font-size: 14px;
     margin-bottom: 4px;
   }
-  .act-card .desc {
-    color: #657786;
-    font-size: 13px;
-    line-height: 1.55;
-  }
+  .act-card .desc { color: #657786; font-size: 13px; line-height: 1.55; }
 
   /* ---------- PARTNERSHIP ---------- */
   .partner-card {
@@ -230,7 +253,8 @@
     border: 1px solid #F0D675;
     border-left: 5px solid #C7A84B;
     border-radius: 0 10px 10px 0;
-    padding: 22px 24px;
+    padding: 20px 22px;
+    margin-top: 8px;
   }
   .partner-card .p-label {
     color: #8A6D00;
@@ -246,22 +270,16 @@
     font-weight: bold;
     margin-bottom: 10px;
   }
-  .partner-card p {
-    color: #5A4500;
-    font-size: 14px;
-    line-height: 1.7;
-    margin: 0;
-  }
+  .partner-card p { color: #5A4500; font-size: 14px; line-height: 1.7; margin: 0; }
 
   /* ---------- BENEFITS ---------- */
   .benefit-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: 12px;
+    margin-top: 8px;
   }
-  @media (max-width: 640px) {
-    .benefit-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 640px) { .benefit-grid { grid-template-columns: 1fr; } }
   .benefit-card {
     background: #F8FAFC;
     border-left: 4px solid #2E7D32;
@@ -274,17 +292,9 @@
     font-size: 14px;
     margin-bottom: 4px;
   }
-  .benefit-card .bdesc {
-    color: #50606F;
-    font-size: 13px;
-    line-height: 1.55;
-  }
+  .benefit-card .bdesc { color: #50606F; font-size: 13px; line-height: 1.55; }
 
-  /* ---------- REGISTER STEPS ---------- */
-  .steps {
-    padding: 0;
-    margin: 0;
-  }
+  /* ---------- STEPS ---------- */
   .step-item {
     display: flex;
     gap: 16px;
@@ -292,6 +302,7 @@
     border-bottom: 1px solid #eef2f6;
     align-items: flex-start;
   }
+  .step-item:first-child { padding-top: 8px; }
   .step-item:last-child { border-bottom: none; }
   .step-num {
     flex-shrink: 0;
@@ -306,25 +317,16 @@
     font-weight: bold;
     font-size: 14px;
   }
-  .step-body {
-    flex: 1;
-  }
+  .step-body { flex: 1; }
   .step-body .step-title {
     color: #17365D;
     font-weight: bold;
     font-size: 15px;
     margin-bottom: 4px;
   }
-  .step-body .step-desc {
-    color: #50606F;
-    font-size: 13.5px;
-    line-height: 1.6;
-  }
+  .step-body .step-desc { color: #50606F; font-size: 13.5px; line-height: 1.6; }
 
-  .cta-wrap {
-    text-align: center;
-    margin-top: 22px;
-  }
+  .cta-wrap { text-align: center; margin-top: 22px; }
   .btn-cta {
     display: inline-block;
     background: #C7A84B;
@@ -342,21 +344,17 @@
   .contact-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
+    gap: 12px;
+    margin-top: 8px;
   }
-  @media (max-width: 640px) {
-    .contact-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 640px) { .contact-grid { grid-template-columns: 1fr; } }
   .contact-item {
     background: #F8FAFC;
     border-radius: 8px;
     padding: 16px 18px;
     text-align: center;
   }
-  .contact-item .cicon {
-    font-size: 22px;
-    margin-bottom: 6px;
-  }
+  .contact-item .cicon { font-size: 22px; margin-bottom: 6px; }
   .contact-item .clabel {
     color: #657786;
     font-size: 11px;
@@ -371,10 +369,7 @@
     font-weight: bold;
     word-break: break-word;
   }
-  .contact-item .cvalue a {
-    color: #17365D;
-    text-decoration: none;
-  }
+  .contact-item .cvalue a { color: #17365D; text-decoration: none; }
   .contact-item .cvalue a:hover { text-decoration: underline; }
 
   /* ---------- FOOTER ---------- */
@@ -386,6 +381,9 @@
     line-height: 1.7;
   }
   .footer strong { color: #17365D; }
+
+  .p { margin: 10px 0 0; line-height: 1.75; }
+  .p:first-child { margin-top: 0; }
 </style>
 </head>
 <body data-page="About Us">
@@ -404,243 +402,359 @@
 <div class="page">
 
   <!-- ============ WHO WE ARE ============ -->
-  <div class="section">
-    <h2>Who We Are</h2>
-    <p>
-      AMLPN is a professional network of Medical Laboratory Professionals and
-      like-minded stakeholders drawn from districts across Uganda. We exist to
-      promote excellence, integrity, and professionalism in medical laboratory
-      practice — while also improving the social and economic wellbeing of our
-      members.
-    </p>
-    <p>
-      We recognise the Uganda Medical Laboratory Technology Professionals
-      Association (UMLTA) as the national professional body for medical laboratory
-      professionals in Uganda, and we operate in full cooperation with UMLTA and
-      the Allied Health Professionals Council.
-    </p>
+  <div class="acc" data-acc>
+    <div class="acc-head">
+      <div class="acc-title">
+        <div class="acc-icon">👥</div>
+        <div>
+          <div class="acc-label">Who We Are</div>
+          <div class="acc-hint">Learn more about AMLPN</div>
+        </div>
+      </div>
+      <div class="acc-chev">▾</div>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <p class="p">
+          AMLPN is a professional network of Medical Laboratory Professionals and
+          like-minded stakeholders drawn from districts across Uganda. We exist to
+          promote excellence, integrity, and professionalism in medical laboratory
+          practice — while also improving the social and economic wellbeing of our
+          members.
+        </p>
+        <p class="p">
+          We recognise the Uganda Medical Laboratory Technology Professionals
+          Association (UMLTA) as the national professional body for medical laboratory
+          professionals in Uganda, and we operate in full cooperation with UMLTA and
+          the Allied Health Professionals Council.
+        </p>
+      </div>
+    </div>
   </div>
 
   <!-- ============ MISSION & VISION ============ -->
-  <div class="section">
-    <h2>Our Mission &amp; Vision</h2>
-    <div class="mv-grid">
-      <div class="mv-card">
-        <div class="mv-label">Our Vision</div>
-        <div class="mv-text">
-          To see that Medical Laboratory Professionals have a developed laboratory
-          mind, act as an example to others, and equally enjoy the benefits of the
-          profession.
+  <div class="acc" data-acc>
+    <div class="acc-head">
+      <div class="acc-title">
+        <div class="acc-icon">🎯</div>
+        <div>
+          <div class="acc-label">Our Mission &amp; Vision</div>
+          <div class="acc-hint">What drives us forward</div>
         </div>
       </div>
-      <div class="mv-card">
-        <div class="mv-label">Our Mission</div>
-        <div class="mv-text">
-          To make Medical Laboratory Services more affordable, improve the
-          integrity of Medical Laboratory Professionals, and enhance their
-          livelihoods through wealth creation action plans.
+      <div class="acc-chev">▾</div>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="mv-grid">
+          <div class="mv-card">
+            <div class="mv-label">Our Vision</div>
+            <div class="mv-text">
+              To see that Medical Laboratory Professionals have a developed laboratory
+              mind, act as an example to others, and equally enjoy the benefits of the
+              profession.
+            </div>
+          </div>
+          <div class="mv-card">
+            <div class="mv-label">Our Mission</div>
+            <div class="mv-text">
+              To make Medical Laboratory Services more affordable, improve the
+              integrity of Medical Laboratory Professionals, and enhance their
+              livelihoods through wealth creation action plans.
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- ============ OBJECTIVES ============ -->
-  <div class="section">
-    <h2>Our Objectives</h2>
-    <ol class="obj-list">
-      <li>To promote and improve health service delivery within the medical laboratory sector across Uganda.</li>
-      <li>To promote self-esteem and build professional confidence among Medical Laboratory Professionals.</li>
-      <li>To improve the livelihoods of Medical Laboratory Professionals through strategic wealth creation initiatives.</li>
-      <li>To establish and implement development projects among members of the Network to foster job creation opportunities.</li>
-      <li>To encourage and cultivate a culture of saving among the members of the Network.</li>
-      <li>To promote, facilitate, and support scientific research among members of the Network.</li>
-      <li>To organize professional seminars, activities, and forums that empower medical laboratory professionals to realize their full potential in the medical sector.</li>
-      <li>To cooperate and collaborate with other professional bodies, including the Uganda Medical Laboratory Technology Professionals Association (UMLTA), to advance the interests of Medical Laboratory Professionals.</li>
-      <li>To advocate for the rights, occupational welfare, and general interests of Medical Laboratory Professionals.</li>
-      <li>To promote ethical practice, integrity, and strict professionalism within the medical laboratory sector.</li>
-    </ol>
+  <div class="acc" data-acc>
+    <div class="acc-head">
+      <div class="acc-title">
+        <div class="acc-icon">🎓</div>
+        <div>
+          <div class="acc-label">Our Objectives</div>
+          <div class="acc-hint">10 objectives that guide everything we do</div>
+        </div>
+      </div>
+      <div class="acc-chev">▾</div>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <ol class="obj-list">
+          <li>To promote and improve health service delivery within the medical laboratory sector across Uganda.</li>
+          <li>To promote self-esteem and build professional confidence among Medical Laboratory Professionals.</li>
+          <li>To improve the livelihoods of Medical Laboratory Professionals through strategic wealth creation initiatives.</li>
+          <li>To establish and implement development projects among members of the Network to foster job creation opportunities.</li>
+          <li>To encourage and cultivate a culture of saving among the members of the Network.</li>
+          <li>To promote, facilitate, and support scientific research among members of the Network.</li>
+          <li>To organize professional seminars, activities, and forums that empower medical laboratory professionals to realize their full potential in the medical sector.</li>
+          <li>To cooperate and collaborate with other professional bodies, including the Uganda Medical Laboratory Technology Professionals Association (UMLTA), to advance the interests of Medical Laboratory Professionals.</li>
+          <li>To advocate for the rights, occupational welfare, and general interests of Medical Laboratory Professionals.</li>
+          <li>To promote ethical practice, integrity, and strict professionalism within the medical laboratory sector.</li>
+        </ol>
+      </div>
+    </div>
   </div>
 
   <!-- ============ LEGALLY REGISTERED ============ -->
-  <div class="section">
-    <h2>Legally Registered &amp; Recognized</h2>
-    <p>
-      AMLPN is a duly registered Company Limited by Guarantee under the Companies
-      Act of Uganda. Our operations, governance, and objectives are formally
-      constituted and publicly accountable.
-    </p>
-    <div class="legal-box">
-      <div class="legal-row"><span class="label">Registered Name</span><span class="value">Atria Medical Laboratory Professionals Network Ltd</span></div>
-      <div class="legal-row"><span class="label">Company Registration No.</span><span class="value">80047806938013</span></div>
-      <div class="legal-row"><span class="label">Company Type</span><span class="value">Limited by Guarantee (without share capital)</span></div>
-      <div class="legal-row"><span class="label">URA TIN</span><span class="value">1059431014</span></div>
-      <div class="legal-row"><span class="label">LG TIN</span><span class="value">2608974106</span></div>
-      <div class="legal-row"><span class="label">Registered Office</span><span class="value">P.O. Box 154432, Mukono – Uganda</span></div>
+  <div class="acc" data-acc>
+    <div class="acc-head">
+      <div class="acc-title">
+        <div class="acc-icon">📜</div>
+        <div>
+          <div class="acc-label">Legally Registered &amp; Recognized</div>
+          <div class="acc-hint">Registration details &amp; official documents</div>
+        </div>
+      </div>
+      <div class="acc-chev">▾</div>
     </div>
-    <div class="cert-btns">
-      <a href="/certificate-of-incorporation.pdf" class="btn-cert" target="_blank" rel="noopener">
-        📄 View Certificate of Incorporation
-      </a>
-      <a href="/about.pdf" class="btn-cert gold" target="_blank" rel="noopener">
-        ⬇️ Download Our Profile (PDF)
-      </a>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <p class="p">
+          AMLPN is a duly registered Company Limited by Guarantee under the Companies
+          Act of Uganda. Our operations, governance, and objectives are formally
+          constituted and publicly accountable.
+        </p>
+        <div class="legal-box">
+          <div class="legal-row"><span class="label">Registered Name</span><span class="value">Atria Medical Laboratory Professionals Network Ltd</span></div>
+          <div class="legal-row"><span class="label">Company Registration No.</span><span class="value">80047806938013</span></div>
+          <div class="legal-row"><span class="label">Company Type</span><span class="value">Limited by Guarantee (without share capital)</span></div>
+          <div class="legal-row"><span class="label">URA TIN</span><span class="value">1059431014</span></div>
+          <div class="legal-row"><span class="label">LG TIN</span><span class="value">2608974106</span></div>
+          <div class="legal-row"><span class="label">Registered Office</span><span class="value">P.O. Box 154432, Mukono – Uganda</span></div>
+        </div>
+        <div class="cert-btns">
+          <a href="/certificate-of-incorporation.pdf" class="btn-cert" target="_blank" rel="noopener">
+            📄 View Certificate of Incorporation
+          </a>
+          <a href="/about.pdf" class="btn-cert gold" target="_blank" rel="noopener">
+            ⬇️ Download Our Profile (PDF)
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- ============ OUR PARTNERSHIP ============ -->
-  <div class="section">
-    <h2>Our Partnership</h2>
-    <div class="partner-card">
-      <div class="p-label">To be communicated</div>
-      <div class="p-title">Coming soon</div>
-      <p>
-       To be updated.
-      </p>
+  <div class="acc" data-acc>
+    <div class="acc-head">
+      <div class="acc-title">
+        <div class="acc-icon">🤝</div>
+        <div>
+          <div class="acc-label">Our Partnership</div>
+          <div class="acc-hint">Institutional collaborations</div>
+        </div>
+      </div>
+      <div class="acc-chev">▾</div>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="partner-card">
+          <div class="p-label">To be communicated</div>
+          <div class="p-title">Coming soon</div>
+          <p>
+            Details of AMLPN's institutional partnerships and formal collaborations
+            will be published here as they are formalized and approved.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- ============ WHAT WE DO ============ -->
-  <div class="section">
-    <h2>What We Do</h2>
-    <div class="act-grid">
-      <div class="act-card">
-        <div class="icon">🏥</div>
-        <div class="title">Health Service Improvement</div>
-        <div class="desc">Promoting quality and responsible use of medical laboratory services across Uganda.</div>
+  <div class="acc" data-acc>
+    <div class="acc-head">
+      <div class="acc-title">
+        <div class="acc-icon">🛠️</div>
+        <div>
+          <div class="acc-label">What We Do</div>
+          <div class="acc-hint">Our core areas of activity</div>
+        </div>
       </div>
-      <div class="act-card">
-        <div class="icon">🎓</div>
-        <div class="title">Professional Development</div>
-        <div class="desc">Seminars, CPD activities, mentorship, and forums that empower laboratory professionals.</div>
-      </div>
-      <div class="act-card">
-        <div class="icon">🔬</div>
-        <div class="title">Research &amp; Surveillance</div>
-        <div class="desc">Supporting lawful scientific research, data-informed planning, and dissemination of findings.</div>
-      </div>
-      <div class="act-card">
-        <div class="icon">🛡️</div>
-        <div class="title">Advocacy &amp; Welfare</div>
-        <div class="desc">Championing the rights, occupational welfare, and interests of Medical Laboratory Professionals.</div>
-      </div>
-      <div class="act-card">
-        <div class="icon">🤝</div>
-        <div class="title">Community Engagement</div>
-        <div class="desc">Health education, disease prevention campaigns, and community outreach programs.</div>
-      </div>
-      <div class="act-card">
-        <div class="icon">💼</div>
-        <div class="title">Economic Empowerment</div>
-        <div class="desc">Financial literacy, saving initiatives, and livelihood development projects for members.</div>
-      </div>
-      <div class="act-card">
-        <div class="icon">⚖️</div>
-        <div class="title">Ethics &amp; Professionalism</div>
-        <div class="desc">Promoting integrity, ethical practice, and strict professionalism in the sector.</div>
-      </div>
-      <div class="act-card">
-        <div class="icon">🌍</div>
-        <div class="title">Strategic Partnerships</div>
-        <div class="desc">Collaborating with UMLTA, health institutions, academia, and community partners.</div>
+      <div class="acc-chev">▾</div>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="act-grid">
+          <div class="act-card">
+            <div class="icon">🏥</div>
+            <div class="title">Health Service Improvement</div>
+            <div class="desc">Promoting quality and responsible use of medical laboratory services across Uganda.</div>
+          </div>
+          <div class="act-card">
+            <div class="icon">🎓</div>
+            <div class="title">Professional Development</div>
+            <div class="desc">Seminars, CPD activities, mentorship, and forums that empower laboratory professionals.</div>
+          </div>
+          <div class="act-card">
+            <div class="icon">🔬</div>
+            <div class="title">Research &amp; Surveillance</div>
+            <div class="desc">Supporting lawful scientific research, data-informed planning, and dissemination of findings.</div>
+          </div>
+          <div class="act-card">
+            <div class="icon">🛡️</div>
+            <div class="title">Advocacy &amp; Welfare</div>
+            <div class="desc">Championing the rights, occupational welfare, and interests of Medical Laboratory Professionals.</div>
+          </div>
+          <div class="act-card">
+            <div class="icon">🤝</div>
+            <div class="title">Community Engagement</div>
+            <div class="desc">Health education, disease prevention campaigns, and community outreach programs.</div>
+          </div>
+          <div class="act-card">
+            <div class="icon">💼</div>
+            <div class="title">Economic Empowerment</div>
+            <div class="desc">Financial literacy, saving initiatives, and livelihood development projects for members.</div>
+          </div>
+          <div class="act-card">
+            <div class="icon">⚖️</div>
+            <div class="title">Ethics &amp; Professionalism</div>
+            <div class="desc">Promoting integrity, ethical practice, and strict professionalism in the sector.</div>
+          </div>
+          <div class="act-card">
+            <div class="icon">🌍</div>
+            <div class="title">Strategic Partnerships</div>
+            <div class="desc">Collaborating with UMLTA, health institutions, academia, and community partners.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ============ BENEFITS ============ -->
-  <div class="section">
-    <h2>Benefits of Becoming a Member</h2>
-    <div class="benefit-grid">
-      <div class="benefit-card">
-        <div class="btitle">Professional Development</div>
-        <div class="bdesc">Access approved training, seminars, mentorship programs, and peer-learning forums.</div>
+  <div class="acc" data-acc>
+    <div class="acc-head">
+      <div class="acc-title">
+        <div class="acc-icon">✨</div>
+        <div>
+          <div class="acc-label">Benefits of Becoming a Member</div>
+          <div class="acc-hint">What you gain as an AMLPN member</div>
+        </div>
       </div>
-      <div class="benefit-card">
-        <div class="btitle">Advocacy &amp; Representation</div>
-        <div class="bdesc">Your professional interests and occupational welfare championed at sector level.</div>
-      </div>
-      <div class="benefit-card">
-        <div class="btitle">Research Participation</div>
-        <div class="bdesc">Engage in scientific research, surveillance, and knowledge dissemination.</div>
-      </div>
-      <div class="benefit-card">
-        <div class="btitle">Community Impact</div>
-        <div class="bdesc">Join public-health education and community health engagement initiatives.</div>
-      </div>
-      <div class="benefit-card">
-        <div class="btitle">Ethics &amp; Professionalism</div>
-        <div class="bdesc">Strengthen your professional integrity, ethics, and accountability standards.</div>
-      </div>
-      <div class="benefit-card">
-        <div class="btitle">Financial Literacy &amp; Welfare</div>
-        <div class="bdesc">Access livelihood, financial-literacy, and responsible development initiatives.</div>
-      </div>
-      <div class="benefit-card">
-        <div class="btitle">Partnership Access</div>
-        <div class="bdesc">Connect with recognized professional, health, academic, and community institutions.</div>
-      </div>
-      <div class="benefit-card">
-        <div class="btitle">Recognition &amp; Compliance</div>
-        <div class="bdesc">Support maintaining your professional registration, licensing, and CPD requirements.</div>
+      <div class="acc-chev">▾</div>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="benefit-grid">
+          <div class="benefit-card">
+            <div class="btitle">Professional Development</div>
+            <div class="bdesc">Access approved training, seminars, mentorship programs, and peer-learning forums.</div>
+          </div>
+          <div class="benefit-card">
+            <div class="btitle">Advocacy &amp; Representation</div>
+            <div class="bdesc">Your professional interests and occupational welfare championed at sector level.</div>
+          </div>
+          <div class="benefit-card">
+            <div class="btitle">Research Participation</div>
+            <div class="bdesc">Engage in scientific research, surveillance, and knowledge dissemination.</div>
+          </div>
+          <div class="benefit-card">
+            <div class="btitle">Community Impact</div>
+            <div class="bdesc">Join public-health education and community health engagement initiatives.</div>
+          </div>
+          <div class="benefit-card">
+            <div class="btitle">Ethics &amp; Professionalism</div>
+            <div class="bdesc">Strengthen your professional integrity, ethics, and accountability standards.</div>
+          </div>
+          <div class="benefit-card">
+            <div class="btitle">Financial Literacy &amp; Welfare</div>
+            <div class="bdesc">Access livelihood, financial-literacy, and responsible development initiatives.</div>
+          </div>
+          <div class="benefit-card">
+            <div class="btitle">Partnership Access</div>
+            <div class="bdesc">Connect with recognized professional, health, academic, and community institutions.</div>
+          </div>
+          <div class="benefit-card">
+            <div class="btitle">Recognition &amp; Compliance</div>
+            <div class="bdesc">Support maintaining your professional registration, licensing, and CPD requirements.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ============ HOW TO REGISTER ============ -->
-  <div class="section">
-    <h2>How to Register as a Member</h2>
-    <div class="steps">
-      <div class="step-item">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <div class="step-title">Complete the Application</div>
-          <div class="step-desc">Fill in your personal, contact, and professional details through our secure online form.</div>
+  <div class="acc" data-acc>
+    <div class="acc-head">
+      <div class="acc-title">
+        <div class="acc-icon">📝</div>
+        <div>
+          <div class="acc-label">How to Register as a Member</div>
+          <div class="acc-hint">4 simple steps to join AMLPN</div>
         </div>
       </div>
-      <div class="step-item">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <div class="step-title">Submit Supporting Documents</div>
-          <div class="step-desc">Provide your passport photo, national ID, and professional or academic evidence as requested.</div>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <div class="step-title">Complete Your Payment</div>
-          <div class="step-desc">Once approved, you'll receive payment instructions for your joining fee and annual subscription.</div>
-        </div>
-      </div>
-      <div class="step-item">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <div class="step-title">Receive Your Membership</div>
-          <div class="step-desc">After verification, you'll receive your Member ID, certificate, and access to the AMLPN Member Portal.</div>
-        </div>
-      </div>
+      <div class="acc-chev">▾</div>
     </div>
-    <div class="cta-wrap">
-      <a href="/apply.html" class="btn-cta">Apply for Membership →</a>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Complete the Application</div>
+            <div class="step-desc">Fill in your personal, contact, and professional details through our secure online form.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Submit Supporting Documents</div>
+            <div class="step-desc">Provide your passport photo, national ID, and professional or academic evidence as requested.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Complete Your Payment</div>
+            <div class="step-desc">Once approved, you'll receive payment instructions for your joining fee and annual subscription.</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Receive Your Membership</div>
+            <div class="step-desc">After verification, you'll receive your Member ID, certificate, and access to the AMLPN Member Portal.</div>
+          </div>
+        </div>
+        <div class="cta-wrap">
+          <a href="/apply.html" class="btn-cta">Apply for Membership →</a>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- ============ CONTACT ============ -->
-  <div class="section">
-    <h2>Contact Us</h2>
-    <div class="contact-grid">
-      <div class="contact-item">
-        <div class="cicon">📞</div>
-        <div class="clabel">Phone</div>
-        <div class="cvalue"><a href="tel:+256785457533">(+256)-785-457-533</a></div>
+  <div class="acc" data-acc>
+    <div class="acc-head">
+      <div class="acc-title">
+        <div class="acc-icon">📞</div>
+        <div>
+          <div class="acc-label">Contact Us</div>
+          <div class="acc-hint">Reach out to AMLPN</div>
+        </div>
       </div>
-      <div class="contact-item">
-        <div class="cicon">📧</div>
-        <div class="clabel">Email</div>
-        <div class="cvalue"><a href="mailto:amlpn.ug@gmail.com">amlpn.ug@gmail.com</a></div>
-      </div>
-      <div class="contact-item">
-        <div class="cicon">📍</div>
-        <div class="clabel">Address</div>
-        <div class="cvalue">P.O. Box 154432, Mukono – Uganda</div>
+      <div class="acc-chev">▾</div>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="contact-grid">
+          <div class="contact-item">
+            <div class="cicon">📞</div>
+            <div class="clabel">Phone</div>
+            <div class="cvalue"><a href="tel:+256785457533">(+256)-785-457-533</a></div>
+          </div>
+          <div class="contact-item">
+            <div class="cicon">📧</div>
+            <div class="clabel">Email</div>
+            <div class="cvalue"><a href="mailto:amlpn.ug@gmail.com">amlpn.ug@gmail.com</a></div>
+          </div>
+          <div class="contact-item">
+            <div class="cicon">📍</div>
+            <div class="clabel">Address</div>
+            <div class="cvalue">P.O. Box 154432, Mukono – Uganda</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -651,6 +765,25 @@
   <strong>Atria Medical Laboratory Professionals Network</strong><br>
   Together We Can
 </div>
+
+<script>
+  // ============================================================
+  // ACCORDION BEHAVIOUR
+  // Each section expands/collapses when its header is tapped.
+  // Multiple sections can be open at once.
+  // ============================================================
+
+  document.querySelectorAll("[data-acc]").forEach(acc => {
+    const head = acc.querySelector(".acc-head");
+    head.addEventListener("click", () => {
+      acc.classList.toggle("open");
+    });
+  });
+
+  // Open "Who We Are" by default so the page isn't empty on first load
+  const firstAcc = document.querySelector("[data-acc]");
+  if (firstAcc) firstAcc.classList.add("open");
+</script>
 
 </body>
 </html>
