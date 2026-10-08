@@ -373,9 +373,11 @@
       <div class="card"><h2>Contributions</h2><table class="data" id="tblContributions"></table></div>
       <div class="card">
         <h2>Quick Actions</h2>
-        <button class="btn-secondary" id="btnVerify" style="margin-top:0;">View Public Verification Page</button>
-        <button class="btn-secondary" id="btnChange" style="margin-top:10px;">Change My Password</button>
-        <button class="btn-secondary" id="btnContact" style="margin-top:10px;">Contact AMLPN</button>
+      <button class="btn-primary" id="btnRenew" style="margin-top:0;">Renew My Membership</button>
+      <button class="btn-primary" id="btnContribute" style="margin-top:10px;">Make a Contribution</button>
+      <button class="btn-secondary" id="btnVerify" style="margin-top:10px;">View Public Verification Page</button>
+      <button class="btn-secondary" id="btnChange" style="margin-top:10px;">Change My Password</button>
+      <button class="btn-secondary" id="btnContact" style="margin-top:10px;">Contact AMLPN</button>
       </div>
     </div>
   </div>
@@ -661,10 +663,35 @@ function renderDashboard(res) {
     window.location.href = "mailto:amlpn.ug@gmail.com?subject=AMLPN Portal Query " + m.memberId;
   };
 
+  document.getElementById("btnRenew").onclick = () => openFormWithToken("renew");
+  document.getElementById("btnContribute").onclick = () => openFormWithToken("contribute");
+
   document.getElementById("dashLoading").classList.add("hidden");
   document.getElementById("dashContent").classList.remove("hidden");
 }
 
+ async function openFormWithToken(formType) {
+  if (!TOKEN) { alert("Session expired. Please sign in again."); return; }
+  const btnId = formType === "renew" ? "btnRenew" : "btnContribute";
+  const btn = document.getElementById(btnId);
+  const original = btn.textContent;
+  btn.disabled = true; btn.textContent = "Preparing…";
+
+  try {
+    const res = await api({ action: "request-form-token", sessionToken: TOKEN, formType });
+    btn.disabled = false; btn.textContent = original;
+    if (!res || !res.ok || !res.formToken) {
+      alert((res && res.message) || "Could not prepare form. Please try again.");
+      return;
+    }
+    const page = formType === "renew" ? "/renew.html" : "/contribute.html";
+    window.location.href = page + "?token=" + encodeURIComponent(res.formToken);
+  } catch (err) {
+    btn.disabled = false; btn.textContent = original;
+    alert("Network error. Please try again.");
+  }
+}
+ 
 function appendRow(table, key, value, allowHtml) {
   const tr = document.createElement("tr");
   const td1 = document.createElement("td"); td1.textContent = key;
