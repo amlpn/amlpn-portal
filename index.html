@@ -156,12 +156,27 @@
     border-bottom: 2px solid #d9e2ec;
   }
   table.data td { padding: 10px 12px; border-bottom: 1px solid #eef2f6; }
-  .pill {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: bold;
+  table.data tr.row-clickable { cursor: pointer; }
+  table.data tr.row-clickable:hover { background: #f7fafd; }
+  table.data tr.row-open { background: #EEF5FB; }
+  .tx-detail-row td {
+    padding: 0 !important;
+    background: #f7fafd;
+    border-bottom: 1px solid #eef2f6;
+  }
+  .tx-detail-box {
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #243447;
+    border-left: 4px solid #C7A84B;
+    background: linear-gradient(180deg,#F4F8FC 0%,#EEF5FB 100%);
+    animation: fadeSlide .2s ease-out;
+  }
+  .tx-detail-box .tx-row { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; }
+  .tx-detail-box .tx-row .k { color: #657786; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .tx-detail-box .tx-row .v { color: #17365D; font-weight: bold; text-align: right; }
+  @keyframes fadeSlide { from { opacity:0; transform: translateY(-3px);} to {opacity:1; transform:none;} }
   }
   .pill-green { background: #E7F4EA; color: #26733C; }
   .pill-yellow { background: #FFF8DD; color: #795E00; }
@@ -451,6 +466,12 @@ function initPromo() {
     });
 }
 
+ function escapeHtml_(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+ 
 function startPromoRotation() {
   const dotsContainer = document.getElementById("promoDots");
   dotsContainer.innerHTML = "";
@@ -636,9 +657,7 @@ function renderDashboard(res) {
    ["Licence Expiry", m.licenceExpiry || "—"]]
     .forEach(([k, v]) => appendRow(t2, k, v, false));
 
-  renderTable("tblPayments",
-    ["Date","Category","Amount","Status"],
-    (res.payments || []).map(p => [p.date, p.category, p.amount, pillFor(p.status)]));
+  renderPaymentsTable("tblPayments", res.payments || []);
 
   renderTable("tblRenewals",
     ["Year","Amount","Status","Completed"],
@@ -699,6 +718,59 @@ function appendRow(table, key, value, allowHtml) {
   if (allowHtml) td2.innerHTML = value; else td2.textContent = value;
   tr.appendChild(td1); tr.appendChild(td2);
   table.appendChild(tr);
+}
+function renderPaymentsTable(id, payments) {
+  const t = document.getElementById(id);
+  t.innerHTML = "";
+
+  const thead = document.createElement("tr");
+  ["Date","Category","Amount","Status"].forEach(h => {
+    const th = document.createElement("th"); th.textContent = h; thead.appendChild(th);
+  });
+  t.appendChild(thead);
+
+  if (!payments.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 4; td.style.textAlign = "center"; td.style.color = "#657786";
+    td.textContent = "No records yet.";
+    tr.appendChild(td); t.appendChild(tr); return;
+  }
+
+  payments.forEach(p => {
+    const tr = document.createElement("tr");
+    tr.className = "row-clickable";
+    tr.innerHTML =
+      "<td>" + escapeHtml_(p.date) + "</td>" +
+      "<td>" + escapeHtml_(p.category) + "</td>" +
+      "<td>" + escapeHtml_(p.amount) + "</td>" +
+      "<td>" + pillFor(p.status) + "</td>";
+
+    const detail = document.createElement("tr");
+    detail.className = "tx-detail-row";
+    detail.style.display = "none";
+    const dtd = document.createElement("td");
+    dtd.colSpan = 4;
+    dtd.innerHTML =
+      '<div class="tx-detail-box">' +
+        '<div class="tx-row"><span class="k">Date</span><span class="v">' + escapeHtml_(p.date) + '</span></div>' +
+        '<div class="tx-row"><span class="k">Type</span><span class="v">' + escapeHtml_(p.category) + '</span></div>' +
+        '<div class="tx-row"><span class="k">Amount</span><span class="v">' + escapeHtml_(p.amount) + '</span></div>' +
+        '<div class="tx-row"><span class="k">Status</span><span class="v">' + escapeHtml_(p.status) + '</span></div>' +
+      '</div>';
+    detail.appendChild(dtd);
+
+    tr.addEventListener("click", () => {
+      const open = detail.style.display !== "none";
+      // Close any other open detail
+      t.querySelectorAll(".tx-detail-row").forEach(r => r.style.display = "none");
+      t.querySelectorAll("tr.row-open").forEach(r => r.classList.remove("row-open"));
+      if (!open) { detail.style.display = "table-row"; tr.classList.add("row-open"); }
+    });
+
+    t.appendChild(tr);
+    t.appendChild(detail);
+  });
 }
 
 function renderTable(id, headers, rows) {
