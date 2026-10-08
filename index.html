@@ -156,6 +156,27 @@
     border-bottom: 2px solid #d9e2ec;
   }
   table.data td { padding: 10px 12px; border-bottom: 1px solid #eef2f6; }
+  .tx-tip { position: relative; }
+  .tx-tip:hover { background: #f7fafd; }
+  .tx-tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 12px;
+    background: #17365D;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(23,54,93,.25);
+  }
+  .tx-tip:hover::after { opacity: 1; }
   table.data tr.row-clickable { cursor: pointer; }
   table.data tr.row-clickable:hover { background: #f7fafd; }
   table.data tr.row-open { background: #EEF5FB; }
@@ -663,9 +684,20 @@ function renderDashboard(res) {
     ["Year","Amount","Status","Completed"],
     (res.renewals || []).map(r => [r.year, r.amount, pillFor(r.status), r.completed || "—"]));
 
-  renderTable("tblContributions",
-    ["Fund","Amount","Status"],
-    (res.contributions || []).map(c => [c.fund, c.amount, pillFor(c.status)]));
+      const contribRows = (res.contributions || []).map(c => {
+      const tip = "Date: " + (c.date || "—") + " • Type: " + (c.type || "Member Contribution");
+      return [
+        c.fund,
+        c.amount,
+        pillFor(c.status)
+      ].map((cell, i) => i === 0
+        ? '<span class="tx-tip" data-tip="' + escapeHtml_(tip) + '">' + escapeHtml_(cell) + '</span>'
+        : cell
+      );
+    });
+    renderTable("tblContributions",
+      ["Fund","Amount","Status"],
+      contribRows);
 
   document.getElementById("btnVerify").onclick = () => {
     if (m.verificationUrl) window.open(m.verificationUrl, "_blank");
