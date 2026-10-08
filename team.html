@@ -40,7 +40,7 @@
   }
 
   .page {
-    max-width: 1000px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 0 16px 60px;
   }
@@ -65,13 +65,11 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* ---------- COMPACT TEAM GRID ---------- */
   .grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
-  @media (max-width: 900px) {
-    .grid { grid-template-columns: repeat(2, 1fr); }
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
   }
   @media (max-width: 560px) {
     .grid { grid-template-columns: 1fr; }
@@ -92,9 +90,11 @@
     border-color: #C7A84B;
   }
 
+  /* ---------- COMPACT PHOTO (3:4 aspect, capped) ---------- */
   .photo {
     width: 100%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 3 / 4;
+    max-height: 240px;
     background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
     display: flex;
     align-items: center;
@@ -110,28 +110,29 @@
   }
   .initials {
     color: #fff;
-    font-size: 44px;
+    font-size: 32px;
     font-weight: bold;
     letter-spacing: 2px;
   }
 
+  /* ---------- COMPACT INFO ---------- */
   .info {
-    padding: 18px 20px 20px;
+    padding: 12px 14px 16px;
   }
   .name {
     color: #17365D;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     line-height: 1.35;
     margin-bottom: 6px;
   }
   .position {
     color: #C7A84B;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
     letter-spacing: 1px;
     text-transform: uppercase;
-    padding: 5px 12px;
+    padding: 4px 10px;
     background: #FFF8DD;
     border-radius: 20px;
     display: inline-block;
@@ -139,19 +140,19 @@
   }
   .bio {
     color: #50606F;
-    font-size: 13px;
-    line-height: 1.6;
-    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.55;
+    margin-top: 10px;
     text-align: left;
   }
   .contact-links {
-    margin-top: 14px;
-    padding-top: 12px;
+    margin-top: 12px;
+    padding-top: 10px;
     border-top: 1px solid #eef2f6;
     display: flex;
     justify-content: center;
-    gap: 14px;
-    font-size: 12px;
+    gap: 12px;
+    font-size: 11px;
     flex-wrap: wrap;
   }
   .contact-links a {
@@ -161,14 +162,14 @@
   }
   .contact-links a:hover { text-decoration: underline; }
 
-  /* Board label */
+  /* ---------- SECTION LABEL ---------- */
   .section-label {
     color: #17365D;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     letter-spacing: 2px;
     text-transform: uppercase;
-    margin: 8px 0 18px;
+    margin: 8px 0 16px;
     padding-bottom: 10px;
     border-bottom: 2px solid #C7A84B;
   }
