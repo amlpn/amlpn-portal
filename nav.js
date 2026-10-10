@@ -27,6 +27,20 @@
     { label: "News & Updates", href: "/news.html", icon: "📰" },
     { label: "Contact", href: "/contact.html", icon: "📞" }
   ];
+  // If a member is signed in, prepend a Dashboard link at the top of the menu
+(function injectDashboardLink() {
+  try {
+    if (sessionStorage.getItem("amlpn_token")) {
+      NAV_LINKS.unshift({ label: "Dashboard", href: "/dashboard.html", icon: "📊" });
+    }
+      // Optional: hide Member Login when signed in
+      for (let i = NAV_LINKS.length - 1; i >= 0; i--) {
+        if (NAV_LINKS[i].href === "/index.html" || NAV_LINKS[i].label === "Member Login") {
+          NAV_LINKS.splice(i, 1);
+        }
+      }
+  } catch (e) { /* sessionStorage blocked — skip silently */ }
+})();
 
   // Links only shown after login (checked at runtime via localStorage)
   const AUTH_LINKS = [
