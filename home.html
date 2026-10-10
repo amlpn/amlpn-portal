@@ -533,5 +533,16 @@ function resetTimer() {
 loadCarousel();
 
 </script>
+ <script>
+  try {
+    if (sessionStorage.getItem("amlpn_token")) {
+      var el = document.querySelector('a[href="/login.html"].btn-ghost');
+      if (el) {
+        el.href = "/dashboard.html";
+        el.textContent = "My Dashboard";
+      }
+    }
+  } catch (e) {}
+</script>
 </body>
 </html>
