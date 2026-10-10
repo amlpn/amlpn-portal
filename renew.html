@@ -16,15 +16,18 @@
     font-size: 15px;
     line-height: 1.6;
   }
+
+  /* ---------- HERO ---------- */
   .hero {
     background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
     color: #fff;
-    padding: 22px 22px 20px;
+    padding: 24px 22px 22px;
     border-radius: 12px;
-    margin: 16px auto 18px;
+    margin: 16px auto 14px;
     box-shadow: 0 4px 14px rgba(23,54,93,.18);
     text-align: center;
     max-width: 720px;
+    width: calc(100% - 32px);
   }
   .hero h1 { margin: 0; font-size: 22px; letter-spacing: .5px; }
   .hero .sub {
@@ -43,7 +46,7 @@
   }
   .back-dash {
     display: inline-block;
-    margin-bottom: 12px;
+    margin-top: 14px;
     background: rgba(255,255,255,.15);
     color: #fff;
     border: 1px solid rgba(255,255,255,.35);
@@ -55,6 +58,15 @@
     letter-spacing: .5px;
   }
   .back-dash:hover { background: rgba(255,255,255,.25); }
+
+  /* ---------- LAYOUT ---------- */
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 16px 60px;
+  }
+
+  /* ---------- CARDS ---------- */
   .card {
     background: #fff;
     border: 1px solid #d9e2ec;
@@ -68,6 +80,8 @@
     font-size: 18px;
     color: #17365D;
   }
+
+  /* ---------- FORMS ---------- */
   label {
     display: block;
     font-size: 12px;
@@ -111,6 +125,7 @@
     gap: 12px;
   }
   @media (max-width: 520px) { .two-col { grid-template-columns: 1fr; } }
+
   .readonly-value {
     padding: 12px 14px;
     background: #f8fafc;
@@ -137,6 +152,8 @@
     white-space: pre-wrap;
     font-family: inherit;
   }
+
+  /* ---------- BUTTONS ---------- */
   button.btn-primary {
     width: 100%;
     padding: 15px;
@@ -153,6 +170,8 @@
   }
   button.btn-primary:hover { background: #0F2A47; }
   button.btn-primary:disabled { background: #94A3B8; cursor: not-allowed; }
+
+  /* ---------- NOTICES ---------- */
   .notice {
     padding: 14px 16px;
     border-radius: 6px;
@@ -163,6 +182,8 @@
   }
   .notice.error { background: #FDECEC; color: #B71C1C; border-left: 4px solid #C62828; display: block; }
   .notice.success { background: #E7F4EA; color: #26733C; border-left: 4px solid #2E7D32; display: block; }
+
+  /* ---------- LOADING ---------- */
   .loading {
     text-align: center;
     padding: 60px 20px;
@@ -182,10 +203,9 @@
     animation: spin .8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .success-box {
-    text-align: center;
-    padding: 30px 20px;
-  }
+
+  /* ---------- SUCCESS ---------- */
+  .success-box { text-align: center; padding: 30px 20px; }
   .success-box .icon { font-size: 56px; margin-bottom: 10px; }
   .success-box h3 {
     color: #17365D;
@@ -223,6 +243,7 @@
     font-weight: bold;
     font-size: 14px;
   }
+
   .footer {
     text-align: center;
     padding: 30px 16px 20px;
