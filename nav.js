@@ -24,6 +24,7 @@
     { label: "Member Login", href: "/index.html", icon: "🔐" },
     { label: "About Us", href: "/about.html", icon: "ℹ️" },
     { label: "Meet the Team", href: "/team.html", icon: "👥" },
+    { label: "News & Updates", href: "/news.html", icon: "📰" },
     { label: "Contact", href: "/contact.html", icon: "📞" }
   ];
 
