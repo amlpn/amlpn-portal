@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/favicon.png">
+<title>AMLPN — Atria Medical Laboratory Professionals Network</title>
+<script src="/nav.js" defer></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #243447;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
+    color: #fff;
+    padding: 56px 24px 52px;
+    text-align: center;
+  }
+  .hero .brand {
+    font-size: 34px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    margin-bottom: 6px;
+  }
+  .hero .sub {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: .9;
+  }
+  .hero .flag {
+    display: flex;
+    width: 180px;
+    height: 5px;
+    margin: 16px auto 0;
+  }
+  .hero .flag div { flex: 1; }
+  .hero .flag .b { background: #000; }
+  .hero .flag .y { background: #FCDC04; }
+  .hero .flag .r { background: #D90000; }
+  .hero .motto {
+    color: #E5C453;
+    font-style: italic;
+    font-size: 13px;
+    margin-top: 14px;
+  }
+  .hero .lede {
+    max-width: 640px;
+    margin: 22px auto 0;
+    font-size: 15px;
+    line-height: 1.75;
+    opacity: .95;
+  }
+  .hero .cta-row {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .hero .btn-gold {
+    background: #C7A84B;
+    color: #17365D;
+    padding: 15px 30px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: .5px;
+    display: inline-block;
+  }
+  .hero .btn-gold:hover { background: #B89738; }
+  .hero .btn-ghost {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.4);
+    padding: 15px 30px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: .5px;
+    display: inline-block;
+  }
+  .hero .btn-ghost:hover { background: rgba(255,255,255,.1); }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 36px 16px 20px;
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .section-head h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #17365D;
+  }
+  .section-head .tag {
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #C7A84B;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .section-head .view-all {
+    background: #fff;
+    color: #17365D;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid #d9e2ec;
+    white-space: nowrap;
+  }
+  .section-head .view-all:hover { background: #EEF5FB; }
+
+  /* ---------- CAROUSEL ---------- */
+  .carousel {
+    position: relative;
+    margin-bottom: 40px;
+  }
+  .carousel-track {
+    position: relative;
+    min-height: 220px;
+  }
+  .carousel-card {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .45s;
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    padding: 26px 26px 24px;
+    box-shadow: 0 4px 14px rgba(23,54,93,.08);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .carousel-card.active {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
+    z-index: 2;
+  }
+  .carousel-card .meta {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #657786;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .carousel-card .meta .writer { color: #17365D; font-weight: bold; }
+  .carousel-card h3 {
+    margin: 0 0 10px;
+    font-size: 21px;
+    color: #17365D;
+    line-height: 1.35;
+  }
+  .carousel-card .summary {
+    font-size: 14px;
+    color: #50606F;
+    line-height: 1.7;
+    margin: 0 0 16px;
+    flex: 1;
+  }
+  .carousel-card .read-more {
+    font-size: 13px;
+    font-weight: bold;
+    color: #17365D;
+  }
+  .carousel-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .carousel-nav .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d9e2ec;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+  }
+  .carousel-nav .dot:hover { background: #B8C9DA; }
+  .carousel-nav .dot.active { background: #C7A84B; transform: scale(1.3); }
+  .carousel-state {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    color: #657786;
+    font-size: 14px;
+  }
+
+  /* ---------- QUICK LINKS ---------- */
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 620px) { .quick-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 400px) { .quick-grid { grid-template-columns: 1fr; } }
+  .quick {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    padding: 20px 18px;
+    text-decoration: none;
+    color: #243447;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+    transition: transform .12s, box-shadow .12s, border-color .12s;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .quick:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(23,54,93,.1);
+    border-color: #C7A84B;
+  }
+  .quick .icon { font-size: 22px; }
+  .quick .label { font-weight: bold; color: #17365D; font-size: 14px; }
+  .quick .desc { font-size: 12px; color: #657786; line-height: 1.5; }
+
+  /* ---------- ABOUT STRIP ---------- */
+  .about-strip {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    padding: 28px 26px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  }
+  .about-strip h2 {
+    margin: 0 0 12px;
+    font-size: 20px;
+    color: #17365D;
+  }
+  .about-strip p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #50606F;
+    margin: 0 0 12px;
+  }
+  .about-strip p:last-child { margin-bottom: 0; }
+  .about-strip .motto-line {
+    color: #C7A84B;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 30px 16px 40px;
+    color: #657786;
+    font-size: 11px;
+    line-height: 1.7;
+    border-top: 1px solid #d9e2ec;
+    margin-top: 20px;
+  }
+  .footer strong { color: #17365D; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body data-page="Home">
+
+<div class="hero">
+  <div class="brand">AMLPN</div>
+  <div class="sub">Atria Medical Laboratory Professionals Network</div>
+  <div class="flag"><div class="b"></div><div class="y"></div><div class="r"></div></div>
+  <div class="motto">Together We Can</div>
+  <p class="lede">
+    A national network of medical laboratory professionals, working together
+    to raise standards, strengthen livelihoods, and serve Uganda's health
+    system with integrity and excellence.
+  </p>
+  <div class="cta-row">
+    <a href="/apply.html" class="btn-gold">Apply for Membership →</a>
+    <a href="/login.html" class="btn-ghost">Member Login</a>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- NEWS CAROUSEL -->
+  <div class="section-head">
+    <div>
+      <span class="tag">Latest</span>
+      <h2>News &amp; Updates</h2>
+    </div>
+    <a href="/news.html" class="view-all">View all updates →</a>
+  </div>
+
+  <div class="carousel" id="carousel">
+    <div class="carousel-state" id="carouselLoading">Loading updates…</div>
+    <div class="carousel-track hidden" id="carouselTrack"></div>
+    <div class="carousel-nav hidden" id="carouselNav"></div>
+  </div>
+
+  <!-- QUICK LINKS -->
+  <div class="section-head">
+    <div>
+      <span class="tag">Explore</span>
+      <h2>Quick Links</h2>
+    </div>
+  </div>
+
+  <div class="quick-grid">
+    <a href="/apply.html" class="quick">
+      <span class="icon">📝</span>
+      <span class="label">Apply for Membership</span>
+      <span class="desc">Start your AMLPN application.</span>
+    </a>
+    <a href="/track.html" class="quick">
+      <span class="icon">🔍</span>
+      <span class="label">Track Application</span>
+      <span class="desc">Check the status of your application.</span>
+    </a>
+    <a href="/login.html" class="quick">
+      <span class="icon">🔐</span>
+      <span class="label">Member Login</span>
+      <span class="desc">Access your member portal.</span>
+    </a>
+    <a href="/about.html" class="quick">
+      <span class="icon">ℹ️</span>
+      <span class="label">About Us</span>
+      <span class="desc">Our vision, mission and objectives.</span>
+    </a>
+    <a href="/team.html" class="quick">
+      <span class="icon">👥</span>
+      <span class="label">Meet the Team</span>
+      <span class="desc">The CEC and leadership.</span>
+    </a>
+    <a href="/contact.html" class="quick">
+      <span class="icon">📞</span>
+      <span class="label">Contact</span>
+      <span class="desc">Reach out to AMLPN.</span>
+    </a>
+  </div>
+
+  <!-- ABOUT STRIP -->
+  <div class="about-strip">
+    <h2>About AMLPN</h2>
+    <p>
+      Atria Medical Laboratory Professionals Network Ltd is a Ugandan
+      professional network bringing together medical laboratory professionals
+      to advance ethical practice, professional development, and the
+      livelihoods of its members.
+    </p>
+    <p class="motto-line">Together We Can.</p>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Atria Medical Laboratory Professionals Network</strong><br>
+  Together We Can
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
+
+async function api(payload) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+function escapeHtml(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+// ============================================================
+// NEWS CAROUSEL
+// ============================================================
+
+let CAROUSEL_ITEMS = [];
+let CAROUSEL_INDEX = 0;
+let CAROUSEL_TIMER = null;
+
+async function loadCarousel() {
+  const loading = document.getElementById("carouselLoading");
+  const track = document.getElementById("carouselTrack");
+  const nav = document.getElementById("carouselNav");
+
+  try {
+    const res = await api({ action: "get-updates", limit: 5 });
+
+    if (!res || !res.ok || !res.updates || !res.updates.length) {
+      loading.textContent = "No updates yet — check back soon.";
+      return;
+    }
+
+    CAROUSEL_ITEMS = res.updates;
+    loading.classList.add("hidden");
+    track.classList.remove("hidden");
+    renderCarousel();
+
+  } catch (err) {
+    loading.textContent = "Could not load updates.";
+  }
+}
+
+function renderCarousel() {
+  const track = document.getElementById("carouselTrack");
+  const nav = document.getElementById("carouselNav");
+  track.innerHTML = "";
+  nav.innerHTML = "";
+
+  CAROUSEL_ITEMS.forEach((item, i) => {
+    const card = document.createElement("div");
+    card.className = "carousel-card" + (i === 0 ? " active" : "");
+
+    let metaHtml = '<span>' + escapeHtml(item.date) + '</span>';
+    if (item.writer) metaHtml += '<span class="writer">' + escapeHtml(item.writer) + '</span>';
+
+    card.innerHTML =
+      '<div>' +
+        '<div class="meta">' + metaHtml + '</div>' +
+        '<h3>' + escapeHtml(item.headline || "(Untitled)") + '</h3>' +
+        '<p class="summary">' + escapeHtml(item.summary || "") + '</p>' +
+      '</div>' +
+      '<span class="read-more">Read more →</span>';
+
+    card.addEventListener("click", () => {
+      window.location.href = "/news.html?id=" + encodeURIComponent(item.id);
+    });
+
+    track.appendChild(card);
+  });
+
+  if (CAROUSEL_ITEMS.length > 1) {
+    nav.classList.remove("hidden");
+    CAROUSEL_ITEMS.forEach((_, i) => {
+      const dot = document.createElement("button");
+      dot.className = "dot" + (i === 0 ? " active" : "");
+      dot.setAttribute("aria-label", "Show update " + (i+1));
+      dot.addEventListener("click", () => {
+        goToSlide(i);
+        resetTimer();
+      });
+      nav.appendChild(dot);
+    });
+
+    startTimer();
+  }
+}
+
+function goToSlide(i) {
+  const cards = document.querySelectorAll(".carousel-card");
+  const dots = document.querySelectorAll(".carousel-nav .dot");
+  if (!cards.length) return;
+
+  CAROUSEL_INDEX = ((i % cards.length) + cards.length) % cards.length;
+
+  cards.forEach((c, idx) => c.classList.toggle("active", idx === CAROUSEL_INDEX));
+  dots.forEach((d, idx) => d.classList.toggle("active", idx === CAROUSEL_INDEX));
+}
+
+function startTimer() {
+  CAROUSEL_TIMER = setInterval(() => goToSlide(CAROUSEL_INDEX + 1), 6500);
+}
+
+function resetTimer() {
+  if (CAROUSEL_TIMER) clearInterval(CAROUSEL_TIMER);
+  startTimer();
+}
+
+loadCarousel();
+
+</script>
+</body>
+</html>
