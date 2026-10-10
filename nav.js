@@ -27,20 +27,32 @@
     { label: "News & Updates", href: "/news.html", icon: "📰" },
     { label: "Contact", href: "/contact.html", icon: "📞" }
   ];
-  // If a member is signed in, prepend a Dashboard link at the top of the menu
+  
+// If a member is signed in, inject Dashboard link + hide Member Login
 (function injectDashboardLink() {
   try {
     if (sessionStorage.getItem("amlpn_token")) {
       NAV_LINKS.unshift({ label: "Dashboard", href: "/dashboard.html", icon: "📊" });
-    }
-      // Optional: hide Member Login when signed in
+      // Hide "Member Login" while signed in
       for (let i = NAV_LINKS.length - 1; i >= 0; i--) {
         if (NAV_LINKS[i].href === "/index.html" || NAV_LINKS[i].label === "Member Login") {
           NAV_LINKS.splice(i, 1);
         }
       }
+      // Add Sign Out
+      NAV_LINKS.push({ label: "Sign Out", href: "#signout", icon: "🚪" });
+    }
   } catch (e) { /* sessionStorage blocked — skip silently */ }
 })();
+
+// Handle the Sign Out click wherever it appears
+document.addEventListener("click", function (e) {
+  const a = e.target.closest && e.target.closest('a[href="#signout"]');
+  if (!a) return;
+  e.preventDefault();
+  try { sessionStorage.removeItem("amlpn_token"); } catch (err) {}
+  window.location.replace("/login.html");
+});
 
   // Links only shown after login (checked at runtime via localStorage)
   const AUTH_LINKS = [
