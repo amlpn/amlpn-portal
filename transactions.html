@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/favicon.png">
+<title>My Transactions — AMLPN</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #243447;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .nav {
+    background: #17365D;
+    color: #fff;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .nav .brand {
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #fff;
+    text-decoration: none;
+  }
+  .nav .links { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+  .nav .links a {
+    color: #DCE6F2;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background .15s;
+  }
+  .nav .links a:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .nav .links a.active { background: #C7A84B; color: #17365D; }
+  .nav .links button {
+    background: transparent;
+    color: #DCE6F2;
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0;
+  }
+  .nav .links button:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .page { max-width: 960px; margin: 0 auto; padding: 22px 16px 40px; }
+  .hero {
+    background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
+    color: #fff;
+    padding: 24px 22px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+  }
+  .hero h1 { margin: 0; font-size: 22px; letter-spacing: .5px; }
+  .hero p { margin: 6px 0 0; font-size: 13px; opacity: .9; }
+  .hero .summary {
+    margin-top: 14px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+  .hero .summary .k { color: #C7A84B; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; display: block; }
+  .hero .summary .v { font-weight: bold; font-size: 16px; }
+  .card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+  }
+  .card h2 {
+    margin: 0 0 14px;
+    font-size: 15px;
+    color: #17365D;
+  }
+  .filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 720px) {
+    .filters { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 460px) {
+    .filters { grid-template-columns: 1fr; }
+  }
+  .filter { display: flex; flex-direction: column; gap: 4px; }
+  .filter label {
+    font-size: 11px;
+    font-weight: bold;
+    color: #17365D;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .filter select, .filter input {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #d9e2ec;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    background: #fff;
+    color: #243447;
+  }
+  .filter select:focus, .filter input:focus {
+    outline: none;
+    border-color: #17365D;
+    box-shadow: 0 0 0 3px rgba(23,54,93,.1);
+  }
+  .filter-date-row {
+    grid-column: 1 / -1;
+    display: none;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .filter-date-row.visible { display: grid; }
+  @media (max-width: 460px) { .filter-date-row.visible { grid-template-columns: 1fr; } }
+  .actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .actions button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0;
+  }
+  .actions .apply { background: #17365D; color: #fff; }
+  .actions .apply:hover { background: #0F2A47; }
+  .actions .reset { background: #fff; color: #17365D; border: 1px solid #d9e2ec; }
+  .actions .reset:hover { background: #eef2f6; }
+  table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.data th {
+    background: #F4F6F8;
+    color: #17365D;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #d9e2ec;
+    letter-spacing: .5px;
+  }
+  table.data td { padding: 10px 12px; border-bottom: 1px solid #eef2f6; }
+  table.data tr.row-clickable { cursor: pointer; }
+  table.data tr.row-clickable:hover { background: #f7fafd; }
+  table.data tr.row-open { background: #EEF5FB; }
+  .tx-detail-row td {
+    padding: 0 !important;
+    background: #f7fafd;
+    border-bottom: 1px solid #eef2f6;
+  }
+  .tx-detail-box {
+    padding: 16px 18px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #243447;
+    border-left: 4px solid #C7A84B;
+    background: linear-gradient(180deg,#F4F8FC 0%,#EEF5FB 100%);
+    animation: fadeSlide .2s ease-out;
+  }
+  .tx-detail-box .tx-row { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; }
+  .tx-detail-box .tx-row .k { color: #657786; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .tx-detail-box .tx-row .v { color: #17365D; font-weight: bold; text-align: right; word-break: break-word; }
+  @keyframes fadeSlide { from { opacity:0; transform: translateY(-3px);} to {opacity:1; transform:none;} }
+  .pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  .pill-green { background: #E7F4EA; color: #26733C; }
+  .pill-yellow { background: #FFF8DD; color: #795E00; }
+  .pill-red { background: #FDECEC; color: #B71C1C; }
+  .pill-blue { background: #EFF6FF; color: #1D4ED8; }
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #657786;
+    font-size: 13px;
+  }
+  .loading { text-align: center; padding: 40px; color: #657786; }
+  .loading::after {
+    content: "";
+    display: inline-block;
+    width: 18px; height: 18px;
+    border: 3px solid #17365D;
+    border-top-color: transparent;
+    border-radius: 50%;
+    margin-left: 10px;
+    vertical-align: middle;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .footer {
+    text-align: center;
+    padding: 24px 16px 40px;
+    color: #657786;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .footer strong { color: #17365D; }
+  .hidden { display: none !important; }
+  .table-wrap { overflow-x: auto; }
+</style>
+</head>
+<body data-page="Transactions">
+
+<nav class="nav">
+  <a href="/dashboard.html" class="brand">AMLPN</a>
+  <div class="links">
+    <a href="/dashboard.html">Dashboard</a>
+    <a href="/transactions.html" class="active">Transactions</a>
+    <button id="btnLogout">Sign Out</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <h1>My Transactions</h1>
+    <p>All your payments, renewals, and contributions in one place.</p>
+    <div class="summary" id="summaryBox">
+      <div><span class="k">Transactions</span><span class="v" id="sumCount">—</span></div>
+      <div><span class="k">Total</span><span class="v" id="sumTotal">—</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Filters</h2>
+    <div class="filters">
+      <div class="filter">
+        <label for="fPeriod">Period</label>
+        <select id="fPeriod">
+          <option value="all">All time</option>
+          <option value="year">This year</option>
+          <option value="month">This month</option>
+          <option value="30">Last 30 days</option>
+          <option value="custom">Custom range</option>
+        </select>
+      </div>
+      <div class="filter">
+        <label for="fType">Type</label>
+        <select id="fType">
+          <option value="all">All types</option>
+          <option value="JOINING">Membership Joining Fee</option>
+          <option value="RENEWAL">Membership Renewal</option>
+          <option value="CONTRIBUTION">Member Contribution</option>
+        </select>
+      </div>
+      <div class="filter">
+        <label for="fStatus">Status</label>
+        <select id="fStatus">
+          <option value="all">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+      <div class="filter" style="justify-content:flex-end;">
+        <div class="actions" style="margin-top:0;">
+          <button class="apply" id="btnApply">Apply</button>
+          <button class="reset" id="btnReset">Reset</button>
+        </div>
+      </div>
+      <div class="filter-date-row" id="customRange">
+        <div class="filter">
+          <label for="fFrom">From</label>
+          <input type="date" id="fFrom">
+        </div>
+        <div class="filter">
+          <label for="fTo">To</label>
+          <input type="date" id="fTo">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Results</h2>
+    <div class="loading" id="txLoading">Loading your transactions</div>
+    <div class="table-wrap hidden" id="tableWrap">
+      <table class="data" id="tblTx"></table>
+    </div>
+    <div class="empty hidden" id="emptyMsg">No transactions match your filters.</div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Atria Medical Laboratory Professionals Network</strong><br>
+  Together We Can
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
+
+let TOKEN = sessionStorage.getItem("amlpn_token") || null;
+
+if (!TOKEN) {
+  window.location.replace("/login.html");
+}
+
+async function api(payload) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+function escapeHtml_(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function pillFor(status) {
+  const s = String(status || "").toLowerCase();
+  let cls = "pill-blue";
+  if (s.includes("active") || s.includes("verified") || s.includes("completed") || s.includes("sent") || s.includes("disbursed") || s.includes("approved")) cls = "pill-green";
+  else if (s.includes("pending") || s.includes("awaiting")) cls = "pill-yellow";
+  else if (s.includes("rejected") || s.includes("failed") || s.includes("inactive") || s.includes("expired")) cls = "pill-red";
+  return '<span class="pill ' + cls + '">' + escapeHtml_(status) + '</span>';
+}
+
+// ============================================================
+// PRE-FILL FILTERS FROM URL (?type=RENEWAL etc.)
+// ============================================================
+
+(function prefillFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const t = params.get("type");
+  if (t && ["JOINING","RENEWAL","CONTRIBUTION"].includes(t.toUpperCase())) {
+    document.getElementById("fType").value = t.toUpperCase();
+  }
+  const s = params.get("status");
+  if (s && ["pending","approved","rejected"].includes(s.toLowerCase())) {
+    document.getElementById("fStatus").value = s.toLowerCase();
+  }
+})();
+
+// ============================================================
+// PERIOD → DATE RANGE
+// ============================================================
+
+function computeDateRange() {
+  const period = document.getElementById("fPeriod").value;
+  const now = new Date();
+  let from = "", to = "";
+
+  function iso(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return y + "-" + m + "-" + day;
+  }
+
+  if (period === "year") {
+    from = now.getFullYear() + "-01-01";
+    to   = now.getFullYear() + "-12-31";
+  } else if (period === "month") {
+    from = iso(new Date(now.getFullYear(), now.getMonth(), 1));
+    to   = iso(new Date(now.getFullYear(), now.getMonth()+1, 0));
+  } else if (period === "30") {
+    const d = new Date(now.getTime() - 30*24*60*60*1000);
+    from = iso(d);
+    to   = iso(now);
+  } else if (period === "custom") {
+    from = document.getElementById("fFrom").value || "";
+    to   = document.getElementById("fTo").value || "";
+  }
+  return { from, to };
+}
+
+// Show/hide custom range
+document.getElementById("fPeriod").addEventListener("change", () => {
+  const period = document.getElementById("fPeriod").value;
+  document.getElementById("customRange").classList.toggle("visible", period === "custom");
+});
+
+// ============================================================
+// LOAD TRANSACTIONS
+// ============================================================
+
+async function loadTransactions() {
+  const type   = document.getElementById("fType").value;
+  const status = document.getElementById("fStatus").value;
+  const range  = computeDateRange();
+
+  document.getElementById("txLoading").classList.remove("hidden");
+  document.getElementById("tableWrap").classList.add("hidden");
+  document.getElementById("emptyMsg").classList.add("hidden");
+
+  try {
+    const res = await api({
+      action: "get-transactions",
+      sessionToken: TOKEN,
+      type: type,
+      status: status,
+      fromDate: range.from,
+      toDate: range.to
+    });
+
+    if (!res || !res.ok) {
+      if (res && res.message && res.message.toLowerCase().includes("session")) {
+        sessionStorage.removeItem("amlpn_token");
+        window.location.replace("/login.html");
+        return;
+      }
+      document.getElementById("txLoading").textContent = res && res.message ? res.message : "Could not load transactions.";
+      return;
+    }
+
+    renderTransactions(res.transactions || [], res.totalFormatted || "—", res.count || 0);
+  } catch (err) {
+    document.getElementById("txLoading").textContent = "Network error.";
+  }
+}
+
+function renderTransactions(rows, totalFormatted, count) {
+  document.getElementById("txLoading").classList.add("hidden");
+  document.getElementById("sumCount").textContent = count;
+  document.getElementById("sumTotal").textContent = totalFormatted;
+
+  const t = document.getElementById("tblTx");
+  t.innerHTML = "";
+
+  const thead = document.createElement("tr");
+  ["Date","Type","Reference","Amount","Status"].forEach(h => {
+    const th = document.createElement("th"); th.textContent = h; thead.appendChild(th);
+  });
+  t.appendChild(thead);
+
+  if (!rows.length) {
+    document.getElementById("emptyMsg").classList.remove("hidden");
+    return;
+  }
+
+  document.getElementById("tableWrap").classList.remove("hidden");
+
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.className = "row-clickable";
+    tr.innerHTML =
+      "<td>" + escapeHtml_(r.date) + "</td>" +
+      "<td>" + escapeHtml_(r.category) + "</td>" +
+      "<td style='font-family:Consolas,Monaco,monospace;font-size:12px;color:#657786;'>" + escapeHtml_(r.txId || "—") + "</td>" +
+      "<td>" + escapeHtml_(r.amount) + "</td>" +
+      "<td>" + pillFor(r.status) + "</td>";
+
+    const detail = document.createElement("tr");
+    detail.className = "tx-detail-row";
+    detail.style.display = "none";
+    const dtd = document.createElement("td");
+    dtd.colSpan = 5;
+
+    let rowsHtml = "";
+    rowsHtml += '<div class="tx-row"><span class="k">Transaction ID</span><span class="v">' + escapeHtml_(r.txId || "—") + '</span></div>';
+    rowsHtml += '<div class="tx-row"><span class="k">Date</span><span class="v">' + escapeHtml_(r.date) + '</span></div>';
+    rowsHtml += '<div class="tx-row"><span class="k">Type</span><span class="v">' + escapeHtml_(r.category) + '</span></div>';
+    rowsHtml += '<div class="tx-row"><span class="k">Amount</span><span class="v">' + escapeHtml_(r.amount) + '</span></div>';
+    if (r.method)    rowsHtml += '<div class="tx-row"><span class="k">Payment Method</span><span class="v">' + escapeHtml_(r.method) + '</span></div>';
+    if (r.reference) rowsHtml += '<div class="tx-row"><span class="k">Reference</span><span class="v">' + escapeHtml_(r.reference) + '</span></div>';
+    if (r.fund)      rowsHtml += '<div class="tx-row"><span class="k">Fund</span><span class="v">' + escapeHtml_(r.fund) + '</span></div>';
+    if (r.notes)     rowsHtml += '<div class="tx-row"><span class="k">Notes</span><span class="v">' + escapeHtml_(r.notes) + '</span></div>';
+    rowsHtml += '<div class="tx-row"><span class="k">Status</span><span class="v">' + escapeHtml_(r.status) + '</span></div>';
+    if (r.approvedAt) rowsHtml += '<div class="tx-row"><span class="k">Approved</span><span class="v">' + escapeHtml_(r.approvedAt) + '</span></div>';
+    if (r.finTxId)    rowsHtml += '<div class="tx-row"><span class="k">Ledger Ref</span><span class="v">' + escapeHtml_(r.finTxId) + '</span></div>';
+
+    dtd.innerHTML = '<div class="tx-detail-box">' + rowsHtml + '</div>';
+    detail.appendChild(dtd);
+
+    tr.addEventListener("click", () => {
+      const open = detail.style.display !== "none";
+      t.querySelectorAll(".tx-detail-row").forEach(x => x.style.display = "none");
+      t.querySelectorAll("tr.row-open").forEach(x => x.classList.remove("row-open"));
+      if (!open) { detail.style.display = "table-row"; tr.classList.add("row-open"); }
+    });
+
+    t.appendChild(tr);
+    t.appendChild(detail);
+  });
+}
+
+// ============================================================
+// BUTTONS
+// ============================================================
+
+document.getElementById("btnApply").addEventListener("click", loadTransactions);
+
+document.getElementById("btnReset").addEventListener("click", () => {
+  document.getElementById("fPeriod").value = "all";
+  document.getElementById("fType").value = "all";
+  document.getElementById("fStatus").value = "all";
+  document.getElementById("fFrom").value = "";
+  document.getElementById("fTo").value = "";
+  document.getElementById("customRange").classList.remove("visible");
+  loadTransactions();
+});
+
+document.getElementById("btnLogout").addEventListener("click", async () => {
+  const t = sessionStorage.getItem("amlpn_token");
+  sessionStorage.removeItem("amlpn_token");
+  if (t) { try { await api({ action: "logout", token: t }); } catch (e) {} }
+  window.location.replace("/login.html");
+});
+
+// ============================================================
+// GO
+// ============================================================
+
+if (TOKEN) loadTransactions();
+
+</script>
+</body>
+</html>
