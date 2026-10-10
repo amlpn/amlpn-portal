@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/favicon.png">
+<title>AMLPN CPD Centre</title>
+<script src="/nav.js" defer></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #243447;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
+    color: #fff;
+    padding: 24px 22px 22px;
+    border-radius: 12px;
+    margin: 16px auto 14px;
+    box-shadow: 0 4px 14px rgba(23,54,93,.18);
+    text-align: center;
+    max-width: 720px;
+    width: calc(100% - 32px);
+  }
+  .hero h1 { margin: 0; font-size: 22px; letter-spacing: .5px; }
+  .hero .sub {
+    color: #E5C453;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .hero p {
+    margin: 10px auto 0;
+    font-size: 13px;
+    line-height: 1.6;
+    opacity: .92;
+    max-width: 620px;
+  }
+  .hero .badge {
+    display: inline-block;
+    margin-top: 12px;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.3);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .page { max-width: 720px; margin: 0 auto; padding: 0 16px 60px; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 14px;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  .tab {
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #657786;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    font-family: inherit;
+  }
+  .tab.active {
+    color: #17365D;
+    border-bottom-color: #C7A84B;
+  }
+  .tab:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* SESSION CARD */
+  .session-card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    cursor: pointer;
+    transition: box-shadow .15s, transform .15s;
+  }
+  .session-card:hover {
+    box-shadow: 0 6px 16px rgba(23,54,93,.12);
+    transform: translateY(-1px);
+  }
+  .session-card .cat-line {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #657786;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .session-card .cat-line .category { color: #17365D; font-weight: bold; }
+  .session-card h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    color: #17365D;
+    line-height: 1.35;
+  }
+  .session-card .desc {
+    font-size: 14px;
+    color: #50606F;
+    line-height: 1.65;
+    margin: 0 0 14px;
+  }
+  .session-card .chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .chip {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+  }
+  .chip-accredited { background: #E7F4EA; color: #26733C; }
+  .chip-legacy { background: #FFF8DD; color: #795E00; }
+  .chip-info { background: #EEF5FB; color: #17365D; }
+  .chip-locked { background: #F4F6F8; color: #657786; }
+
+  /* DETAIL */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #17365D;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid #d9e2ec;
+  }
+  .back-link:hover { background: #EEF5FB; }
+  .detail-card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    padding: 24px 22px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  }
+  .detail-card h1 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    color: #17365D;
+    line-height: 1.3;
+  }
+  .detail-card .meta {
+    font-size: 12px;
+    color: #657786;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .detail-card .meta .category { color: #17365D; font-weight: bold; }
+  .detail-card .desc {
+    font-size: 14px;
+    color: #50606F;
+    line-height: 1.7;
+    margin: 0 0 16px;
+  }
+  .detail-card h2 {
+    font-size: 14px;
+    color: #17365D;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 20px 0 10px;
+  }
+  .materials-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .material-item {
+    display: block;
+    padding: 12px 14px;
+    background: #F4F8FC;
+    border-left: 4px solid #17365D;
+    border-radius: 0 8px 8px 0;
+    text-decoration: none;
+    color: #17365D;
+    font-size: 13px;
+    font-weight: bold;
+    word-break: break-word;
+  }
+  .material-item:hover { background: #E1EBF5; }
+  .quiz-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    color: #243447;
+  }
+  .quiz-facts div {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #eef2f6;
+  }
+  .quiz-facts div:last-child { border-bottom: none; }
+  .quiz-facts .k { color: #657786; }
+  .quiz-facts .v { font-weight: bold; color: #17365D; }
+
+  button.btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: #17365D;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background .15s;
+  }
+  button.btn-primary:hover { background: #0F2A47; }
+  button.btn-primary.locked {
+    background: #94A3B8;
+    cursor: pointer;
+  }
+  button.btn-primary.locked:hover { background: #7E8FA3; }
+
+  /* STATE */
+  .state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #657786;
+    font-size: 14px;
+  }
+  .state .icon { font-size: 48px; margin-bottom: 12px; }
+  .state h3 { color: #17365D; margin: 0 0 8px; font-size: 20px; }
+
+  /* MODAL */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(23,54,93,.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 500;
+  }
+  .modal-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 26px 24px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 12px 40px rgba(23,54,93,.35);
+    text-align: center;
+  }
+  .modal-card .icon { font-size: 42px; margin-bottom: 10px; }
+  .modal-card h3 { margin: 0 0 8px; font-size: 19px; color: #17365D; }
+  .modal-card p { font-size: 13px; color: #50606F; line-height: 1.65; margin: 0 0 18px; }
+  .modal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .modal-actions a, .modal-actions button {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+  }
+  .modal-actions .primary { background: #17365D; color: #fff; }
+  .modal-actions .primary:hover { background: #0F2A47; }
+  .modal-actions .secondary { background: #fff; color: #17365D; border: 1px solid #d9e2ec; }
+  .modal-actions .secondary:hover { background: #eef2f6; }
+
+  .footer {
+    text-align: center;
+    padding: 30px 16px 20px;
+    color: #657786;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .footer strong { color: #17365D; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body data-page="CPD Centre">
+
+<div class="hero">
+  <h1>AMLPN CPD Centre</h1>
+  <div class="sub">Continuous Professional Development</div>
+  <p>Study materials, take short quizzes, earn CPD points and verifiable certificates — all in one place.</p>
+  <span class="badge" id="memberBadge"></span>
+</div>
+
+<div class="page">
+
+  <!-- LIST VIEW -->
+  <div id="listView">
+    <div class="state" id="listLoading">Loading CPD sessions…</div>
+    <div id="listContent" class="hidden"></div>
+    <div class="state hidden" id="listEmpty">
+      <div class="icon">🎓</div>
+      <h3>No CPD sessions yet</h3>
+      <p>Check back soon — new sessions will appear here.</p>
+    </div>
+  </div>
+
+  <!-- DETAIL VIEW -->
+  <div id="detailView" class="hidden">
+    <a href="/cpd.html" class="back-link">← Back to CPD Centre</a>
+    <div class="state" id="detailLoading">Loading session…</div>
+    <div id="detailContent" class="hidden"></div>
+    <div class="state hidden" id="detailError">
+      <div class="icon">🔍</div>
+      <h3>Session not found</h3>
+      <p>This session may have been removed or the link is incorrect.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Atria Medical Laboratory Professionals Network</strong><br>
+  Together We Can
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal-backdrop hidden">
+  <div class="modal-card">
+    <div class="icon">🔐</div>
+    <h3>Members Only</h3>
+    <p>
+      The AMLPN CPD Centre is available to registered members.
+      Please sign in to your account, or apply for membership to get started.
+    </p>
+    <div class="modal-actions">
+      <a href="/login.html" class="primary">Sign In</a>
+      <a href="/apply.html" class="secondary">Apply Now</a>
+    </div>
+    <button class="secondary" id="modalClose" style="width:100%; margin-top:10px; padding:10px; border-radius:6px; background:transparent; color:#657786; border:none; font-size:12px; cursor:pointer;">Close</button>
+  </div>
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
+const SESSION_TOKEN = sessionStorage.getItem("amlpn_token") || null;
+
+async function api(payload) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+function escapeHtml(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+// Show "signed in as member" badge or "guest"
+(function memberBadge() {
+  const b = document.getElementById("memberBadge");
+  if (SESSION_TOKEN) {
+    b.textContent = "✓ Signed in";
+  } else {
+    b.textContent = "👋 Public view — sign in for full access";
+  }
+})();
+
+// ============================================================
+// ROUTING
+// ============================================================
+
+const params = new URLSearchParams(window.location.search);
+const sessionId = params.get("session");
+
+if (sessionId) {
+  document.getElementById("detailView").classList.remove("hidden");
+  loadDetail(sessionId);
+} else {
+  document.getElementById("listView").classList.remove("hidden");
+  loadList();
+}
+
+// ============================================================
+// LIST
+// ============================================================
+
+async function loadList() {
+  try {
+    const res = await api({ action: "cpd-list-sessions" });
+    if (!res || !res.ok) {
+      document.getElementById("listLoading").textContent = "Could not load sessions.";
+      return;
+    }
+    const sessions = res.sessions || [];
+    if (!sessions.length) {
+      document.getElementById("listLoading").classList.add("hidden");
+      document.getElementById("listEmpty").classList.remove("hidden");
+      return;
+    }
+    renderList(sessions);
+  } catch (err) {
+    document.getElementById("listLoading").textContent = "Network error.";
+  }
+}
+
+function renderList(sessions) {
+  const box = document.getElementById("listContent");
+  box.innerHTML = "";
+
+  sessions.forEach(s => {
+    const card = document.createElement("div");
+    card.className = "session-card";
+
+    const isAccredited = String(s.accreditation || "").toLowerCase() === "accredited";
+    const pointsChip = isAccredited
+      ? '<span class="chip chip-accredited">🎓 ' + s.accreditedPoints + ' CPD points (Accredited)</span>'
+      : '<span class="chip chip-legacy">⭐ ' + s.legacyPoints + ' Legacy points</span>';
+
+    let chips = pointsChip;
+    if (s.duration > 0) chips += '<span class="chip chip-info">⏱ ' + s.duration + ' hrs</span>';
+    if (s.questionCount > 0) chips += '<span class="chip chip-info">📝 ' + s.questionCount + ' questions</span>';
+    if (!SESSION_TOKEN) chips += '<span class="chip chip-locked">🔒 Members only</span>';
+
+    card.innerHTML =
+      '<div class="cat-line"><span class="category">' + escapeHtml(s.category || "General") + '</span><span>' + escapeHtml(s.sessionDate || "") + '</span></div>' +
+      '<h3>' + escapeHtml(s.title) + '</h3>' +
+      '<p class="desc">' + escapeHtml(s.description) + '</p>' +
+      '<div class="chips">' + chips + '</div>';
+
+    card.addEventListener("click", () => {
+      window.location.href = "/cpd.html?session=" + encodeURIComponent(s.sessionId);
+    });
+
+    box.appendChild(card);
+  });
+
+  document.getElementById("listLoading").classList.add("hidden");
+  box.classList.remove("hidden");
+}
+
+// ============================================================
+// DETAIL
+// ============================================================
+
+async function loadDetail(sid) {
+  try {
+    const res = await api({ action: "cpd-get-session", sessionId: sid });
+    if (!res || !res.ok) {
+      document.getElementById("detailLoading").classList.add("hidden");
+      document.getElementById("detailError").classList.remove("hidden");
+      return;
+    }
+    renderDetail(res.session);
+  } catch (err) {
+    document.getElementById("detailLoading").textContent = "Network error.";
+  }
+}
+
+function renderDetail(s) {
+  const box = document.getElementById("detailContent");
+  box.innerHTML = "";
+
+  const isAccredited = String(s.accreditation || "").toLowerCase() === "accredited";
+  const pointsLabel = isAccredited
+    ? '🎓 ' + s.accreditedPoints + ' CPD Points (Accredited)'
+    : '⭐ ' + s.legacyPoints + ' Legacy Points';
+
+  let materialsHtml = "";
+  if (s.materials && s.materials.length) {
+    materialsHtml = '<h2>Materials</h2><div class="materials-list">';
+    s.materials.forEach(m => {
+      materialsHtml += '<a class="material-item" href="' + escapeHtml(m.url) + '" target="_blank" rel="noopener">📄 ' + escapeHtml(m.label) + '</a>';
+    });
+    materialsHtml += '</div>';
+  }
+
+  let materialsTextHtml = "";
+  if (s.materialsText) {
+    materialsTextHtml = '<p style="font-size:13px;color:#50606F;line-height:1.7;margin:10px 0 0;">' + escapeHtml(s.materialsText) + '</p>';
+  }
+
+  const lockLabel = SESSION_TOKEN ? "Start Quiz →" : "🔒 Take Quiz (Members Only)";
+
+  box.innerHTML =
+    '<div class="detail-card">' +
+      '<h1>' + escapeHtml(s.title) + '</h1>' +
+      '<div class="meta"><span class="category">' + escapeHtml(s.category || "General") + '</span><span>' + escapeHtml(s.sessionDate || "") + '</span>' + (s.duration > 0 ? '<span>⏱ ' + s.duration + ' hrs</span>' : '') + '</div>' +
+      '<p class="desc">' + escapeHtml(s.description) + '</p>' +
+      '<div class="chips"><span class="chip ' + (isAccredited ? 'chip-accredited' : 'chip-legacy') + '">' + pointsLabel + '</span></div>' +
+      materialsTextHtml +
+      materialsHtml +
+      '<h2>About the Quiz</h2>' +
+      '<div class="quiz-facts">' +
+        '<div><span class="k">Questions</span><span class="v">' + s.questionCount + '</span></div>' +
+        '<div><span class="k">Pass mark</span><span class="v">' + s.passMark + '%</span></div>' +
+        '<div><span class="k">Max attempts</span><span class="v">' + (s.maxAttempts > 0 ? s.maxAttempts : "Unlimited") + '</span></div>' +
+        '<div><span class="k">Provider</span><span class="v">' + escapeHtml(s.provider || "AMLPN") + '</span></div>' +
+      '</div>' +
+      '<button class="btn-primary ' + (SESSION_TOKEN ? '' : 'locked') + '" id="btnStart">' + lockLabel + '</button>' +
+    '</div>';
+
+  document.getElementById("detailLoading").classList.add("hidden");
+  box.classList.remove("hidden");
+  window.scrollTo(0, 0);
+
+  document.getElementById("btnStart").addEventListener("click", () => {
+    if (!SESSION_TOKEN) {
+      document.getElementById("loginModal").classList.remove("hidden");
+    } else {
+      // Stage 3 will wire the quiz. For now, show a placeholder.
+      alert("Quiz UI comes in Stage 3. Backend is ready.");
+    }
+  });
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+
+document.getElementById("modalClose").addEventListener("click", () => {
+  document.getElementById("loginModal").classList.add("hidden");
+});
+
+document.getElementById("loginModal").addEventListener("click", (e) => {
+  if (e.target === document.getElementById("loginModal")) {
+    document.getElementById("loginModal").classList.add("hidden");
+  }
+});
+
+</script>
+</body>
+</html>
