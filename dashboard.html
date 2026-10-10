@@ -63,6 +63,50 @@
     margin: 0;
   }
   .nav .links button:hover { background: rgba(255,255,255,.1); color: #fff; }
+   .nav .dropdown { position: relative; }
+  .nav .dropbtn {
+    background: transparent;
+    color: #DCE6F2;
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0;
+  }
+  .nav .dropbtn:hover, .nav .dropbtn.open { background: #C7A84B; color: #17365D; border-color: #C7A84B; }
+  .nav .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(23,54,93,.18);
+    min-width: 240px;
+    padding: 6px;
+    z-index: 200;
+    animation: menuFade .15s ease-out;
+  }
+  .nav .dropdown-menu button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    color: #243447;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 0;
+  }
+  .nav .dropdown-menu button:hover { background: #EEF5FB; color: #17365D; }
+  @keyframes menuFade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
   .page { max-width: 720px; margin: 0 auto; padding: 22px 16px 40px; }
   .card {
     background: #fff;
@@ -192,10 +236,19 @@
 <body data-page="Dashboard">
 
 <nav class="nav">
-  <a href="/dashboard.html" class="brand">AMLPN</a>
+  <a href="/" class="brand">AMLPN</a>
   <div class="links">
     <a href="/dashboard.html" class="active">Dashboard</a>
     <a href="/transactions.html">Transactions</a>
+    <div class="dropdown">
+      <button id="btnQuickMenu" class="dropbtn">⚡ Quick Actions ▾</button>
+      <div class="dropdown-menu hidden" id="quickMenu">
+        <button data-action="renew">🔄 Renew My Membership</button>
+        <button data-action="contribute">💚 Make a Contribution</button>
+        <button data-action="password">🔑 Change My Password</button>
+        <button data-action="contact">✉️ Contact AMLPN</button>
+      </div>
+    </div>
     <button id="btnLogout">Sign Out</button>
   </div>
 </nav>
@@ -227,15 +280,6 @@
       <h2>Recent Contributions <a href="/transactions.html?type=CONTRIBUTION" class="view-all">View all →</a></h2>
       <table class="data" id="tblContributions"></table>
     </div>
-
-    <div class="card">
-      <h2>Quick Actions</h2>
-      <button class="btn-primary" id="btnRenew">Renew My Membership</button>
-      <button class="btn-primary" id="btnContribute">Make a Contribution</button>
-      <button class="btn-primary" id="btnChange">Change My Password</button>
-      <button class="btn-primary" id="btnContact">Contact AMLPN</button>
-    </div>
-
   </div>
 </div>
 
@@ -350,13 +394,8 @@ function renderDashboard(res) {
     ["Fund","Amount","Status"],
     (res.contributions || []).slice(0, 3).map(c => [c.fund, c.amount, pillFor(c.status)]));
 
-  // Buttons
-  document.getElementById("btnRenew").onclick = () => openFormWithToken("renew");
-  document.getElementById("btnContribute").onclick = () => openFormWithToken("contribute");
-  document.getElementById("btnChange").onclick = () => openPwdModal();
-  document.getElementById("btnContact").onclick = () => {
-    window.location.href = "mailto:amlpn.ug@gmail.com?subject=AMLPN Portal Query " + m.memberId;
-  };
+  // Save member ID for the dropdown contact action
+  window._MEMBER_ID = m.memberId;
 
   document.getElementById("dashLoading").classList.add("hidden");
   document.getElementById("dashContent").classList.remove("hidden");
@@ -532,6 +571,41 @@ document.getElementById("btnSavePwd").addEventListener("click", async () => {
     PWD_NOTICE.style.display="block";
   }
 });
+
+ // ============================================================
+// QUICK ACTIONS DROPDOWN
+// ============================================================
+
+(function initQuickMenu() {
+  const btn = document.getElementById("btnQuickMenu");
+  const menu = document.getElementById("quickMenu");
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = !menu.classList.contains("hidden");
+    menu.classList.toggle("hidden", open);
+    btn.classList.toggle("open", !open);
+  });
+
+  document.addEventListener("click", () => {
+    menu.classList.add("hidden");
+    btn.classList.remove("open");
+  });
+
+  menu.addEventListener("click", (e) => {
+    const action = e.target.closest("button")?.dataset.action;
+    if (!action) return;
+    menu.classList.add("hidden");
+    btn.classList.remove("open");
+
+    if (action === "renew") openFormWithToken("renew");
+    else if (action === "contribute") openFormWithToken("contribute");
+    else if (action === "password") openPwdModal();
+    else if (action === "contact") {
+      window.location.href = "mailto:amlpn.ug@gmail.com?subject=AMLPN Portal Query " + (window._MEMBER_ID || "");
+    }
+  });
+})();
 
 // ============================================================
 // GO
