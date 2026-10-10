@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/favicon.png">
+<title>AMLPN Member Login</title>
+<script src="/nav.js" defer></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #243447;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .header {
+    background: #17365D;
+    color: #fff;
+    padding: 22px 20px;
+    text-align: center;
+  }
+  .header .brand { font-size: 26px; font-weight: bold; letter-spacing: 3px; }
+  .header .sub { font-size: 11px; margin-top: 4px; opacity: .9; }
+  .flag { display: flex; width: 180px; height: 5px; margin: 12px auto 0; }
+  .flag div { flex: 1; }
+  .flag .b { background: #000; }
+  .flag .y { background: #FCDC04; }
+  .flag .r { background: #D90000; }
+  .motto { color: #E5C453; font-style: italic; font-size: 12px; margin-top: 8px; }
+  .page { max-width: 720px; margin: 0 auto; padding: 22px 16px 40px; }
+  .card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+  }
+  .card h2 { margin: 0 0 14px; font-size: 17px; color: #17365D; }
+  .card.narrow { max-width: 460px; margin-left: auto; margin-right: auto; }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: #17365D;
+    margin: 12px 0 6px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d9e2ec;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+  }
+  input:focus {
+    outline: none;
+    border-color: #17365D;
+    box-shadow: 0 0 0 3px rgba(23,54,93,.1);
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+  .btn-primary { background: #17365D; color: #fff; }
+  .btn-primary:hover { background: #0F2A47; }
+  .btn-secondary { background: #fff; color: #17365D; border: 1px solid #d9e2ec; }
+  .btn-secondary:hover { background: #eef2f6; }
+  .btn-apply {
+    background: #C7A84B;
+    color: #17365D;
+    padding: 16px;
+    font-size: 15px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-top: 0;
+  }
+  .btn-apply:hover { background: #B89738; }
+  .notice {
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-top: 14px;
+    display: none;
+  }
+  .notice.error { background: #FDECEC; color: #B71C1C; border-left: 4px solid #C62828; display: block; }
+  .notice.success { background: #E7F4EA; color: #26733C; border-left: 4px solid #2E7D32; display: block; }
+  .footer {
+    text-align: center;
+    padding: 24px 16px 40px;
+    color: #657786;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .footer strong { color: #17365D; }
+  .hidden { display: none !important; }
+
+  /* PROMO CARD */
+  .promo-card {
+    background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(23,54,93,.2);
+    position: relative;
+    overflow: hidden;
+    min-height: 90px;
+  }
+  .promo-card .promo-tag {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #E5C453;
+    margin-bottom: 6px;
+  }
+  .promo-card .promo-text {
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 1.4;
+    transition: opacity .5s;
+  }
+  .promo-card .promo-dots { margin-top: 12px; display: flex; gap: 6px; }
+  .promo-card .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,.3);
+    transition: background .3s;
+  }
+  .promo-card .dot.active { background: #E5C453; }
+
+  /* APPLY BANNER */
+  .apply-banner {
+    background: #FFF8DD;
+    border: 1px solid #F0D675;
+    border-left: 5px solid #C7A84B;
+    border-radius: 0 8px 8px 0;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .apply-banner .text { flex: 1; min-width: 200px; }
+  .apply-banner .text .line1 { color: #17365D; font-size: 15px; font-weight: bold; margin-bottom: 2px; }
+  .apply-banner .text .line2 { color: #7C6A20; font-size: 13px; line-height: 1.5; }
+  .apply-banner .btn-apply {
+    margin-top: 0; padding: 12px 22px;
+    width: auto; font-size: 14px; white-space: nowrap;
+  }
+  @media (max-width: 520px) {
+    .apply-banner { flex-direction: column; align-items: stretch; }
+    .apply-banner .btn-apply { width: 100%; }
+    .promo-card { padding: 18px 18px; }
+    .promo-card .promo-text { font-size: 16px; }
+  }
+</style>
+</head>
+<body data-page="Member Login">
+
+<div class="header">
+  <div class="brand">AMLPN</div>
+  <div class="sub">ATRIA MEDICAL LABORATORY PROFESSIONALS NETWORK</div>
+  <div class="flag"><div class="b"></div><div class="y"></div><div class="r"></div></div>
+  <div class="motto">Together We Can</div>
+</div>
+
+<div id="view-login" class="page">
+
+  <div class="promo-card" id="promoCard">
+    <div class="promo-tag">AMLPN</div>
+    <div class="promo-text" id="promoText">Together We Can</div>
+    <div class="promo-dots" id="promoDots"></div>
+  </div>
+
+  <div class="apply-banner">
+    <div class="text">
+      <div class="line1">New to AMLPN?</div>
+      <div class="line2">Join our professional network. Click below to start your membership application.</div>
+    </div>
+    <a href="/apply.html" class="btn-apply">Apply for Membership →</a>
+  </div>
+
+  <div class="card narrow">
+    <h2 style="text-align:center;">Member Portal Login</h2>
+    <label for="email">Email Address</label>
+    <input type="email" id="email" autocomplete="username">
+    <label for="password">Password</label>
+    <div style="position:relative;">
+      <input type="password" id="password" autocomplete="current-password" style="padding-right:44px;">
+      <button type="button" id="toggleLoginPwd" tabindex="-1" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);background:none;border:none;cursor:pointer;width:auto;padding:4px;margin:0;font-size:18px;color:#657786;line-height:1;opacity:.7;">👁</button>
+    </div>
+    <button class="btn-primary" id="btnLogin">Sign In</button>
+    <div class="notice" id="loginNotice"></div>
+    <div style="text-align:center;margin-top:14px;">
+      <a href="javascript:void(0)" id="linkForgot" style="color:#17365D;font-size:13px;font-weight:bold;text-decoration:none;">Forgot your password?</a>
+    </div>
+  </div>
+
+  <div class="card narrow" style="text-align:center;font-size:13px;color:#657786;">
+    Need help? Contact AMLPN at
+    <a href="mailto:amlpn.ug@gmail.com" style="color:#17365D;font-weight:bold;">amlpn.ug@gmail.com</a>
+  </div>
+</div>
+
+<div id="view-forgot" class="page hidden">
+  <div class="card narrow">
+    <h2 style="text-align:center;">Forgot Password</h2>
+    <p style="font-size:13px;color:#657786;line-height:1.6;margin-top:0;">
+      Enter your AMLPN registered email. If an account exists, we'll send you a temporary password.
+    </p>
+    <label for="forgotEmail">Email Address</label>
+    <input type="email" id="forgotEmail">
+    <button class="btn-primary" id="btnSendReset">Send Temporary Password</button>
+    <button class="btn-secondary" id="btnBackToLogin">Back to Login</button>
+    <div class="notice" id="forgotNotice"></div>
+  </div>
+</div>
+
+<div class="footer">
+  <strong>Atria Medical Laboratory Professionals Network</strong><br>
+  Together We Can
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
+
+let PROMO_MESSAGES = ["Together We Can"];
+let PROMO_INDEX = 0;
+let PROMO_INTERVAL = null;
+
+async function api(payload) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+// ---------- If already signed in, go straight to dashboard ----------
+if (sessionStorage.getItem("amlpn_token")) {
+  window.location.replace("/dashboard.html");
+}
+
+// ---------- Promo rotator ----------
+function initPromo() {
+  api({ action: "apply-options" })
+    .then(res => {
+      if (res && res.ok && res.promo && res.promo.rotatingMessages && res.promo.rotatingMessages.length) {
+        PROMO_MESSAGES = res.promo.rotatingMessages;
+      }
+      startPromoRotation();
+    })
+    .catch(() => startPromoRotation());
+}
+
+function startPromoRotation() {
+  const dotsContainer = document.getElementById("promoDots");
+  dotsContainer.innerHTML = "";
+  PROMO_MESSAGES.forEach((_, i) => {
+    const dot = document.createElement("div");
+    dot.className = "dot" + (i === 0 ? " active" : "");
+    dotsContainer.appendChild(dot);
+  });
+
+  document.getElementById("promoText").textContent = PROMO_MESSAGES[0];
+
+  if (PROMO_MESSAGES.length > 1) {
+    PROMO_INTERVAL = setInterval(() => {
+      const textEl = document.getElementById("promoText");
+      textEl.style.opacity = "0";
+      setTimeout(() => {
+        PROMO_INDEX = (PROMO_INDEX + 1) % PROMO_MESSAGES.length;
+        textEl.textContent = PROMO_MESSAGES[PROMO_INDEX];
+        textEl.style.opacity = "1";
+        document.querySelectorAll("#promoDots .dot").forEach((d, i) => {
+          d.classList.toggle("active", i === PROMO_INDEX);
+        });
+      }, 400);
+    }, 5000);
+  }
+}
+
+initPromo();
+
+// ---------- View switcher ----------
+function showView(name) {
+  ["login","forgot"].forEach(v => {
+    const el = document.getElementById("view-" + v);
+    if (v === name) el.classList.remove("hidden");
+    else el.classList.add("hidden");
+  });
+  window.scrollTo(0, 0);
+}
+
+// ---------- Password toggle ----------
+(function attachLoginPwdToggle() {
+  const btn = document.getElementById("toggleLoginPwd");
+  const input = document.getElementById("password");
+  if (!btn || !input) return;
+  btn.addEventListener("click", () => {
+    const isPw = input.type === "password";
+    input.type = isPw ? "text" : "password";
+    btn.textContent = isPw ? "🙈" : "👁";
+  });
+})();
+
+// ---------- Login ----------
+document.getElementById("btnLogin").addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const notice = document.getElementById("loginNotice");
+  notice.className = "notice"; notice.textContent = "";
+
+  if (!email || !password) {
+    notice.className = "notice error";
+    notice.textContent = "Please enter email and password.";
+    return;
+  }
+
+  const btn = document.getElementById("btnLogin");
+  btn.disabled = true; btn.textContent = "Signing in…";
+
+  try {
+    const res = await api({ action: "login", email, password });
+    btn.disabled = false; btn.textContent = "Sign In";
+
+    if (!res.ok) {
+      notice.className = "notice error";
+      notice.textContent = res.message || "Login failed.";
+      return;
+    }
+
+    sessionStorage.setItem("amlpn_token", res.token);
+    window.location.replace("/dashboard.html");
+
+  } catch (err) {
+    btn.disabled = false; btn.textContent = "Sign In";
+    notice.className = "notice error";
+    notice.textContent = "Network error. Please try again.";
+  }
+});
+
+document.getElementById("password").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("btnLogin").click();
+});
+
+// ---------- Forgot password ----------
+document.getElementById("linkForgot").addEventListener("click", () => {
+  showView("forgot");
+  document.getElementById("forgotNotice").className = "notice";
+  document.getElementById("forgotNotice").textContent = "";
+  document.getElementById("forgotEmail").value = document.getElementById("email").value;
+});
+
+document.getElementById("btnBackToLogin").addEventListener("click", () => showView("login"));
+
+document.getElementById("btnSendReset").addEventListener("click", async () => {
+  const email = document.getElementById("forgotEmail").value.trim();
+  const notice = document.getElementById("forgotNotice");
+  notice.className = "notice"; notice.textContent = "";
+
+  if (!email) {
+    notice.className = "notice error";
+    notice.textContent = "Please enter your email.";
+    return;
+  }
+
+  const btn = document.getElementById("btnSendReset");
+  btn.disabled = true; btn.textContent = "Sending…";
+
+  try {
+    const res = await api({ action: "forgot-password", email });
+    btn.disabled = false; btn.textContent = "Send Temporary Password";
+    notice.className = "notice success";
+    notice.textContent = res.message || "If this email is registered, a temporary password has been sent.";
+    document.getElementById("forgotEmail").value = "";
+  } catch (err) {
+    btn.disabled = false; btn.textContent = "Send Temporary Password";
+    notice.className = "notice error";
+    notice.textContent = "Network error. Please try again.";
+  }
+});
+
+</script>
+</body>
+</html>
