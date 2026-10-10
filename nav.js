@@ -18,10 +18,10 @@
   // ---------- Navigation links ----------
 
   const NAV_LINKS = [
-    { label: "Home", href: "/index.html", icon: "🏠" },
+    { label: "Home", href: "/home.html", icon: "🏠" },
     { label: "Apply for Membership", href: "/apply.html", icon: "📝" },
     { label: "Track Application", href: "/track.html", icon: "🔍" },
-    { label: "Member Login", href: "/index.html", icon: "🔐" },
+    { label: "Member Login", href: "/login.html", icon: "🔐" },
     { label: "About Us", href: "/about.html", icon: "ℹ️" },
     { label: "Meet the Team", href: "/team.html", icon: "👥" },
     { label: "News & Updates", href: "/news.html", icon: "📰" },
