@@ -293,6 +293,111 @@
   }
   .footer strong { color: #17365D; }
   .hidden { display: none !important; }
+   /* ---------- CPD BAND ---------- */
+  .cpd-band {
+    background: linear-gradient(135deg, #3B1F87 0%, #6E3BD6 55%, #B44FD9 100%);
+    border-radius: 16px;
+    padding: 34px 30px 32px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(59,31,135,.28);
+    color: #fff;
+  }
+  .cpd-band::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cpd-band::after {
+    content: "🎓";
+    position: absolute;
+    font-size: 180px;
+    line-height: 1;
+    bottom: -30px;
+    right: -20px;
+    opacity: .07;
+    pointer-events: none;
+    transform: rotate(-12deg);
+  }
+  .cpd-band-inner { position: relative; z-index: 1; }
+  .cpd-tag {
+    display: inline-block;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.3);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #FCDC04;
+    margin-bottom: 14px;
+  }
+  .cpd-band h2 {
+    margin: 0 0 12px;
+    font-size: 26px;
+    letter-spacing: .5px;
+    color: #fff;
+    font-weight: bold;
+  }
+  .cpd-band p {
+    margin: 0 0 22px;
+    font-size: 14.5px;
+    line-height: 1.7;
+    max-width: 640px;
+    color: rgba(255,255,255,.92);
+  }
+  .cpd-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .cpd-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: .3px;
+    transition: transform .12s, box-shadow .12s, background .12s;
+    border: none;
+  }
+  .cpd-btn-primary {
+    background: #FCDC04;
+    color: #3B1F87;
+    box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  }
+  .cpd-btn-primary:hover {
+    background: #FFE63D;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  }
+  .cpd-btn-ghost {
+    background: rgba(255,255,255,.14);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.35);
+  }
+  .cpd-btn-ghost:hover {
+    background: rgba(255,255,255,.25);
+    transform: translateY(-1px);
+  }
+  @media (max-width: 520px) {
+    .cpd-band { padding: 26px 20px 24px; }
+    .cpd-band h2 { font-size: 22px; }
+    .cpd-band::after { font-size: 120px; bottom: -20px; right: -14px; }
+    .cpd-actions { flex-direction: column; }
+    .cpd-btn { justify-content: center; width: 100%; }
+  }
 </style>
 </head>
 <body data-page="Home">
@@ -331,23 +436,20 @@
     <div class="carousel-nav hidden" id="carouselNav"></div>
   </div>
 
-   <!-- CPD CTA -->
-  <div class="section-head">
-    <div>
-      <span class="tag">Learn &amp; Grow</span>
-      <h2>CPD Centre</h2>
-    </div>
-    <a href="/cpd.html" class="view-all">Enter CPD Centre →</a>
-  </div>
-  <div style="background:#fff;border:1px solid #d9e2ec;border-radius:12px;padding:20px 22px;margin-bottom:36px;box-shadow:0 2px 8px rgba(0,0,0,.04);">
-    <p style="margin:0 0 14px;font-size:14px;line-height:1.7;color:#50606F;">
-      Study our CPD materials, take short quizzes, and earn verifiable AMLPN certificates.
-      Members build up points toward a leaderboard and portfolio. Public can browse sessions — sign in to take a quiz.
-    </p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <a href="/cpd.html" class="view-all" style="background:#17365D;color:#fff;border:none;">Browse Sessions</a>
-      <a href="/cpd-leaderboard.html" class="view-all">🏆 Leaderboard</a>
-      <a href="/cpd-verify.html" class="view-all">🔎 Verify Certificate</a>
+  <!-- CPD CTA -->
+  <div class="cpd-band">
+    <div class="cpd-band-inner">
+      <div class="cpd-tag">🎓 Learn &amp; Grow</div>
+      <h2>AMLPN CPD Centre</h2>
+      <p>
+        Study our CPD materials, take short quizzes, and earn verifiable AMLPN certificates.
+        Members build up points toward a leaderboard and portfolio.
+      </p>
+      <div class="cpd-actions">
+        <a href="/cpd.html" class="cpd-btn cpd-btn-primary">Browse Sessions →</a>
+        <a href="/cpd-leaderboard.html" class="cpd-btn cpd-btn-ghost">🏆 Leaderboard</a>
+        <a href="/cpd-verify.html" class="cpd-btn cpd-btn-ghost">🔎 Verify Certificate</a>
+      </div>
     </div>
   </div>
  
