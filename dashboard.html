@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/favicon.png">
+<title>AMLPN Dashboard</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #243447;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .nav {
+    background: #17365D;
+    color: #fff;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .nav .brand {
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #fff;
+    text-decoration: none;
+  }
+  .nav .links {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .nav .links a {
+    color: #DCE6F2;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background .15s;
+  }
+  .nav .links a:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .nav .links a.active { background: #C7A84B; color: #17365D; }
+  .nav .links button {
+    background: transparent;
+    color: #DCE6F2;
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0;
+  }
+  .nav .links button:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .page { max-width: 720px; margin: 0 auto; padding: 22px 16px 40px; }
+  .card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+  }
+  .card h2 {
+    margin: 0 0 14px;
+    font-size: 17px;
+    color: #17365D;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .card h2 .view-all {
+    font-size: 12px;
+    font-weight: bold;
+    color: #17365D;
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #EEF5FB;
+  }
+  .card h2 .view-all:hover { background: #D6E6F5; }
+  table.info { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.info td { padding: 10px 12px; border-bottom: 1px solid #eef2f6; }
+  table.info td:first-child { color: #657786; width: 42%; }
+  table.info td:last-child { color: #243447; font-weight: bold; }
+  table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.data th {
+    background: #F4F6F8;
+    color: #17365D;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #d9e2ec;
+  }
+  table.data td { padding: 10px 12px; border-bottom: 1px solid #eef2f6; }
+  table.data tr.row-clickable { cursor: pointer; }
+  table.data tr.row-clickable:hover { background: #f7fafd; }
+  table.data tr.row-open { background: #EEF5FB; }
+  .tx-detail-row td {
+    padding: 0 !important;
+    background: #f7fafd;
+    border-bottom: 1px solid #eef2f6;
+  }
+  .tx-detail-box {
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #243447;
+    border-left: 4px solid #C7A84B;
+    background: linear-gradient(180deg,#F4F8FC 0%,#EEF5FB 100%);
+    animation: fadeSlide .2s ease-out;
+  }
+  .tx-detail-box .tx-row { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; }
+  .tx-detail-box .tx-row .k { color: #657786; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .tx-detail-box .tx-row .v { color: #17365D; font-weight: bold; text-align: right; }
+  @keyframes fadeSlide { from { opacity:0; transform: translateY(-3px);} to {opacity:1; transform:none;} }
+  .pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+  }
+  .pill-green { background: #E7F4EA; color: #26733C; }
+  .pill-yellow { background: #FFF8DD; color: #795E00; }
+  .pill-red { background: #FDECEC; color: #B71C1C; }
+  .pill-blue { background: #EFF6FF; color: #1D4ED8; }
+  .banner {
+    background: #FFF8DD;
+    color: #5A4500;
+    border-left: 4px solid #C7A84B;
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .banner a { color: #17365D; font-weight: bold; }
+  button.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: #17365D;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  button.btn-primary:hover { background: #0F2A47; }
+  button.btn-primary:disabled { background: #94A3B8; cursor: not-allowed; }
+  .loading { text-align: center; padding: 40px; color: #657786; }
+  .loading::after {
+    content: "";
+    display: inline-block;
+    width: 18px; height: 18px;
+    border: 3px solid #17365D;
+    border-top-color: transparent;
+    border-radius: 50%;
+    margin-left: 10px;
+    vertical-align: middle;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .footer {
+    text-align: center;
+    padding: 24px 16px 40px;
+    color: #657786;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .footer strong { color: #17365D; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body data-page="Dashboard">
+
+<nav class="nav">
+  <a href="/dashboard.html" class="brand">AMLPN</a>
+  <div class="links">
+    <a href="/dashboard.html" class="active">Dashboard</a>
+    <a href="/transactions.html">Transactions</a>
+    <button id="btnLogout">Sign Out</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="banner hidden" id="tempPasswordBanner">
+    You're using a temporary password. <a href="javascript:void(0)" id="bannerChangeLink">Change it now →</a>
+  </div>
+
+  <div class="loading" id="dashLoading">Loading your record</div>
+
+  <div id="dashContent" class="hidden">
+
+    <div class="card"><h2>Membership Summary</h2><table class="info" id="tblMember"></table></div>
+    <div class="card"><h2>Professional Licence</h2><table class="info" id="tblLicence"></table></div>
+
+    <div class="card">
+      <h2>Recent Payments <a href="/transactions.html?type=all" class="view-all">View all →</a></h2>
+      <table class="data" id="tblPayments"></table>
+    </div>
+
+    <div class="card">
+      <h2>Recent Renewals <a href="/transactions.html?type=RENEWAL" class="view-all">View all →</a></h2>
+      <table class="data" id="tblRenewals"></table>
+    </div>
+
+    <div class="card">
+      <h2>Recent Contributions <a href="/transactions.html?type=CONTRIBUTION" class="view-all">View all →</a></h2>
+      <table class="data" id="tblContributions"></table>
+    </div>
+
+    <div class="card">
+      <h2>Quick Actions</h2>
+      <button class="btn-primary" id="btnRenew">Renew My Membership</button>
+      <button class="btn-primary" id="btnContribute">Make a Contribution</button>
+      <button class="btn-primary" id="btnChange">Change My Password</button>
+      <button class="btn-primary" id="btnContact">Contact AMLPN</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  <strong>Atria Medical Laboratory Professionals Network</strong><br>
+  Together We Can
+</div>
+
+<!-- CHANGE PASSWORD (inline view) -->
+<div id="view-password" class="hidden" style="position:fixed;inset:0;background:rgba(23,54,93,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100;">
+  <div class="card" style="max-width:460px;width:100%;margin:0;">
+    <h2>Change My Password</h2>
+    <label for="pwd1" style="display:block;font-size:12px;font-weight:bold;color:#17365D;margin:12px 0 6px;text-transform:uppercase;letter-spacing:.5px;">New Password</label>
+    <input type="password" id="pwd1" placeholder="At least 8 characters" style="width:100%;padding:12px 14px;border:1px solid #d9e2ec;border-radius:6px;font-family:inherit;font-size:15px;">
+    <label for="pwd2" style="display:block;font-size:12px;font-weight:bold;color:#17365D;margin:12px 0 6px;text-transform:uppercase;letter-spacing:.5px;">Confirm New Password</label>
+    <input type="password" id="pwd2" style="width:100%;padding:12px 14px;border:1px solid #d9e2ec;border-radius:6px;font-family:inherit;font-size:15px;">
+    <button class="btn-primary" id="btnSavePwd">Save New Password</button>
+    <button class="btn-primary" id="btnCancelPwd" style="background:#fff;color:#17365D;border:1px solid #d9e2ec;">Cancel</button>
+    <div class="notice" id="pwdNotice" style="padding:12px 14px;border-radius:6px;font-size:13px;margin-top:14px;display:none;"></div>
+  </div>
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
+const PWD_NOTICE = document.getElementById("pwdNotice");
+
+let TOKEN = sessionStorage.getItem("amlpn_token") || null;
+
+// If no token, send to login
+if (!TOKEN) {
+  window.location.replace("/login.html");
+}
+
+async function api(payload) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+function escapeHtml_(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function pillFor(status) {
+  const s = String(status || "").toLowerCase();
+  let cls = "pill-blue";
+  if (s.includes("active") || s.includes("verified") || s.includes("completed") || s.includes("sent") || s.includes("disbursed")) cls = "pill-green";
+  else if (s.includes("pending") || s.includes("awaiting")) cls = "pill-yellow";
+  else if (s.includes("rejected") || s.includes("failed") || s.includes("inactive") || s.includes("expired")) cls = "pill-red";
+  return '<span class="pill ' + cls + '">' + escapeHtml_(status) + '</span>';
+}
+
+// ============================================================
+// LOAD DASHBOARD
+// ============================================================
+
+async function loadDashboard() {
+  document.getElementById("dashLoading").classList.remove("hidden");
+  document.getElementById("dashContent").classList.add("hidden");
+
+  try {
+    const res = await api({ action: "dashboard", token: TOKEN });
+
+    if (!res || !res.ok) {
+      if (res && res.message && res.message.toLowerCase().includes("session")) {
+        sessionStorage.removeItem("amlpn_token");
+        window.location.replace("/login.html");
+        return;
+      }
+      document.getElementById("dashLoading").textContent = res && res.message ? res.message : "Could not load dashboard.";
+      return;
+    }
+
+    renderDashboard(res);
+  } catch (err) {
+    document.getElementById("dashLoading").textContent = "Network error.";
+  }
+}
+
+function renderDashboard(res) {
+  const m = res.member;
+
+  const t1 = document.getElementById("tblMember");
+  t1.innerHTML = "";
+  [["Member ID", m.memberId],["Category", m.category],["Status", pillFor(m.status)],
+   ["Date Joined", m.dateJoined],["Email", m.email],
+   ["Phone", m.phone || "—"],["District", m.district || "—"]]
+    .forEach(([k, v]) => appendRow(t1, k, v, true));
+
+  const t2 = document.getElementById("tblLicence");
+  t2.innerHTML = "";
+  [["Professional Registration No.", m.professionalRegNo || "—"],
+   ["Professional Category", m.professionalCategory || "—"],
+   ["Registration Status", m.professionalRegStatus || "—"],
+   ["Licence Expiry", m.licenceExpiry || "—"]]
+    .forEach(([k, v]) => appendRow(t2, k, v, false));
+
+  // Show last 3 for each preview
+  renderPaymentsTable("tblPayments", (res.payments || []).slice(0, 3));
+
+  renderTable("tblRenewals",
+    ["Year","Amount","Status","Completed"],
+    (res.renewals || []).slice(0, 3).map(r => [r.year, r.amount, pillFor(r.status), r.completed || "—"]));
+
+  renderTable("tblContributions",
+    ["Fund","Amount","Status"],
+    (res.contributions || []).slice(0, 3).map(c => [c.fund, c.amount, pillFor(c.status)]));
+
+  // Buttons
+  document.getElementById("btnRenew").onclick = () => openFormWithToken("renew");
+  document.getElementById("btnContribute").onclick = () => openFormWithToken("contribute");
+  document.getElementById("btnChange").onclick = () => openPwdModal();
+  document.getElementById("btnContact").onclick = () => {
+    window.location.href = "mailto:amlpn.ug@gmail.com?subject=AMLPN Portal Query " + m.memberId;
+  };
+
+  document.getElementById("dashLoading").classList.add("hidden");
+  document.getElementById("dashContent").classList.remove("hidden");
+}
+
+function appendRow(table, key, value, allowHtml) {
+  const tr = document.createElement("tr");
+  const td1 = document.createElement("td"); td1.textContent = key;
+  const td2 = document.createElement("td");
+  if (allowHtml) td2.innerHTML = value; else td2.textContent = value;
+  tr.appendChild(td1); tr.appendChild(td2);
+  table.appendChild(tr);
+}
+
+function renderPaymentsTable(id, payments) {
+  const t = document.getElementById(id);
+  t.innerHTML = "";
+
+  const thead = document.createElement("tr");
+  ["Date","Category","Amount","Status"].forEach(h => {
+    const th = document.createElement("th"); th.textContent = h; thead.appendChild(th);
+  });
+  t.appendChild(thead);
+
+  if (!payments.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 4; td.style.textAlign = "center"; td.style.color = "#657786";
+    td.textContent = "No records yet.";
+    tr.appendChild(td); t.appendChild(tr); return;
+  }
+
+  payments.forEach(p => {
+    const tr = document.createElement("tr");
+    tr.className = "row-clickable";
+    tr.innerHTML =
+      "<td>" + escapeHtml_(p.date) + "</td>" +
+      "<td>" + escapeHtml_(p.category) + "</td>" +
+      "<td>" + escapeHtml_(p.amount) + "</td>" +
+      "<td>" + pillFor(p.status) + "</td>";
+
+    const detail = document.createElement("tr");
+    detail.className = "tx-detail-row";
+    detail.style.display = "none";
+    const dtd = document.createElement("td");
+    dtd.colSpan = 4;
+    dtd.innerHTML =
+      '<div class="tx-detail-box">' +
+        '<div class="tx-row"><span class="k">Date</span><span class="v">' + escapeHtml_(p.date) + '</span></div>' +
+        '<div class="tx-row"><span class="k">Type</span><span class="v">' + escapeHtml_(p.category) + '</span></div>' +
+        '<div class="tx-row"><span class="k">Amount</span><span class="v">' + escapeHtml_(p.amount) + '</span></div>' +
+        '<div class="tx-row"><span class="k">Status</span><span class="v">' + escapeHtml_(p.status) + '</span></div>' +
+      '</div>';
+    detail.appendChild(dtd);
+
+    tr.addEventListener("click", () => {
+      const open = detail.style.display !== "none";
+      t.querySelectorAll(".tx-detail-row").forEach(r => r.style.display = "none");
+      t.querySelectorAll("tr.row-open").forEach(r => r.classList.remove("row-open"));
+      if (!open) { detail.style.display = "table-row"; tr.classList.add("row-open"); }
+    });
+
+    t.appendChild(tr);
+    t.appendChild(detail);
+  });
+}
+
+function renderTable(id, headers, rows) {
+  const t = document.getElementById(id);
+  t.innerHTML = "";
+  const thead = document.createElement("tr");
+  headers.forEach(h => { const th = document.createElement("th"); th.textContent = h; thead.appendChild(th); });
+  t.appendChild(thead);
+  if (!rows.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = headers.length;
+    td.style.textAlign = "center";
+    td.style.color = "#657786";
+    td.textContent = "No records yet.";
+    tr.appendChild(td); t.appendChild(tr); return;
+  }
+  rows.forEach(cells => {
+    const tr = document.createElement("tr");
+    cells.forEach(c => { const td = document.createElement("td"); td.innerHTML = c; tr.appendChild(td); });
+    t.appendChild(tr);
+  });
+}
+
+// ============================================================
+// FORM TOKEN HANDOFF (renew / contribute)
+// ============================================================
+
+async function openFormWithToken(formType) {
+  if (!TOKEN) { window.location.replace("/login.html"); return; }
+  const btnId = formType === "renew" ? "btnRenew" : "btnContribute";
+  const btn = document.getElementById(btnId);
+  const original = btn.textContent;
+  btn.disabled = true; btn.textContent = "Preparing…";
+
+  try {
+    const res = await api({ action: "request-form-token", sessionToken: TOKEN, formType });
+    btn.disabled = false; btn.textContent = original;
+    if (!res || !res.ok || !res.formToken) {
+      alert((res && res.message) || "Could not prepare form. Please try again.");
+      return;
+    }
+    const page = formType === "renew" ? "/renew.html" : "/contribute.html";
+    window.location.href = page + "?token=" + encodeURIComponent(res.formToken);
+  } catch (err) {
+    btn.disabled = false; btn.textContent = original;
+    alert("Network error. Please try again.");
+  }
+}
+
+// ============================================================
+// LOGOUT
+// ============================================================
+
+document.getElementById("btnLogout").addEventListener("click", async () => {
+  const t = sessionStorage.getItem("amlpn_token");
+  sessionStorage.removeItem("amlpn_token");
+  if (t) {
+    try { await api({ action: "logout", token: t }); } catch (e) {}
+  }
+  window.location.replace("/login.html");
+});
+
+// ============================================================
+// CHANGE PASSWORD MODAL
+// ============================================================
+
+function openPwdModal() {
+  document.getElementById("view-password").classList.remove("hidden");
+  PWD_NOTICE.style.display = "none";
+  PWD_NOTICE.textContent = "";
+  document.getElementById("pwd1").value = "";
+  document.getElementById("pwd2").value = "";
+}
+
+function closePwdModal() {
+  document.getElementById("view-password").classList.add("hidden");
+}
+
+document.getElementById("btnCancelPwd").addEventListener("click", closePwdModal);
+document.getElementById("bannerChangeLink") && document.getElementById("bannerChangeLink").addEventListener("click", openPwdModal);
+
+document.getElementById("btnSavePwd").addEventListener("click", async () => {
+  const p1 = document.getElementById("pwd1").value;
+  const p2 = document.getElementById("pwd2").value;
+  PWD_NOTICE.style.display = "none";
+  PWD_NOTICE.textContent = "";
+
+  if (!p1 || !p2) { PWD_NOTICE.style.background="#FDECEC"; PWD_NOTICE.style.color="#B71C1C"; PWD_NOTICE.textContent = "Fill both fields."; PWD_NOTICE.style.display="block"; return; }
+  if (p1 !== p2) { PWD_NOTICE.style.background="#FDECEC"; PWD_NOTICE.style.color="#B71C1C"; PWD_NOTICE.textContent = "Passwords don't match."; PWD_NOTICE.style.display="block"; return; }
+  if (p1.length < 8) { PWD_NOTICE.style.background="#FDECEC"; PWD_NOTICE.style.color="#B71C1C"; PWD_NOTICE.textContent = "Password must be at least 8 characters."; PWD_NOTICE.style.display="block"; return; }
+
+  const btn = document.getElementById("btnSavePwd");
+  btn.disabled = true; btn.textContent = "Saving…";
+
+  try {
+    const res = await api({ action: "change-password", token: TOKEN, newPassword: p1 });
+    btn.disabled = false; btn.textContent = "Save New Password";
+    if (!res.ok) { PWD_NOTICE.style.background="#FDECEC"; PWD_NOTICE.style.color="#B71C1C"; PWD_NOTICE.textContent = res.message; PWD_NOTICE.style.display="block"; return; }
+    PWD_NOTICE.style.background="#E7F4EA"; PWD_NOTICE.style.color="#26733C"; PWD_NOTICE.textContent = "Password updated.";
+    PWD_NOTICE.style.display="block";
+    document.getElementById("pwd1").value = "";
+    document.getElementById("pwd2").value = "";
+  } catch (err) {
+    btn.disabled = false; btn.textContent = "Save New Password";
+    PWD_NOTICE.style.background="#FDECEC"; PWD_NOTICE.style.color="#B71C1C";
+    PWD_NOTICE.textContent = "Network error.";
+    PWD_NOTICE.style.display="block";
+  }
+});
+
+// ============================================================
+// GO
+// ============================================================
+
+if (TOKEN) loadDashboard();
+
+</script>
+</body>
+</html>
