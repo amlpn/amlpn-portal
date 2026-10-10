@@ -25,6 +25,7 @@
     { label: "About Us", href: "/about.html", icon: "ℹ️" },
     { label: "Meet the Team", href: "/team.html", icon: "👥" },
     { label: "News & Updates", href: "/news.html", icon: "📰" },
+    { label: "Verify Certificate", href: "/cpd-verify.html", icon: "🔎" },
     { label: "Contact", href: "/contact.html", icon: "📞" }
   ];
   
