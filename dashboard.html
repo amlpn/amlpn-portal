@@ -490,16 +490,17 @@ function renderTable(id, headers, rows) {
 // FORM TOKEN HANDOFF (renew / contribute)
 // ============================================================
 
-async function openFormWithToken(formType) {
+async function openFormWithToken(formType, triggerEl) {
   if (!TOKEN) { window.location.replace("/login.html"); return; }
-  const btnId = formType === "renew" ? "btnRenew" : "btnContribute";
-  const btn = document.getElementById(btnId);
-  const original = btn.textContent;
-  btn.disabled = true; btn.textContent = "Preparing…";
+
+  const btn = triggerEl || null;
+  const original = btn ? btn.textContent : "";
+  if (btn) { btn.disabled = true; btn.textContent = "Preparing…"; }
 
   try {
     const res = await api({ action: "request-form-token", sessionToken: TOKEN, formType });
-    btn.disabled = false; btn.textContent = original;
+    if (btn) { btn.disabled = false; btn.textContent = original; }
+
     if (!res || !res.ok || !res.formToken) {
       alert((res && res.message) || "Could not prepare form. Please try again.");
       return;
@@ -507,7 +508,7 @@ async function openFormWithToken(formType) {
     const page = formType === "renew" ? "/renew.html" : "/contribute.html";
     window.location.href = page + "?token=" + encodeURIComponent(res.formToken);
   } catch (err) {
-    btn.disabled = false; btn.textContent = original;
+    if (btn) { btn.disabled = false; btn.textContent = original; }
     alert("Network error. Please try again.");
   }
 }
