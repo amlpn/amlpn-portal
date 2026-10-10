@@ -58,6 +58,108 @@
     margin: 0;
   }
   .nav .links button:hover { background: rgba(255,255,255,.1); color: #fff; }
+  .nav .dropdown { position: relative; }
+  .nav .dropbtn {
+    background: transparent;
+    color: #DCE6F2;
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0;
+  }
+  .nav .dropbtn:hover, .nav .dropbtn.open { background: #C7A84B; color: #17365D; border-color: #C7A84B; }
+  .nav .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(23,54,93,.18);
+    min-width: 240px;
+    padding: 6px;
+    z-index: 200;
+    animation: menuFade .15s ease-out;
+  }
+  .nav .dropdown-menu button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    color: #243447;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 0;
+  }
+  .nav .dropdown-menu button:hover { background: #EEF5FB; color: #17365D; }
+  @keyframes menuFade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  /* Change Password modal (transactions page) */
+  #pwdModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(23,54,93,.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 100;
+  }
+  #pwdModal .modal-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 22px;
+    max-width: 460px;
+    width: 100%;
+    box-shadow: 0 12px 40px rgba(23,54,93,.3);
+  }
+  #pwdModal h2 { margin: 0 0 14px; font-size: 17px; color: #17365D; }
+  #pwdModal label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: #17365D;
+    margin: 12px 0 6px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  #pwdModal input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d9e2ec;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+  }
+  #pwdModal button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  #pwdModal .primary { background: #17365D; color: #fff; }
+  #pwdModal .primary:hover { background: #0F2A47; }
+  #pwdModal .secondary { background: #fff; color: #17365D; border: 1px solid #d9e2ec; }
+  #pwdModal .notice {
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-top: 14px;
+    display: none;
+  }
   .page { max-width: 960px; margin: 0 auto; padding: 22px 16px 40px; }
   .hero {
     background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
@@ -231,10 +333,19 @@
 <body data-page="Transactions">
 
 <nav class="nav">
-  <a href="/dashboard.html" class="brand">AMLPN</a>
+  <a href="/" class="brand">AMLPN</a>
   <div class="links">
     <a href="/dashboard.html">Dashboard</a>
     <a href="/transactions.html" class="active">Transactions</a>
+    <div class="dropdown">
+      <button id="btnQuickMenu" class="dropbtn">⚡ Quick Actions ▾</button>
+      <div class="dropdown-menu hidden" id="quickMenu">
+        <button data-action="renew">🔄 Renew My Membership</button>
+        <button data-action="contribute">💚 Make a Contribution</button>
+        <button data-action="password">🔑 Change My Password</button>
+        <button data-action="contact">✉️ Contact AMLPN</button>
+      </div>
+    </div>
     <button id="btnLogout">Sign Out</button>
   </div>
 </nav>
@@ -314,6 +425,18 @@
 <div class="footer">
   <strong>Atria Medical Laboratory Professionals Network</strong><br>
   Together We Can
+</div>
+ <div id="pwdModal" class="hidden">
+  <div class="modal-card">
+    <h2>Change My Password</h2>
+    <label for="pwd1">New Password</label>
+    <input type="password" id="pwd1" placeholder="At least 8 characters">
+    <label for="pwd2">Confirm New Password</label>
+    <input type="password" id="pwd2">
+    <button class="primary" id="btnSavePwd">Save New Password</button>
+    <button class="secondary" id="btnCancelPwd">Cancel</button>
+    <div class="notice" id="pwdNotice"></div>
+  </div>
 </div>
 
 <script>
@@ -530,6 +653,111 @@ document.getElementById("btnLogout").addEventListener("click", async () => {
   sessionStorage.removeItem("amlpn_token");
   if (t) { try { await api({ action: "logout", token: t }); } catch (e) {} }
   window.location.replace("/login.html");
+});
+
+ // ============================================================
+// QUICK ACTIONS DROPDOWN
+// ============================================================
+
+async function openFormWithToken(formType, triggerEl) {
+  if (!TOKEN) { window.location.replace("/login.html"); return; }
+  const btn = triggerEl || null;
+  const original = btn ? btn.textContent : "";
+  if (btn) { btn.disabled = true; btn.textContent = "Preparing…"; }
+
+  try {
+    const res = await api({ action: "request-form-token", sessionToken: TOKEN, formType });
+    if (btn) { btn.disabled = false; btn.textContent = original; }
+    if (!res || !res.ok || !res.formToken) {
+      alert((res && res.message) || "Could not prepare form. Please try again.");
+      return;
+    }
+    const page = formType === "renew" ? "/renew.html" : "/contribute.html";
+    window.location.href = page + "?token=" + encodeURIComponent(res.formToken);
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = original; }
+    alert("Network error. Please try again.");
+  }
+}
+
+function openPwdModal() {
+  const m = document.getElementById("pwdModal");
+  m.classList.remove("hidden");
+  const n = document.getElementById("pwdNotice");
+  n.style.display = "none";
+  n.textContent = "";
+  document.getElementById("pwd1").value = "";
+  document.getElementById("pwd2").value = "";
+}
+function closePwdModal() {
+  document.getElementById("pwdModal").classList.add("hidden");
+}
+
+(function initQuickMenu() {
+  const btn = document.getElementById("btnQuickMenu");
+  const menu = document.getElementById("quickMenu");
+  if (!btn || !menu) return;
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = !menu.classList.contains("hidden");
+    menu.classList.toggle("hidden", open);
+    btn.classList.toggle("open", !open);
+  });
+
+  document.addEventListener("click", () => {
+    menu.classList.add("hidden");
+    btn.classList.remove("open");
+  });
+
+  menu.addEventListener("click", (e) => {
+    const tgt = e.target.closest("button");
+    const action = tgt ? tgt.dataset.action : null;
+    if (!action) return;
+    menu.classList.add("hidden");
+    btn.classList.remove("open");
+
+    if (action === "renew") openFormWithToken("renew", tgt);
+    else if (action === "contribute") openFormWithToken("contribute", tgt);
+    else if (action === "password") openPwdModal();
+    else if (action === "contact") {
+      window.location.href = "mailto:amlpn.ug@gmail.com?subject=AMLPN Portal Query";
+    }
+  });
+})();
+
+document.getElementById("btnCancelPwd").addEventListener("click", closePwdModal);
+
+document.getElementById("btnSavePwd").addEventListener("click", async () => {
+  const p1 = document.getElementById("pwd1").value;
+  const p2 = document.getElementById("pwd2").value;
+  const N = document.getElementById("pwdNotice");
+  N.style.display = "none"; N.textContent = "";
+
+  function showErr(msg) {
+    N.style.background = "#FDECEC"; N.style.color = "#B71C1C";
+    N.textContent = msg; N.style.display = "block";
+  }
+
+  if (!p1 || !p2) return showErr("Fill both fields.");
+  if (p1 !== p2) return showErr("Passwords don't match.");
+  if (p1.length < 8) return showErr("Password must be at least 8 characters.");
+
+  const btn = document.getElementById("btnSavePwd");
+  btn.disabled = true; btn.textContent = "Saving…";
+
+  try {
+    const res = await api({ action: "change-password", token: TOKEN, newPassword: p1 });
+    btn.disabled = false; btn.textContent = "Save New Password";
+    if (!res.ok) return showErr(res.message || "Could not update password.");
+    N.style.background = "#E7F4EA"; N.style.color = "#26733C";
+    N.textContent = "Password updated."; N.style.display = "block";
+    document.getElementById("pwd1").value = "";
+    document.getElementById("pwd2").value = "";
+  } catch (err) {
+    btn.disabled = false; btn.textContent = "Save New Password";
+    showErr("Network error.");
+  }
 });
 
 // ============================================================
