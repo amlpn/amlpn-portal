@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/favicon.png">
+<title>News & Updates — AMLPN</title>
+<script src="/nav.js" defer></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #243447;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .hero {
+    background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
+    color: #fff;
+    padding: 44px 24px 40px;
+    text-align: center;
+  }
+  .hero h1 { margin: 0; font-size: 28px; letter-spacing: 1px; }
+  .hero .sub {
+    color: #E5C453;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+  .hero p {
+    max-width: 620px;
+    margin: 18px auto 0;
+    font-size: 14px;
+    line-height: 1.7;
+    opacity: .95;
+  }
+  .page { max-width: 760px; margin: 0 auto; padding: 26px 16px 60px; }
+  .back-link {
+    display: inline-block;
+    margin-bottom: 16px;
+    color: #17365D;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid #d9e2ec;
+  }
+  .back-link:hover { background: #EEF5FB; }
+  .news-card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+    transition: box-shadow .15s, transform .15s;
+  }
+  .news-card.clickable { cursor: pointer; }
+  .news-card.clickable:hover {
+    box-shadow: 0 6px 16px rgba(23,54,93,.12);
+    transform: translateY(-1px);
+  }
+  .news-card .meta {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #657786;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .news-card .meta .writer { color: #17365D; font-weight: bold; }
+  .news-card h2 {
+    margin: 0 0 10px;
+    font-size: 19px;
+    color: #17365D;
+    line-height: 1.35;
+  }
+  .news-card .summary {
+    font-size: 14px;
+    color: #50606F;
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+  .news-card .read-more {
+    font-size: 13px;
+    font-weight: bold;
+    color: #17365D;
+  }
+  .article {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    padding: 32px 28px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  }
+  .article .meta {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #657786;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .article .meta .writer { color: #17365D; font-weight: bold; }
+  .article h1 {
+    margin: 0 0 6px;
+    font-size: 26px;
+    color: #17365D;
+    line-height: 1.3;
+  }
+  .article .summary-line {
+    font-size: 15px;
+    color: #50606F;
+    font-style: italic;
+    line-height: 1.6;
+    margin: 0 0 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #eef2f6;
+  }
+  .article .body p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #243447;
+    margin: 0 0 16px;
+  }
+  .article .attachment {
+    margin-top: 24px;
+    padding: 14px 16px;
+    background: #EEF5FB;
+    border-left: 4px solid #C7A84B;
+    border-radius: 0 6px 6px 0;
+    font-size: 14px;
+  }
+  .article .attachment a {
+    color: #17365D;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  .article .attachment a:hover { text-decoration: underline; }
+  .state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #657786;
+    font-size: 14px;
+  }
+  .state .icon { font-size: 48px; margin-bottom: 12px; }
+  .state h3 { color: #17365D; margin: 0 0 8px; font-size: 20px; }
+  .footer {
+    text-align: center;
+    padding: 30px 16px 20px;
+    color: #657786;
+    font-size: 11px;
+    line-height: 1.7;
+    border-top: 1px solid #d9e2ec;
+    margin-top: 40px;
+  }
+  .footer strong { color: #17365D; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body data-page="News & Updates">
+
+<div class="hero">
+  <h1 id="heroTitle">News &amp; Updates</h1>
+  <div class="sub">AMLPN Communications</div>
+  <p id="heroLead">Announcements, milestones and stories from the Atria Medical Laboratory Professionals Network.</p>
+</div>
+
+<div class="page">
+
+  <!-- LIST VIEW -->
+  <div id="listView">
+    <div class="state" id="listLoading">Loading updates…</div>
+    <div id="listContent" class="hidden"></div>
+    <div class="state hidden" id="listEmpty">
+      <div class="icon">📰</div>
+      <h3>No updates yet</h3>
+      <p>Check back soon — news and announcements will appear here.</p>
+    </div>
+  </div>
+
+  <!-- DETAIL VIEW -->
+  <div id="detailView" class="hidden">
+    <a href="/news.html" class="back-link">← Back to all updates</a>
+    <div class="state" id="detailLoading">Loading article…</div>
+    <div id="detailContent" class="hidden"></div>
+    <div class="state hidden" id="detailEmpty">
+      <div class="icon">🔍</div>
+      <h3>Article not found</h3>
+      <p>This update may have been removed or the link is incorrect.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Atria Medical Laboratory Professionals Network</strong><br>
+  Together We Can
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
+
+async function api(payload) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+function escapeHtml(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+// Convert plain-text body with \n\n into <p>…</p>
+function textToParagraphs(text) {
+  const safe = escapeHtml(text || "");
+  const blocks = safe.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
+  if (!blocks.length) return "";
+  return blocks.map(b => "<p>" + b.replace(/\n/g, "<br>") + "</p>").join("");
+}
+
+// ============================================================
+// ROUTING
+// ============================================================
+
+const params = new URLSearchParams(window.location.search);
+const articleId = params.get("id");
+
+if (articleId) {
+  document.getElementById("detailView").classList.remove("hidden");
+  loadArticle(articleId);
+} else {
+  document.getElementById("listView").classList.remove("hidden");
+  loadList();
+}
+
+// ============================================================
+// LIST MODE
+// ============================================================
+
+async function loadList() {
+  document.getElementById("listLoading").classList.remove("hidden");
+  document.getElementById("listContent").classList.add("hidden");
+  document.getElementById("listEmpty").classList.add("hidden");
+
+  try {
+    const res = await api({ action: "get-updates", all: true });
+
+    if (!res || !res.ok) {
+      document.getElementById("listLoading").textContent = "Could not load updates. Please try again.";
+      return;
+    }
+
+    const items = res.updates || [];
+
+    if (!items.length) {
+      document.getElementById("listLoading").classList.add("hidden");
+      document.getElementById("listEmpty").classList.remove("hidden");
+      return;
+    }
+
+    renderList(items);
+  } catch (err) {
+    document.getElementById("listLoading").textContent = "Network error. Please try again.";
+  }
+}
+
+function renderList(items) {
+  const box = document.getElementById("listContent");
+  box.innerHTML = "";
+
+  items.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "news-card clickable";
+
+    let metaHtml = '<span>' + escapeHtml(item.date) + '</span>';
+    if (item.writer) metaHtml += '<span class="writer">' + escapeHtml(item.writer) + '</span>';
+
+    card.innerHTML =
+      '<div class="meta">' + metaHtml + '</div>' +
+      '<h2>' + escapeHtml(item.headline || "(Untitled)") + '</h2>' +
+      '<p class="summary">' + escapeHtml(item.summary || "") + '</p>' +
+      '<span class="read-more">Read more →</span>';
+
+    card.addEventListener("click", () => {
+      window.location.href = "/news.html?id=" + encodeURIComponent(item.id);
+    });
+
+    box.appendChild(card);
+  });
+
+  document.getElementById("listLoading").classList.add("hidden");
+  box.classList.remove("hidden");
+}
+
+// ============================================================
+// DETAIL MODE
+// ============================================================
+
+async function loadArticle(id) {
+  document.getElementById("detailLoading").classList.remove("hidden");
+  document.getElementById("detailContent").classList.add("hidden");
+  document.getElementById("detailEmpty").classList.add("hidden");
+
+  try {
+    const res = await api({ action: "get-updates", id: id });
+
+    if (!res || !res.ok || !res.article) {
+      document.getElementById("detailLoading").classList.add("hidden");
+      document.getElementById("detailEmpty").classList.remove("hidden");
+      return;
+    }
+
+    renderArticle(res.article);
+  } catch (err) {
+    document.getElementById("detailLoading").textContent = "Network error. Please try again.";
+  }
+}
+
+function renderArticle(a) {
+  // Update hero for context
+  document.getElementById("heroTitle").textContent = "News & Updates";
+  document.getElementById("heroLead").textContent = "Reading article…";
+  document.title = a.headline + " — AMLPN News";
+  setTimeout(() => {
+    document.getElementById("heroLead").textContent = "AMLPN Communications";
+  }, 50);
+
+  const box = document.getElementById("detailContent");
+  box.innerHTML = "";
+
+  let metaHtml = '<span>' + escapeHtml(a.date) + '</span>';
+  if (a.writer) metaHtml += '<span class="writer">' + escapeHtml(a.writer) + '</span>';
+
+  let html =
+    '<div class="article">' +
+      '<div class="meta">' + metaHtml + '</div>' +
+      '<h1>' + escapeHtml(a.headline || "(Untitled)") + '</h1>';
+
+  if (a.summary) {
+    html += '<p class="summary-line">' + escapeHtml(a.summary) + '</p>';
+  }
+
+  html += '<div class="body">' + textToParagraphs(a.details || "") + '</div>';
+
+  if (a.attachment) {
+    html +=
+      '<div class="attachment">' +
+        '<strong>📎 Attachment:</strong> ' +
+        '<a href="' + escapeHtml(a.attachment) + '" target="_blank" rel="noopener">Open attachment</a>' +
+      '</div>';
+  }
+
+  html += '</div>';
+
+  box.innerHTML = html;
+  document.getElementById("detailLoading").classList.add("hidden");
+  box.classList.remove("hidden");
+  window.scrollTo(0, 0);
+}
+
+</script>
+</body>
+</html>
