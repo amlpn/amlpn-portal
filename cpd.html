@@ -295,6 +295,235 @@
   .modal-actions .secondary { background: #fff; color: #17365D; border: 1px solid #d9e2ec; }
   .modal-actions .secondary:hover { background: #eef2f6; }
 
+  /* QUIZ */
+  .quiz-card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    padding: 24px 22px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  }
+  .quiz-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .quiz-head .count {
+    font-size: 12px;
+    font-weight: bold;
+    color: #657786;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .quiz-head .session-label {
+    font-size: 12px;
+    color: #17365D;
+    font-weight: bold;
+  }
+  .progress-track {
+    height: 8px;
+    background: #EEF2F6;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #17365D 0%, #C7A84B 100%);
+    transition: width .3s ease;
+    border-radius: 20px;
+  }
+  .question-text {
+    font-size: 17px;
+    font-weight: bold;
+    color: #17365D;
+    line-height: 1.5;
+    margin: 0 0 18px;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 2px solid #d9e2ec;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color .12s, background .12s;
+    font-size: 14px;
+    line-height: 1.5;
+    background: #fff;
+  }
+  .option:hover { border-color: #C7A84B; background: #FFFCF4; }
+  .option.selected {
+    border-color: #17365D;
+    background: #EEF5FB;
+  }
+  .option input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #94A3B8;
+    border-radius: 50%;
+    margin: 0;
+    flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+    background: #fff;
+  }
+  .option.selected input[type="radio"] {
+    border-color: #17365D;
+  }
+  .option.selected input[type="radio"]::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: #17365D;
+  }
+  .option .letter {
+    font-weight: bold;
+    color: #657786;
+    flex-shrink: 0;
+    width: 18px;
+  }
+  .option.selected .letter { color: #17365D; }
+  .option .text { flex: 1; color: #243447; }
+  .quiz-nav {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .quiz-nav button {
+    flex: 1;
+    padding: 13px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+  }
+  .quiz-nav .prev {
+    background: #fff;
+    color: #17365D;
+    border: 1px solid #d9e2ec;
+  }
+  .quiz-nav .prev:hover { background: #eef2f6; }
+  .quiz-nav .next,
+  .quiz-nav .submit {
+    background: #17365D;
+    color: #fff;
+  }
+  .quiz-nav .next:hover,
+  .quiz-nav .submit:hover { background: #0F2A47; }
+  .quiz-nav button:disabled { background: #94A3B8; color: #fff; cursor: not-allowed; }
+  .submit-note {
+    font-size: 12px;
+    color: #657786;
+    text-align: center;
+    margin-top: 12px;
+  }
+  .submit-note.unanswered { color: #B42318; font-weight: bold; }
+
+  /* RESULT SCREENS */
+  .result-card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    margin-bottom: 14px;
+  }
+  .result-card .big-icon { font-size: 56px; margin-bottom: 8px; }
+  .result-card h2 {
+    font-size: 24px;
+    margin: 0 0 10px;
+    color: #17365D;
+    letter-spacing: .5px;
+  }
+  .result-card.pass h2 { color: #26733C; }
+  .result-card.fail h2 { color: #B71C1C; }
+  .result-card .score-line {
+    font-size: 15px;
+    color: #50606F;
+    margin: 0 0 18px;
+    line-height: 1.7;
+  }
+  .result-card .score-big {
+    font-size: 34px;
+    font-weight: bold;
+    color: #17365D;
+    display: block;
+    margin: 6px 0;
+  }
+  .result-card .points-line {
+    display: inline-block;
+    padding: 8px 18px;
+    background: #E7F4EA;
+    color: #26733C;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 12px 0;
+  }
+  .result-card .cert-box {
+    background: #EEF5FB;
+    border: 1px solid #C9DDED;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 18px 0;
+  }
+  .result-card .cert-box .label {
+    font-size: 11px;
+    color: #657786;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .result-card .cert-box .id {
+    font-family: Consolas, Monaco, monospace;
+    font-size: 16px;
+    font-weight: bold;
+    color: #17365D;
+    letter-spacing: 1px;
+    word-break: break-all;
+  }
+  .result-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .result-actions a,
+  .result-actions button {
+    flex: 1;
+    padding: 13px 16px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    min-width: 140px;
+  }
+  .result-actions .primary { background: #17365D; color: #fff; }
+  .result-actions .primary:hover { background: #0F2A47; }
+  .result-actions .secondary { background: #fff; color: #17365D; border: 1px solid #d9e2ec; }
+  .result-actions .secondary:hover { background: #eef2f6; }
+
   .footer {
     text-align: center;
     padding: 30px 16px 20px;
@@ -338,6 +567,16 @@
       <h3>Session not found</h3>
       <p>This session may have been removed or the link is incorrect.</p>
     </div>
+  </div>
+
+  <!-- QUIZ VIEW -->
+  <div id="quizView" class="hidden">
+    <div id="quizContent"></div>
+  </div>
+
+  <!-- RESULT VIEW -->
+  <div id="resultView" class="hidden">
+    <div id="resultContent"></div>
   </div>
 
 </div>
@@ -536,8 +775,7 @@ function renderDetail(s) {
     if (!SESSION_TOKEN) {
       document.getElementById("loginModal").classList.remove("hidden");
     } else {
-      // Stage 3 will wire the quiz. For now, show a placeholder.
-      alert("Quiz UI comes in Stage 3. Backend is ready.");
+      startQuiz(s.sessionId, s.title);
     }
   });
 }
@@ -555,6 +793,252 @@ document.getElementById("loginModal").addEventListener("click", (e) => {
     document.getElementById("loginModal").classList.add("hidden");
   }
 });
+
+ // ============================================================
+// QUIZ ENGINE
+// ============================================================
+
+let QUIZ = null;
+
+async function startQuiz(sessionId, sessionTitle) {
+  document.getElementById("detailView").classList.add("hidden");
+  document.getElementById("listView").classList.add("hidden");
+  document.getElementById("quizView").classList.remove("hidden");
+  document.getElementById("quizContent").innerHTML = '<div class="state">Preparing quiz…</div>';
+  window.scrollTo(0, 0);
+
+  try {
+    const res = await api({
+      action: "cpd-start-quiz",
+      sessionToken: SESSION_TOKEN,
+      sessionId: sessionId
+    });
+
+    if (!res || !res.ok) {
+      renderQuizError(res && res.message ? res.message : "Could not start quiz.");
+      return;
+    }
+
+    QUIZ = {
+      sessionId: sessionId,
+      sessionTitle: sessionTitle,
+      attemptNumber: res.attemptNumber,
+      passMark: res.passMark,
+      maxAttempts: res.maxAttempts,
+      questions: res.questions,
+      answers: {},
+      current: 0,
+      startedAt: Date.now()
+    };
+
+    renderQuestion();
+  } catch (err) {
+    renderQuizError("Network error. Please try again.");
+  }
+}
+
+function renderQuizError(msg) {
+  document.getElementById("quizContent").innerHTML =
+    '<div class="result-card fail">' +
+      '<div class="big-icon">⚠️</div>' +
+      '<h2>Cannot Start Quiz</h2>' +
+      '<p class="score-line">' + escapeHtml(msg) + '</p>' +
+      '<div class="result-actions"><a href="/cpd.html" class="primary">Back to CPD Centre</a></div>' +
+    '</div>';
+}
+
+function renderQuestion() {
+  const q = QUIZ.questions[QUIZ.current];
+  const total = QUIZ.questions.length;
+  const pos = QUIZ.current + 1;
+  const pct = Math.round((pos / total) * 100);
+  const given = QUIZ.answers[q.questionId] || "";
+  const answered = Object.keys(QUIZ.answers).length;
+
+  const letters = ["A","B","C","D"];
+  const opts = letters.map(L => {
+    const sel = given === L ? " selected" : "";
+    return '<label class="option' + sel + '" data-letter="' + L + '">' +
+      '<input type="radio" name="q" value="' + L + '"' + (given === L ? ' checked' : '') + '>' +
+      '<span class="letter">' + L + '.</span>' +
+      '<span class="text">' + escapeHtml(q.options[L] || "") + '</span>' +
+    '</label>';
+  }).join("");
+
+  const isFirst = QUIZ.current === 0;
+  const isLast = QUIZ.current === total - 1;
+  const showSubmit = isLast;
+
+  const remaining = total - answered;
+  const note = showSubmit
+    ? (remaining > 0
+        ? '<div class="submit-note unanswered">' + remaining + ' question' + (remaining > 1 ? 's' : '') + ' still unanswered</div>'
+        : '<div class="submit-note">All questions answered. Ready to submit.</div>')
+    : "";
+
+  document.getElementById("quizContent").innerHTML =
+    '<div class="quiz-card">' +
+      '<div class="quiz-head">' +
+        '<span class="session-label">' + escapeHtml(QUIZ.sessionTitle) + '</span>' +
+        '<span class="count">Question ' + pos + ' of ' + total + '</span>' +
+      '</div>' +
+      '<div class="progress-track"><div class="progress-fill" style="width:' + pct + '%;"></div></div>' +
+      '<p class="question-text">' + escapeHtml(q.text) + '</p>' +
+      '<div class="options" id="optionsBox">' + opts + '</div>' +
+      '<div class="quiz-nav">' +
+        '<button class="prev" id="btnPrev"' + (isFirst ? ' disabled' : '') + '>← Back</button>' +
+        (showSubmit
+          ? '<button class="submit" id="btnSubmit" disabled>Submit Quiz</button>'
+          : '<button class="next" id="btnNext">Next →</button>'
+        ) +
+      '</div>' +
+      note +
+    '</div>';
+
+  // Wire options
+  document.querySelectorAll(".option").forEach(el => {
+    el.addEventListener("click", () => {
+      const L = el.dataset.letter;
+      QUIZ.answers[q.questionId] = L;
+      document.querySelectorAll(".option").forEach(o => o.classList.toggle("selected", o === el));
+      el.querySelector("input").checked = true;
+      updateSubmitButton();
+    });
+  });
+
+  const prev = document.getElementById("btnPrev");
+  if (prev) prev.addEventListener("click", () => {
+    if (QUIZ.current > 0) { QUIZ.current--; renderQuestion(); window.scrollTo(0,0); }
+  });
+
+  const next = document.getElementById("btnNext");
+  if (next) next.addEventListener("click", () => {
+    if (QUIZ.current < QUIZ.questions.length - 1) { QUIZ.current++; renderQuestion(); window.scrollTo(0,0); }
+  });
+
+  const submit = document.getElementById("btnSubmit");
+  if (submit) {
+    updateSubmitButton();
+    submit.addEventListener("click", submitQuiz);
+  }
+}
+
+function updateSubmitButton() {
+  const btn = document.getElementById("btnSubmit");
+  if (!btn) return;
+  const total = QUIZ.questions.length;
+  const answered = Object.keys(QUIZ.answers).length;
+  btn.disabled = answered < total;
+  btn.textContent = answered < total
+    ? "Submit Quiz (" + answered + "/" + total + ")"
+    : "Submit Quiz";
+}
+
+async function submitQuiz() {
+  const total = QUIZ.questions.length;
+  const answered = Object.keys(QUIZ.answers).length;
+  if (answered < total) {
+    alert("Please answer all questions before submitting.");
+    return;
+  }
+
+  const btn = document.getElementById("btnSubmit");
+  btn.disabled = true;
+  btn.textContent = "Scoring…";
+
+  const timeTaken = Math.round((Date.now() - QUIZ.startedAt) / 1000);
+
+  try {
+    const res = await api({
+      action: "cpd-submit-quiz",
+      sessionToken: SESSION_TOKEN,
+      sessionId: QUIZ.sessionId,
+      answers: QUIZ.answers,
+      timeTaken: timeTaken
+    });
+
+    if (!res || !res.ok) {
+      btn.disabled = false;
+      btn.textContent = "Submit Quiz";
+      alert((res && res.message) || "Could not submit. Please try again.");
+      return;
+    }
+
+    renderResult(res);
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = "Submit Quiz";
+    alert("Network error. Please try again.");
+  }
+}
+
+function renderResult(r) {
+  document.getElementById("quizView").classList.add("hidden");
+  document.getElementById("resultView").classList.remove("hidden");
+  window.scrollTo(0, 0);
+
+  const passed = r.result === "PASS";
+  const remaining = r.maxAttempts > 0 ? (r.maxAttempts - r.attemptNumber) : -1;
+
+  let inner = "";
+
+  if (passed) {
+    const certHtml = r.certificateId
+      ? '<div class="cert-box">' +
+          '<div class="label">Your Certificate ID</div>' +
+          '<div class="id">' + escapeHtml(r.certificateId) + '</div>' +
+        '</div>'
+      : "";
+
+    const actionsHtml = r.certificateId
+      ? '<div class="result-actions">' +
+          '<a href="' + escapeHtml(r.verificationUrl || ("/cpd-verify.html?cert=" + encodeURIComponent(r.certificateId))) + '" target="_blank" rel="noopener" class="secondary">Verify Online</a>' +
+          '<a href="/cpd.html" class="primary">View My CPD</a>' +
+        '</div>'
+      : '<div class="result-actions"><a href="/cpd.html" class="primary">View My CPD</a></div>';
+
+    inner =
+      '<div class="result-card pass">' +
+        '<div class="big-icon">🎉</div>' +
+        '<h2>QUIZ PASSED</h2>' +
+        '<span class="score-big">' + r.percentage + '%</span>' +
+        '<p class="score-line">' + r.score + ' of ' + r.total + ' points</p>' +
+        (r.alreadyPassed ? '<div class="points-line" style="background:#EEF5FB;color:#17365D;">Already passed — no new points awarded</div>' :
+          '<div class="points-line">🎓 CPD points awarded</div>') +
+        certHtml +
+        actionsHtml +
+        '<p class="score-line" style="font-size:12px;margin-top:18px;color:#657786;">A confirmation email has been sent to your inbox.</p>' +
+      '</div>';
+
+  } else {
+    const canRetry = r.maxAttempts === 0 || r.attemptNumber < r.maxAttempts;
+
+    const actionsHtml = canRetry
+      ? '<div class="result-actions">' +
+          '<button class="primary" id="btnRetry">Try Again →</button>' +
+          '<a href="/cpd.html" class="secondary">Back to My CPD</a>' +
+        '</div>'
+      : '<div class="result-actions"><a href="/cpd.html" class="primary">Back to My CPD</a></div>';
+
+    inner =
+      '<div class="result-card fail">' +
+        '<div class="big-icon">⚠️</div>' +
+        '<h2>QUIZ NOT PASSED</h2>' +
+        '<span class="score-big">' + r.percentage + '%</span>' +
+        '<p class="score-line">' + r.score + ' of ' + r.total + ' points<br>Pass mark: ' + r.passMark + '%</p>' +
+        '<p class="score-line" style="font-size:13px;">Attempts used: ' + r.attemptNumber + (r.maxAttempts > 0 ? ' of ' + r.maxAttempts : ' (unlimited)') + '</p>' +
+        (!canRetry ? '<div class="points-line" style="background:#FDECEC;color:#B71C1C;">No attempts remaining</div>' : '') +
+        actionsHtml +
+      '</div>';
+  }
+
+  document.getElementById("resultContent").innerHTML = inner;
+
+  const retry = document.getElementById("btnRetry");
+  if (retry) retry.addEventListener("click", () => {
+    startQuiz(QUIZ.sessionId, QUIZ.sessionTitle);
+  });
+}
 
 </script>
 </body>
