@@ -137,6 +137,73 @@
   .chip-legacy { background: #FFF8DD; color: #795E00; }
   .chip-info { background: #EEF5FB; color: #17365D; }
   .chip-locked { background: #F4F6F8; color: #657786; }
+   .chip-passed { background: #E7F4EA; color: #26733C; }
+  .session-card.passed {
+    border-left: 5px solid #26733C;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F6FCF7 100%);
+  }
+  .session-card.passed h3 {
+    color: #26733C;
+  }
+  .session-card .pass-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #26733C;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: .3px;
+    margin-bottom: 10px;
+  }
+
+  /* Detail page — passed banner */
+  .passed-banner {
+    background: linear-gradient(135deg, #E7F4EA 0%, #D5EEDB 100%);
+    border: 1px solid #B7DFC2;
+    border-left: 5px solid #26733C;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .passed-banner .check {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: #26733C;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .passed-banner .text {
+    flex: 1;
+    color: #1E5529;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .passed-banner .text strong { color: #26733C; font-size: 15px; }
+  .passed-banner .text .sub {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #3E6C48;
+  }
+
+  button.btn-primary.secondary-action {
+    background: #fff;
+    color: #17365D;
+    border: 1px solid #d9e2ec;
+  }
+  button.btn-primary.secondary-action:hover { background: #EEF5FB; }
 
   /* DETAIL */
   .back-link {
@@ -640,13 +707,40 @@ function escapeHtml(s) {
 const params = new URLSearchParams(window.location.search);
 const sessionId = params.get("session");
 
-if (sessionId) {
-  document.getElementById("detailView").classList.remove("hidden");
-  loadDetail(sessionId);
-} else {
-  document.getElementById("listView").classList.remove("hidden");
-  loadList();
-}
+// Global map: sessionId → { percentage, pointsEarned, completedOn, result }
+let PASS_MAP = {};
+
+// Load attempts FIRST (if logged in), then route to list or detail
+(async function init() {
+  if (SESSION_TOKEN) {
+    try {
+      const res = await api({ action: "cpd-my-attempts", sessionToken: SESSION_TOKEN });
+      if (res && res.ok && res.attempts) {
+        // Build map: keep only PASS results; if multiple, keep the best/first
+        res.attempts.forEach(a => {
+          if (String(a.result || "").toUpperCase() === "PASS") {
+            if (!PASS_MAP[a.sessionId]) {
+              PASS_MAP[a.sessionId] = {
+                percentage: a.percentage,
+                certificateId: a.certificateId,
+                completedOn: a.attemptDate,
+                attemptNumber: a.attemptNumber
+              };
+            }
+          }
+        });
+      }
+    } catch (e) { /* silent — badges just won't show */ }
+  }
+
+  if (sessionId) {
+    document.getElementById("detailView").classList.remove("hidden");
+    loadDetail(sessionId);
+  } else {
+    document.getElementById("listView").classList.remove("hidden");
+    loadList();
+  }
+})();
 
 // ============================================================
 // LIST
@@ -677,9 +771,12 @@ function renderList(sessions) {
 
   sessions.forEach(s => {
     const card = document.createElement("div");
-    card.className = "session-card";
+    const passed = PASS_MAP[s.sessionId];
+    card.className = "session-card" + (passed ? " passed" : "");
 
     const isAccredited = String(s.accreditation || "").toLowerCase() === "accredited";
+
+    // Points chip
     const pointsChip = isAccredited
       ? '<span class="chip chip-accredited">🎓 ' + s.accreditedPoints + ' CPD points (Accredited)</span>'
       : '<span class="chip chip-legacy">⭐ ' + s.legacyPoints + ' Legacy points</span>';
@@ -687,9 +784,23 @@ function renderList(sessions) {
     let chips = pointsChip;
     if (s.duration > 0) chips += '<span class="chip chip-info">⏱ ' + s.duration + ' hrs</span>';
     if (s.questionCount > 0) chips += '<span class="chip chip-info">📝 ' + s.questionCount + ' questions</span>';
-    if (!SESSION_TOKEN) chips += '<span class="chip chip-locked">🔒 Members only</span>';
+
+    if (passed) {
+      chips += '<span class="chip chip-passed">✓ Passed</span>';
+    } else if (!SESSION_TOKEN) {
+      chips += '<span class="chip chip-locked">🔒 Members only</span>';
+    }
+
+    // Pass badge above title
+    const passBadge = passed
+      ? '<div class="pass-badge">✓ PASSED' +
+        (passed.percentage ? ' — ' + passed.percentage + '%' : '') +
+        (passed.completedOn ? ' on ' + escapeHtml(passed.completedOn) : '') +
+        '</div>'
+      : '';
 
     card.innerHTML =
+      passBadge +
       '<div class="cat-line"><span class="category">' + escapeHtml(s.category || "General") + '</span><span>' + escapeHtml(s.sessionDate || "") + '</span></div>' +
       '<h3>' + escapeHtml(s.title) + '</h3>' +
       '<p class="desc">' + escapeHtml(s.description) + '</p>' +
@@ -728,11 +839,13 @@ function renderDetail(s) {
   const box = document.getElementById("detailContent");
   box.innerHTML = "";
 
+  const passed = PASS_MAP[s.sessionId];
   const isAccredited = String(s.accreditation || "").toLowerCase() === "accredited";
   const pointsLabel = isAccredited
     ? '🎓 ' + s.accreditedPoints + ' CPD Points (Accredited)'
     : '⭐ ' + s.legacyPoints + ' Legacy Points';
 
+  // Materials
   let materialsHtml = "";
   if (s.materials && s.materials.length) {
     materialsHtml = '<h2>Materials</h2><div class="materials-list">';
@@ -747,9 +860,37 @@ function renderDetail(s) {
     materialsTextHtml = '<p style="font-size:13px;color:#50606F;line-height:1.7;margin:10px 0 0;">' + escapeHtml(s.materialsText) + '</p>';
   }
 
-  const lockLabel = SESSION_TOKEN ? "Start Quiz →" : "🔒 Take Quiz (Members Only)";
+  // Passed banner
+  const passedBanner = passed
+    ? '<div class="passed-banner">' +
+        '<div class="check">✓</div>' +
+        '<div class="text">' +
+          '<strong>You have already completed this session</strong>' +
+          '<span class="sub">' +
+            'You earned ' + escapeHtml(pointsLabel.replace(/^[^ ]+ /, '')) +
+            ' on ' + escapeHtml(passed.completedOn || "") +
+            (passed.percentage ? ' — score ' + passed.percentage + '%' : '') +
+            '. Retaking is optional and will not earn extra points.' +
+          '</span>' +
+        '</div>' +
+      '</div>'
+    : '';
+
+  // Button label logic
+  let buttonLabel, buttonClass;
+  if (passed) {
+    buttonLabel = "🔄 Retake Quiz (Optional)";
+    buttonClass = "btn-primary secondary-action";
+  } else if (!SESSION_TOKEN) {
+    buttonLabel = "🔒 Take Quiz (Members Only)";
+    buttonClass = "btn-primary locked";
+  } else {
+    buttonLabel = "Start Quiz →";
+    buttonClass = "btn-primary";
+  }
 
   box.innerHTML =
+    passedBanner +
     '<div class="detail-card">' +
       '<h1>' + escapeHtml(s.title) + '</h1>' +
       '<div class="meta"><span class="category">' + escapeHtml(s.category || "General") + '</span><span>' + escapeHtml(s.sessionDate || "") + '</span>' + (s.duration > 0 ? '<span>⏱ ' + s.duration + ' hrs</span>' : '') + '</div>' +
@@ -764,7 +905,7 @@ function renderDetail(s) {
         '<div><span class="k">Max attempts</span><span class="v">' + (s.maxAttempts > 0 ? s.maxAttempts : "Unlimited") + '</span></div>' +
         '<div><span class="k">Provider</span><span class="v">' + escapeHtml(s.provider || "AMLPN") + '</span></div>' +
       '</div>' +
-      '<button class="btn-primary ' + (SESSION_TOKEN ? '' : 'locked') + '" id="btnStart">' + lockLabel + '</button>' +
+      '<button class="' + buttonClass + '" id="btnStart">' + buttonLabel + '</button>' +
     '</div>';
 
   document.getElementById("detailLoading").classList.add("hidden");
@@ -1032,6 +1173,15 @@ function renderResult(r) {
       '</div>';
   }
 
+   // Update local PASS_MAP so navigating back shows the new state
+  if (passed && QUIZ && QUIZ.sessionId) {
+    PASS_MAP[QUIZ.sessionId] = {
+      percentage: r.percentage,
+      certificateId: r.certificateId || "",
+      completedOn: new Date().toISOString().slice(0, 10),
+      attemptNumber: r.attemptNumber
+    };
+  }
   document.getElementById("resultContent").innerHTML = inner;
 
   const retry = document.getElementById("btnRetry");
