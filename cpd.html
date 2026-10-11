@@ -16,8 +16,6 @@
     font-size: 15px;
     line-height: 1.6;
   }
-
-  /* HERO */
   .hero {
     background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
     color: #fff;
@@ -54,7 +52,6 @@
     font-size: 12px;
     font-weight: bold;
   }
-
   .page { max-width: 720px; margin: 0 auto; padding: 0 16px 60px; }
 
   /* TABS */
@@ -63,6 +60,7 @@
     gap: 4px;
     margin-bottom: 14px;
     border-bottom: 2px solid #e5e7eb;
+    overflow-x: auto;
   }
   .tab {
     padding: 10px 16px;
@@ -75,12 +73,22 @@
     border-bottom: 3px solid transparent;
     margin-bottom: -2px;
     font-family: inherit;
+    white-space: nowrap;
   }
   .tab.active {
     color: #17365D;
     border-bottom-color: #C7A84B;
   }
-  .tab:disabled { opacity: .4; cursor: not-allowed; }
+  .tab .count {
+    display: inline-block;
+    background: #EEF5FB;
+    color: #17365D;
+    font-size: 11px;
+    padding: 1px 8px;
+    border-radius: 10px;
+    margin-left: 6px;
+  }
+  .tab.active .count { background: #C7A84B; color: #fff; }
 
   /* SESSION CARD */
   .session-card {
@@ -97,6 +105,11 @@
     box-shadow: 0 6px 16px rgba(23,54,93,.12);
     transform: translateY(-1px);
   }
+  .session-card.passed {
+    border-left: 5px solid #26733C;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F6FCF7 100%);
+  }
+  .session-card.passed h3 { color: #26733C; }
   .session-card .cat-line {
     font-size: 11px;
     text-transform: uppercase;
@@ -137,14 +150,7 @@
   .chip-legacy { background: #FFF8DD; color: #795E00; }
   .chip-info { background: #EEF5FB; color: #17365D; }
   .chip-locked { background: #F4F6F8; color: #657786; }
-   .chip-passed { background: #E7F4EA; color: #26733C; }
-  .session-card.passed {
-    border-left: 5px solid #26733C;
-    background: linear-gradient(180deg, #FFFFFF 0%, #F6FCF7 100%);
-  }
-  .session-card.passed h3 {
-    color: #26733C;
-  }
+  .chip-passed { background: #E7F4EA; color: #26733C; }
   .session-card .pass-badge {
     display: inline-flex;
     align-items: center;
@@ -159,51 +165,84 @@
     margin-bottom: 10px;
   }
 
-  /* Detail page — passed banner */
-  .passed-banner {
-    background: linear-gradient(135deg, #E7F4EA 0%, #D5EEDB 100%);
-    border: 1px solid #B7DFC2;
-    border-left: 5px solid #26733C;
-    border-radius: 0 8px 8px 0;
-    padding: 16px 18px;
-    margin-bottom: 16px;
+  /* CERTIFICATE CARD (Completed tab / My Certificates tab) */
+  .cert-card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-left: 5px solid #C7A84B;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  }
+  .cert-card .top {
     display: flex;
+    justify-content: space-between;
     align-items: flex-start;
-    gap: 14px;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
   }
-  .passed-banner .check {
-    flex-shrink: 0;
-    width: 32px;
-    height: 32px;
-    background: #26733C;
-    color: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
+  .cert-card .title {
+    font-size: 16px;
     font-weight: bold;
+    color: #17365D;
+    line-height: 1.35;
   }
-  .passed-banner .text {
-    flex: 1;
-    color: #1E5529;
-    font-size: 14px;
-    line-height: 1.6;
-  }
-  .passed-banner .text strong { color: #26733C; font-size: 15px; }
-  .passed-banner .text .sub {
-    display: block;
-    margin-top: 4px;
+  .cert-card .date {
     font-size: 12px;
-    color: #3E6C48;
+    color: #657786;
+    margin-top: 4px;
   }
-
-  button.btn-primary.secondary-action {
+  .cert-card .score-pill {
+    display: inline-block;
+    background: #E7F4EA;
+    color: #26733C;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  .cert-card .id-box {
+    background: #F4F6F8;
+    border: 1px solid #d9e2ec;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin: 10px 0;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 12px;
+    color: #17365D;
+    word-break: break-all;
+  }
+  .cert-card .actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .cert-card .actions a {
+    flex: 1;
+    min-width: 130px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    transition: background .12s;
+  }
+  .cert-card .actions .primary {
+    background: #17365D;
+    color: #fff;
+  }
+  .cert-card .actions .primary:hover { background: #0F2A47; }
+  .cert-card .actions .secondary {
     background: #fff;
     color: #17365D;
     border: 1px solid #d9e2ec;
   }
-  button.btn-primary.secondary-action:hover { background: #EEF5FB; }
+  .cert-card .actions .secondary:hover { background: #EEF5FB; }
 
   /* DETAIL */
   .back-link {
@@ -305,11 +344,52 @@
     transition: background .15s;
   }
   button.btn-primary:hover { background: #0F2A47; }
-  button.btn-primary.locked {
-    background: #94A3B8;
-    cursor: pointer;
-  }
+  button.btn-primary.locked { background: #94A3B8; cursor: pointer; }
   button.btn-primary.locked:hover { background: #7E8FA3; }
+  button.btn-primary.secondary-action {
+    background: #fff;
+    color: #17365D;
+    border: 1px solid #d9e2ec;
+  }
+  button.btn-primary.secondary-action:hover { background: #EEF5FB; }
+
+  .passed-banner {
+    background: linear-gradient(135deg, #E7F4EA 0%, #D5EEDB 100%);
+    border: 1px solid #B7DFC2;
+    border-left: 5px solid #26733C;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .passed-banner .check {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: #26733C;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .passed-banner .text {
+    flex: 1;
+    color: #1E5529;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .passed-banner .text strong { color: #26733C; font-size: 15px; }
+  .passed-banner .text .sub {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #3E6C48;
+  }
 
   /* STATE */
   .state {
@@ -320,6 +400,7 @@
   }
   .state .icon { font-size: 48px; margin-bottom: 12px; }
   .state h3 { color: #17365D; margin: 0 0 8px; font-size: 20px; }
+  .state p { margin: 0; font-size: 13px; }
 
   /* MODAL */
   .modal-backdrop {
@@ -362,235 +443,6 @@
   .modal-actions .secondary { background: #fff; color: #17365D; border: 1px solid #d9e2ec; }
   .modal-actions .secondary:hover { background: #eef2f6; }
 
-  /* QUIZ */
-  .quiz-card {
-    background: #fff;
-    border: 1px solid #d9e2ec;
-    border-radius: 12px;
-    padding: 24px 22px;
-    margin-bottom: 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.04);
-  }
-  .quiz-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-  }
-  .quiz-head .count {
-    font-size: 12px;
-    font-weight: bold;
-    color: #657786;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .quiz-head .session-label {
-    font-size: 12px;
-    color: #17365D;
-    font-weight: bold;
-  }
-  .progress-track {
-    height: 8px;
-    background: #EEF2F6;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-bottom: 22px;
-  }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #17365D 0%, #C7A84B 100%);
-    transition: width .3s ease;
-    border-radius: 20px;
-  }
-  .question-text {
-    font-size: 17px;
-    font-weight: bold;
-    color: #17365D;
-    line-height: 1.5;
-    margin: 0 0 18px;
-  }
-  .options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .option {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 14px 16px;
-    border: 2px solid #d9e2ec;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: border-color .12s, background .12s;
-    font-size: 14px;
-    line-height: 1.5;
-    background: #fff;
-  }
-  .option:hover { border-color: #C7A84B; background: #FFFCF4; }
-  .option.selected {
-    border-color: #17365D;
-    background: #EEF5FB;
-  }
-  .option input[type="radio"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #94A3B8;
-    border-radius: 50%;
-    margin: 0;
-    flex-shrink: 0;
-    position: relative;
-    cursor: pointer;
-    background: #fff;
-  }
-  .option.selected input[type="radio"] {
-    border-color: #17365D;
-  }
-  .option.selected input[type="radio"]::after {
-    content: "";
-    position: absolute;
-    inset: 3px;
-    border-radius: 50%;
-    background: #17365D;
-  }
-  .option .letter {
-    font-weight: bold;
-    color: #657786;
-    flex-shrink: 0;
-    width: 18px;
-  }
-  .option.selected .letter { color: #17365D; }
-  .option .text { flex: 1; color: #243447; }
-  .quiz-nav {
-    display: flex;
-    gap: 8px;
-    margin-top: 20px;
-  }
-  .quiz-nav button {
-    flex: 1;
-    padding: 13px;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-  }
-  .quiz-nav .prev {
-    background: #fff;
-    color: #17365D;
-    border: 1px solid #d9e2ec;
-  }
-  .quiz-nav .prev:hover { background: #eef2f6; }
-  .quiz-nav .next,
-  .quiz-nav .submit {
-    background: #17365D;
-    color: #fff;
-  }
-  .quiz-nav .next:hover,
-  .quiz-nav .submit:hover { background: #0F2A47; }
-  .quiz-nav button:disabled { background: #94A3B8; color: #fff; cursor: not-allowed; }
-  .submit-note {
-    font-size: 12px;
-    color: #657786;
-    text-align: center;
-    margin-top: 12px;
-  }
-  .submit-note.unanswered { color: #B42318; font-weight: bold; }
-
-  /* RESULT SCREENS */
-  .result-card {
-    background: #fff;
-    border: 1px solid #d9e2ec;
-    border-radius: 12px;
-    padding: 32px 24px;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,.04);
-    margin-bottom: 14px;
-  }
-  .result-card .big-icon { font-size: 56px; margin-bottom: 8px; }
-  .result-card h2 {
-    font-size: 24px;
-    margin: 0 0 10px;
-    color: #17365D;
-    letter-spacing: .5px;
-  }
-  .result-card.pass h2 { color: #26733C; }
-  .result-card.fail h2 { color: #B71C1C; }
-  .result-card .score-line {
-    font-size: 15px;
-    color: #50606F;
-    margin: 0 0 18px;
-    line-height: 1.7;
-  }
-  .result-card .score-big {
-    font-size: 34px;
-    font-weight: bold;
-    color: #17365D;
-    display: block;
-    margin: 6px 0;
-  }
-  .result-card .points-line {
-    display: inline-block;
-    padding: 8px 18px;
-    background: #E7F4EA;
-    color: #26733C;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: bold;
-    margin: 12px 0;
-  }
-  .result-card .cert-box {
-    background: #EEF5FB;
-    border: 1px solid #C9DDED;
-    border-radius: 8px;
-    padding: 16px;
-    margin: 18px 0;
-  }
-  .result-card .cert-box .label {
-    font-size: 11px;
-    color: #657786;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-  }
-  .result-card .cert-box .id {
-    font-family: Consolas, Monaco, monospace;
-    font-size: 16px;
-    font-weight: bold;
-    color: #17365D;
-    letter-spacing: 1px;
-    word-break: break-all;
-  }
-  .result-actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-  }
-  .result-actions a,
-  .result-actions button {
-    flex: 1;
-    padding: 13px 16px;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    border: none;
-    min-width: 140px;
-  }
-  .result-actions .primary { background: #17365D; color: #fff; }
-  .result-actions .primary:hover { background: #0F2A47; }
-  .result-actions .secondary { background: #fff; color: #17365D; border: 1px solid #d9e2ec; }
-  .result-actions .secondary:hover { background: #eef2f6; }
-
   .footer {
     text-align: center;
     padding: 30px 16px 20px;
@@ -607,7 +459,7 @@
 <div class="hero">
   <h1>AMLPN CPD Centre</h1>
   <div class="sub">Continuous Professional Development</div>
-  <p>Study materials, take short quizzes, earn CPD points and verifiable certificates — all in one place.</p>
+  <p id="heroLine">Study materials, take short quizzes, earn CPD points and verifiable certificates — all in one place.</p>
   <span class="badge" id="memberBadge"></span>
 </div>
 
@@ -615,12 +467,28 @@
 
   <!-- LIST VIEW -->
   <div id="listView">
+    <div id="tabsWrap" class="tabs hidden">
+      <button class="tab active" data-tab="available">Available <span class="count" id="cntAvailable">0</span></button>
+      <button class="tab" data-tab="completed">Completed <span class="count" id="cntCompleted">0</span></button>
+      <button class="tab" data-tab="certificates">My Certificates <span class="count" id="cntCerts">0</span></button>
+    </div>
+
     <div class="state" id="listLoading">Loading CPD sessions…</div>
     <div id="listContent" class="hidden"></div>
     <div class="state hidden" id="listEmpty">
       <div class="icon">🎓</div>
       <h3>No CPD sessions yet</h3>
       <p>Check back soon — new sessions will appear here.</p>
+    </div>
+    <div class="state hidden" id="completedEmpty">
+      <div class="icon">✅</div>
+      <h3>No completed sessions yet</h3>
+      <p>Take a quiz from the Available tab to start your CPD portfolio.</p>
+    </div>
+    <div class="state hidden" id="certsEmpty">
+      <div class="icon">🏆</div>
+      <h3>No certificates yet</h3>
+      <p>Pass a quiz to earn your first CPD certificate.</p>
     </div>
   </div>
 
@@ -675,6 +543,10 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
 const SESSION_TOKEN = sessionStorage.getItem("amlpn_token") || null;
 
+let ALL_SESSIONS = [];      // from cpd-list-sessions
+let PASS_MAP = {};          // sessionId → { percentage, certId, completedOn, ... }
+let CURRENT_TAB = "available";
+
 async function api(payload) {
   const res = await fetch(API_URL, {
     method: "POST",
@@ -690,14 +562,11 @@ function escapeHtml(s) {
     .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
 
-// Show "signed in as member" badge or "guest"
+// Badge
 (function memberBadge() {
   const b = document.getElementById("memberBadge");
-  if (SESSION_TOKEN) {
-    b.textContent = "✓ Signed in";
-  } else {
-    b.textContent = "👋 Public view — sign in for full access";
-  }
+  if (SESSION_TOKEN) b.textContent = "✓ Signed in";
+  else b.textContent = "👋 Public view — sign in for full access";
 })();
 
 // ============================================================
@@ -705,24 +574,20 @@ function escapeHtml(s) {
 // ============================================================
 
 const params = new URLSearchParams(window.location.search);
-const sessionId = params.get("session");
+const sessionIdParam = params.get("session");
 
-// Global map: sessionId → { percentage, pointsEarned, completedOn, result }
-let PASS_MAP = {};
-
-// Load attempts FIRST (if logged in), then route to list or detail
 (async function init() {
   if (SESSION_TOKEN) {
     try {
       const res = await api({ action: "cpd-my-attempts", sessionToken: SESSION_TOKEN });
       if (res && res.ok && res.attempts) {
-        // Build map: keep only PASS results; if multiple, keep the best/first
         res.attempts.forEach(a => {
           if (String(a.result || "").toUpperCase() === "PASS") {
             if (!PASS_MAP[a.sessionId]) {
               PASS_MAP[a.sessionId] = {
                 percentage: a.percentage,
                 certificateId: a.certificateId,
+                certificateFile: a.certificateFile,
                 completedOn: a.attemptDate,
                 attemptNumber: a.attemptNumber
               };
@@ -730,17 +595,50 @@ let PASS_MAP = {};
           }
         });
       }
-    } catch (e) { /* silent — badges just won't show */ }
+    } catch (e) {}
   }
 
-  if (sessionId) {
+  if (sessionIdParam) {
     document.getElementById("detailView").classList.remove("hidden");
-    loadDetail(sessionId);
+    loadDetail(sessionIdParam);
   } else {
     document.getElementById("listView").classList.remove("hidden");
-    loadList();
+    await loadList();
+    if (SESSION_TOKEN) initTabs();
   }
 })();
+
+// ============================================================
+// TABS
+// ============================================================
+
+function initTabs() {
+  document.getElementById("tabsWrap").classList.remove("hidden");
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      CURRENT_TAB = tab.dataset.tab;
+      renderCurrentTab();
+    });
+  });
+}
+
+function updateTabCounts() {
+  const available = ALL_SESSIONS.filter(s => !PASS_MAP[s.sessionId]).length;
+  const completed = ALL_SESSIONS.filter(s => PASS_MAP[s.sessionId]).length;
+  const certs = Object.keys(PASS_MAP).filter(k => PASS_MAP[k].certificateId).length;
+  document.getElementById("cntAvailable").textContent = available;
+  document.getElementById("cntCompleted").textContent = completed;
+  document.getElementById("cntCerts").textContent = certs;
+}
+
+function renderCurrentTab() {
+  updateTabCounts();
+  if (CURRENT_TAB === "available") renderAvailable();
+  else if (CURRENT_TAB === "completed") renderCompleted();
+  else if (CURRENT_TAB === "certificates") renderCertificates();
+}
 
 // ============================================================
 // LIST
@@ -753,68 +651,148 @@ async function loadList() {
       document.getElementById("listLoading").textContent = "Could not load sessions.";
       return;
     }
-    const sessions = res.sessions || [];
-    if (!sessions.length) {
-      document.getElementById("listLoading").classList.add("hidden");
+    ALL_SESSIONS = res.sessions || [];
+    document.getElementById("listLoading").classList.add("hidden");
+
+    if (!ALL_SESSIONS.length) {
       document.getElementById("listEmpty").classList.remove("hidden");
       return;
     }
-    renderList(sessions);
+
+    if (SESSION_TOKEN) {
+      renderCurrentTab();
+    } else {
+      renderAvailable();
+    }
   } catch (err) {
     document.getElementById("listLoading").textContent = "Network error.";
   }
 }
 
-function renderList(sessions) {
+function renderAvailable() {
+  const box = document.getElementById("listContent");
+  box.innerHTML = "";
+  document.getElementById("listEmpty").classList.add("hidden");
+  document.getElementById("completedEmpty").classList.add("hidden");
+  document.getElementById("certsEmpty").classList.add("hidden");
+
+  // In "Available" tab, show everything (passed are still clickable)
+  // but visually mark passed ones so member doesn't retake by accident.
+  ALL_SESSIONS.forEach(s => {
+    box.appendChild(buildSessionCard(s));
+  });
+
+  box.classList.remove("hidden");
+}
+
+function renderCompleted() {
   const box = document.getElementById("listContent");
   box.innerHTML = "";
 
-  sessions.forEach(s => {
-    const card = document.createElement("div");
-    const passed = PASS_MAP[s.sessionId];
-    card.className = "session-card" + (passed ? " passed" : "");
+  const items = ALL_SESSIONS.filter(s => PASS_MAP[s.sessionId]);
 
-    const isAccredited = String(s.accreditation || "").toLowerCase() === "accredited";
+  if (!items.length) {
+    box.classList.add("hidden");
+    document.getElementById("completedEmpty").classList.remove("hidden");
+    return;
+  }
 
-    // Points chip
-    const pointsChip = isAccredited
-      ? '<span class="chip chip-accredited">🎓 ' + s.accreditedPoints + ' CPD points (Accredited)</span>'
-      : '<span class="chip chip-legacy">⭐ ' + s.legacyPoints + ' Legacy points</span>';
+  document.getElementById("completedEmpty").classList.add("hidden");
+  items.forEach(s => box.appendChild(buildSessionCard(s)));
+  box.classList.remove("hidden");
+}
 
-    let chips = pointsChip;
-    if (s.duration > 0) chips += '<span class="chip chip-info">⏱ ' + s.duration + ' hrs</span>';
-    if (s.questionCount > 0) chips += '<span class="chip chip-info">📝 ' + s.questionCount + ' questions</span>';
+function renderCertificates() {
+  const box = document.getElementById("listContent");
+  box.innerHTML = "";
 
-    if (passed) {
-      chips += '<span class="chip chip-passed">✓ Passed</span>';
-    } else if (!SESSION_TOKEN) {
-      chips += '<span class="chip chip-locked">🔒 Members only</span>';
+  const certEntries = [];
+  ALL_SESSIONS.forEach(s => {
+    const p = PASS_MAP[s.sessionId];
+    if (p && p.certificateId) {
+      certEntries.push({ session: s, pass: p });
     }
-
-    // Pass badge above title
-    const passBadge = passed
-      ? '<div class="pass-badge">✓ PASSED' +
-        (passed.percentage ? ' — ' + passed.percentage + '%' : '') +
-        (passed.completedOn ? ' on ' + escapeHtml(passed.completedOn) : '') +
-        '</div>'
-      : '';
-
-    card.innerHTML =
-      passBadge +
-      '<div class="cat-line"><span class="category">' + escapeHtml(s.category || "General") + '</span><span>' + escapeHtml(s.sessionDate || "") + '</span></div>' +
-      '<h3>' + escapeHtml(s.title) + '</h3>' +
-      '<p class="desc">' + escapeHtml(s.description) + '</p>' +
-      '<div class="chips">' + chips + '</div>';
-
-    card.addEventListener("click", () => {
-      window.location.href = "/cpd.html?session=" + encodeURIComponent(s.sessionId);
-    });
-
-    box.appendChild(card);
   });
 
-  document.getElementById("listLoading").classList.add("hidden");
+  // Also include any certificates not matching a listed session (defensive)
+  Object.keys(PASS_MAP).forEach(sid => {
+    const p = PASS_MAP[sid];
+    if (!p.certificateId) return;
+    if (certEntries.some(e => e.session.sessionId === sid)) return;
+    certEntries.push({ session: { sessionId: sid, title: "(Session unavailable)", category: "" }, pass: p });
+  });
+
+  if (!certEntries.length) {
+    box.classList.add("hidden");
+    document.getElementById("certsEmpty").classList.remove("hidden");
+    return;
+  }
+
+  document.getElementById("certsEmpty").classList.add("hidden");
+
+  certEntries.sort((a, b) => (b.pass.completedOn || "").localeCompare(a.pass.completedOn || ""));
+
+  certEntries.forEach(({ session, pass }) => {
+    const div = document.createElement("div");
+    div.className = "cert-card";
+    div.innerHTML =
+      '<div class="top">' +
+        '<div>' +
+          '<div class="title">' + escapeHtml(session.title) + '</div>' +
+          '<div class="date">' +
+            (session.category ? escapeHtml(session.category) + ' • ' : '') +
+            'Completed ' + escapeHtml(pass.completedOn || "") +
+          '</div>' +
+        '</div>' +
+        (pass.percentage ? '<span class="score-pill">' + pass.percentage + '%</span>' : '') +
+      '</div>' +
+      '<div class="id-box">' + escapeHtml(pass.certificateId) + '</div>' +
+      '<div class="actions">' +
+        (pass.certificateFile ? '<a href="' + escapeHtml(pass.certificateFile) + '" target="_blank" rel="noopener" class="primary">⬇ Download</a>' : '') +
+        '<a href="/cpd-verify.html?cert=' + encodeURIComponent(pass.certificateId) + '" target="_blank" rel="noopener" class="secondary">✓ Verify</a>' +
+        '<a href="/cpd.html?session=' + encodeURIComponent(session.sessionId) + '" class="secondary">View Session</a>' +
+      '</div>';
+    box.appendChild(div);
+  });
+
   box.classList.remove("hidden");
+}
+
+function buildSessionCard(s) {
+  const card = document.createElement("div");
+  const passed = PASS_MAP[s.sessionId];
+  card.className = "session-card" + (passed ? " passed" : "");
+
+  const isAccredited = String(s.accreditation || "").toLowerCase() === "accredited";
+  const pointsChip = isAccredited
+    ? '<span class="chip chip-accredited">🎓 ' + s.accreditedPoints + ' CPD points (Accredited)</span>'
+    : '<span class="chip chip-legacy">⭐ ' + s.legacyPoints + ' Legacy points</span>';
+
+  let chips = pointsChip;
+  if (s.duration > 0) chips += '<span class="chip chip-info">⏱ ' + s.duration + ' hrs</span>';
+  if (s.questionCount > 0) chips += '<span class="chip chip-info">📝 ' + s.questionCount + ' questions</span>';
+  if (passed) chips += '<span class="chip chip-passed">✓ Passed</span>';
+  else if (!SESSION_TOKEN) chips += '<span class="chip chip-locked">🔒 Members only</span>';
+
+  const passBadge = passed
+    ? '<div class="pass-badge">✓ PASSED' +
+      (passed.percentage ? ' — ' + passed.percentage + '%' : '') +
+      (passed.completedOn ? ' on ' + escapeHtml(passed.completedOn) : '') +
+      '</div>'
+    : '';
+
+  card.innerHTML =
+    passBadge +
+    '<div class="cat-line"><span class="category">' + escapeHtml(s.category || "General") + '</span><span>' + escapeHtml(s.sessionDate || "") + '</span></div>' +
+    '<h3>' + escapeHtml(s.title) + '</h3>' +
+    '<p class="desc">' + escapeHtml(s.description) + '</p>' +
+    '<div class="chips">' + chips + '</div>';
+
+  card.addEventListener("click", () => {
+    window.location.href = "/cpd.html?session=" + encodeURIComponent(s.sessionId);
+  });
+
+  return card;
 }
 
 // ============================================================
@@ -845,7 +823,6 @@ function renderDetail(s) {
     ? '🎓 ' + s.accreditedPoints + ' CPD Points (Accredited)'
     : '⭐ ' + s.legacyPoints + ' Legacy Points';
 
-  // Materials
   let materialsHtml = "";
   if (s.materials && s.materials.length) {
     materialsHtml = '<h2>Materials</h2><div class="materials-list">';
@@ -860,7 +837,6 @@ function renderDetail(s) {
     materialsTextHtml = '<p style="font-size:13px;color:#50606F;line-height:1.7;margin:10px 0 0;">' + escapeHtml(s.materialsText) + '</p>';
   }
 
-  // Passed banner
   const passedBanner = passed
     ? '<div class="passed-banner">' +
         '<div class="check">✓</div>' +
@@ -876,7 +852,6 @@ function renderDetail(s) {
       '</div>'
     : '';
 
-  // Button label logic
   let buttonLabel, buttonClass;
   if (passed) {
     buttonLabel = "🔄 Retake Quiz (Optional)";
@@ -922,20 +897,6 @@ function renderDetail(s) {
 }
 
 // ============================================================
-// MODAL
-// ============================================================
-
-document.getElementById("modalClose").addEventListener("click", () => {
-  document.getElementById("loginModal").classList.add("hidden");
-});
-
-document.getElementById("loginModal").addEventListener("click", (e) => {
-  if (e.target === document.getElementById("loginModal")) {
-    document.getElementById("loginModal").classList.add("hidden");
-  }
-});
-
- // ============================================================
 // QUIZ ENGINE
 // ============================================================
 
@@ -1036,7 +997,6 @@ function renderQuestion() {
       note +
     '</div>';
 
-  // Wire options
   document.querySelectorAll(".option").forEach(el => {
     el.addEventListener("click", () => {
       const L = el.dataset.letter;
@@ -1119,7 +1079,15 @@ function renderResult(r) {
   window.scrollTo(0, 0);
 
   const passed = r.result === "PASS";
-  const remaining = r.maxAttempts > 0 ? (r.maxAttempts - r.attemptNumber) : -1;
+
+  if (passed && QUIZ && QUIZ.sessionId) {
+    PASS_MAP[QUIZ.sessionId] = {
+      percentage: r.percentage,
+      certificateId: r.certificateId || "",
+      completedOn: new Date().toISOString().slice(0, 10),
+      attemptNumber: r.attemptNumber
+    };
+  }
 
   let inner = "";
 
@@ -1173,15 +1141,6 @@ function renderResult(r) {
       '</div>';
   }
 
-   // Update local PASS_MAP so navigating back shows the new state
-  if (passed && QUIZ && QUIZ.sessionId) {
-    PASS_MAP[QUIZ.sessionId] = {
-      percentage: r.percentage,
-      certificateId: r.certificateId || "",
-      completedOn: new Date().toISOString().slice(0, 10),
-      attemptNumber: r.attemptNumber
-    };
-  }
   document.getElementById("resultContent").innerHTML = inner;
 
   const retry = document.getElementById("btnRetry");
@@ -1189,6 +1148,20 @@ function renderResult(r) {
     startQuiz(QUIZ.sessionId, QUIZ.sessionTitle);
   });
 }
+
+// ============================================================
+// MODAL
+// ============================================================
+
+document.getElementById("modalClose").addEventListener("click", () => {
+  document.getElementById("loginModal").classList.add("hidden");
+});
+
+document.getElementById("loginModal").addEventListener("click", (e) => {
+  if (e.target === document.getElementById("loginModal")) {
+    document.getElementById("loginModal").classList.add("hidden");
+  }
+});
 
 </script>
 </body>
