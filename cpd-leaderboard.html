@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/favicon.png">
+<title>CPD Leaderboard — AMLPN</title>
+<script src="/nav.js" defer></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #243447;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #17365D 0%, #2B5A94 100%);
+    color: #fff;
+    padding: 24px 22px 22px;
+    border-radius: 12px;
+    margin: 16px auto 14px;
+    box-shadow: 0 4px 14px rgba(23,54,93,.18);
+    text-align: center;
+    max-width: 720px;
+    width: calc(100% - 32px);
+  }
+  .hero h1 { margin: 0; font-size: 22px; letter-spacing: .5px; }
+  .hero .sub {
+    color: #E5C453;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .hero p {
+    margin: 10px auto 0;
+    font-size: 13px;
+    line-height: 1.6;
+    opacity: .92;
+    max-width: 620px;
+  }
+
+  .page { max-width: 720px; margin: 0 auto; padding: 0 16px 60px; }
+
+  /* PODIUM (top 3) */
+  .podium {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 520px) {
+    .podium { grid-template-columns: 1fr; }
+  }
+  .podium-card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    padding: 20px 16px 18px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    position: relative;
+    overflow: hidden;
+  }
+  .podium-card.rank-1 {
+    background: linear-gradient(180deg, #FFFCEB 0%, #FFFFFF 60%);
+    border-color: #C7A84B;
+    box-shadow: 0 4px 16px rgba(199,168,75,.25);
+  }
+  .podium-card .medal {
+    font-size: 34px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .podium-card .rank-num {
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #657786;
+    margin-bottom: 4px;
+  }
+  .podium-card.rank-1 .rank-num { color: #8A6D00; }
+  .podium-card .name {
+    font-size: 15px;
+    font-weight: bold;
+    color: #17365D;
+    line-height: 1.3;
+    margin-bottom: 6px;
+    word-break: break-word;
+  }
+  .podium-card .cat {
+    font-size: 11px;
+    color: #657786;
+    margin-bottom: 12px;
+  }
+  .podium-card .points {
+    display: inline-block;
+    background: #17365D;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .podium-card.rank-1 .points {
+    background: #C7A84B;
+    color: #17365D;
+  }
+  .podium-card .sub-points {
+    font-size: 11px;
+    color: #657786;
+    margin-top: 8px;
+  }
+
+  /* TABLE */
+  .card {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  }
+  .card h2 {
+    margin: 0 0 14px;
+    font-size: 15px;
+    color: #17365D;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  table.leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  table.leaderboard th {
+    background: #F4F6F8;
+    color: #17365D;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    border-bottom: 2px solid #d9e2ec;
+    font-weight: bold;
+  }
+  table.leaderboard td {
+    padding: 11px 12px;
+    border-bottom: 1px solid #eef2f6;
+    vertical-align: middle;
+  }
+  table.leaderboard tr:last-child td { border-bottom: none; }
+  table.leaderboard .rank-cell {
+    font-weight: bold;
+    color: #17365D;
+    width: 44px;
+    text-align: center;
+  }
+  table.leaderboard .name-cell {
+    font-weight: bold;
+    color: #243447;
+    word-break: break-word;
+  }
+  table.leaderboard .cat-cell {
+    font-size: 11px;
+    color: #657786;
+    margin-top: 2px;
+  }
+  table.leaderboard .num-cell {
+    text-align: right;
+    font-weight: bold;
+    color: #17365D;
+    white-space: nowrap;
+  }
+  table.leaderboard .num-cell.legacy {
+    color: #8A6D00;
+    font-weight: normal;
+  }
+  table.leaderboard tr.top-3 .rank-cell {
+    color: #8A6D00;
+  }
+  table.leaderboard tr.top-3 {
+    background: #FFFDF4;
+  }
+
+  /* STATES */
+  .state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #657786;
+    font-size: 14px;
+  }
+  .state .icon { font-size: 48px; margin-bottom: 12px; }
+  .state h3 { color: #17365D; margin: 0 0 8px; font-size: 20px; }
+
+  .footer {
+    text-align: center;
+    padding: 30px 16px 20px;
+    color: #657786;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .footer strong { color: #17365D; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body data-page="CPD Leaderboard">
+
+<div class="hero">
+  <h1>CPD Leaderboard</h1>
+  <div class="sub" id="yearLabel"></div>
+  <p>Top AMLPN members by Continuous Professional Development points earned this year.</p>
+</div>
+
+<div class="page">
+
+  <div class="state" id="loading">Loading leaderboard…</div>
+
+  <div id="podiumWrap" class="hidden">
+    <div class="podium" id="podium"></div>
+  </div>
+
+  <div id="tableWrap" class="hidden">
+    <div class="card">
+      <h2>All Rankings</h2>
+      <table class="leaderboard" id="tblBoard"></table>
+    </div>
+  </div>
+
+  <div class="state hidden" id="emptyState">
+    <div class="icon">🏆</div>
+    <h3>No ranked members yet</h3>
+    <p>Points will appear here once members begin completing CPD sessions.</p>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Atria Medical Laboratory Professionals Network</strong><br>
+  Together We Can
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzANP2bSpfw1fOXQR6HIXP0LE06m4Wq89Wisl5YvBA0f2FIyAtKc0nU0jp4JiPy432B/exec";
+
+async function api(payload) {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+function escapeHtml(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+document.getElementById("yearLabel").textContent = new Date().getFullYear() + " Season";
+
+(async function load() {
+  try {
+    const res = await api({ action: "cpd-leaderboard" });
+
+    if (!res || !res.ok) {
+      document.getElementById("loading").textContent = "Could not load the leaderboard.";
+      return;
+    }
+
+    const rows = res.leaderboard || [];
+
+    if (!rows.length) {
+      document.getElementById("loading").classList.add("hidden");
+      document.getElementById("emptyState").classList.remove("hidden");
+      return;
+    }
+
+    renderPodium(rows.slice(0, 3));
+    renderTable(rows);
+
+    document.getElementById("loading").classList.add("hidden");
+    document.getElementById("podiumWrap").classList.remove("hidden");
+    document.getElementById("tableWrap").classList.remove("hidden");
+  } catch (err) {
+    document.getElementById("loading").textContent = "Network error.";
+  }
+})();
+
+function renderPodium(top3) {
+  const box = document.getElementById("podium");
+  box.innerHTML = "";
+
+  // Arrange visually: 2nd, 1st, 3rd (classic podium)
+  const order = [];
+  if (top3[1]) order.push({ row: top3[1], rank: 2, medal: "🥈" });
+  if (top3[0]) order.push({ row: top3[0], rank: 1, medal: "🥇" });
+  if (top3[2]) order.push({ row: top3[2], rank: 3, medal: "🥉" });
+
+  order.forEach(item => {
+    const r = item.row;
+    const card = document.createElement("div");
+    card.className = "podium-card rank-" + item.rank;
+    card.innerHTML =
+      '<div class="medal">' + item.medal + '</div>' +
+      '<div class="rank-num">Rank ' + item.rank + '</div>' +
+      '<div class="name">' + escapeHtml(r.fullName || "—") + '</div>' +
+      (r.category ? '<div class="cat">' + escapeHtml(r.category) + '</div>' : '<div class="cat">&nbsp;</div>') +
+      '<div class="points">' + r.total + ' pts</div>' +
+      '<div class="sub-points">' +
+        (r.accredited ? r.accredited + ' accredited' : '') +
+        (r.accredited && r.legacy ? ' • ' : '') +
+        (r.legacy ? r.legacy + ' legacy' : '') +
+      '</div>';
+    box.appendChild(card);
+  });
+}
+
+function renderTable(rows) {
+  const t = document.getElementById("tblBoard");
+  t.innerHTML = "";
+
+  const thead = document.createElement("tr");
+  ["#", "Name", "Accredited", "Legacy", "Total"].forEach(h => {
+    const th = document.createElement("th");
+    th.textContent = h;
+    if (h !== "#" && h !== "Name") th.style.textAlign = "right";
+    if (h === "#") th.style.textAlign = "center";
+    thead.appendChild(th);
+  });
+  t.appendChild(thead);
+
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+    if (r.rank <= 3) tr.className = "top-3";
+
+    tr.innerHTML =
+      '<td class="rank-cell">' + r.rank + '</td>' +
+      '<td class="name-cell">' +
+        escapeHtml(r.fullName || "—") +
+        (r.category ? '<div class="cat-cell">' + escapeHtml(r.category) + '</div>' : '') +
+      '</td>' +
+      '<td class="num-cell">' + (r.accredited || 0) + '</td>' +
+      '<td class="num-cell legacy">' + (r.legacy || 0) + '</td>' +
+      '<td class="num-cell">' + (r.total || 0) + '</td>';
+
+    t.appendChild(tr);
+  });
+}
+
+</script>
+</body>
+</html>
